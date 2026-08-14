@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiStock 24 - Promo Sagas</title>
+    <style>
+        :root {
+            --bg-color: #0d1117; --card-bg: #080a0d; --pack-green: #00ff00; --saga-red: #ff0000; --accent-pink: #ff00ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: white; padding-top: 80px; }
+        
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            background: linear-gradient(90deg, #002857 0%, #005691 100%);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 1000;
+        }
+        .logo img { height: 45px; }
+
+        .section-header { padding: 0 20px 20px 20px; font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+
+        /* GRID: 1 columna en móvil, 3 en escritorio */
+        .sagas-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px; padding: 0 20px 40px 20px;
+            max-width: 1400px; margin: 0 auto;
+        }
+        @media (min-width: 900px) { .sagas-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        /* RECUADRO DE SAGA */
+        .saga-card {
+            background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .pack-text { color: var(--pack-green); font-weight: bold; font-size: 15px; text-transform: uppercase; }
+        .pack-text span { font-size: 20px; margin: 0 2px; }
+        .price-btn { background: var(--accent-pink); color: white; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 17px; }
+        
+        .saga-name { color: var(--saga-red); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .saga-desc { color: #888; font-size: 13px; margin-bottom: 15px; }
+
+        /* SLIDER */
+        .slider-wrapper { position: relative; display: flex; align-items: center; }
+        .track { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
+        .track::-webkit-scrollbar { display: none; }
+        .track img { width: 100px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
+        
+        .arrow { 
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8);
+            color: white; border: 1px solid #444; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5;
+        }
+        .arrow-l { left: -10px; } .arrow-r { right: -10px; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9000; justify-content:center; align-items:center; }
+        .modal-content { background:#161b22; padding:30px; border-radius:20px; text-align:center; border: 2px solid var(--accent-pink); width: 90%; max-width: 350px;}
+        .close-btn { background: var(--accent-pink); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="location.href='index.html'" style="cursor:pointer"><img src="https://i.imgur.com/2XOt5Zx.png"></div>
+        <div style="color:white; font-size:24px; cursor:pointer" onclick="location.href='index.html'">☰</div>
+    </header>
+
+    <div class="section-header"><span>🍿</span> PROMO SAGAS</div>
+
+    <main class="sagas-grid" id="sagas-grid"></main>
+
+    <div class="modal" id="modalSaga">
+        <div class="modal-content">
+            <div style="font-size:40px">🍿</div>
+            <h3 style="color:var(--accent-pink); margin:10px 0;">PROMO SAGAS</h3>
+            <h2 id="m-name" style="margin-bottom:10px; text-transform:uppercase;"></h2>
+            <p id="m-pack" style="color:var(--pack-green); font-weight:bold;"></p>
+            <button class="close-btn" onclick="cerrarModal()">✕</button>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
+        const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
+
+        async function cargarSagas() {
+            const resp = await fetch(urlSagas);
+            const text = await resp.text();
+            const json = JSON.parse(text.substring(47).slice(0, -2));
+            const rows = json.table.rows;
+
+            const precios = rows[0].c; // Fila 1
+            const cantidades = rows[1].c; // Fila 2
+            const grid = document.getElementById('sagas-grid');
+
+            for (let i = 2; i < rows.length; i++) {
+                const r = rows[i].c;
+                if (!r || !r[0]) continue;
+
+                let imgs = [];
+                let ultCol = 0;
+                // Buscar última columna con imagen (B hasta Z)
+                for (let j = 1; j < r.length; j++) {
+                    if (r[j]?.v) {
+                        imgs.push(r[j].v);
+                        ultCol = j;
+                    }
+                }
+
+                // Mínimo 5 imágenes (repetir la primera si falta)
+                let sliderImgs = [...imgs];
+                while(sliderImgs.length > 0 && sliderImgs.length < 5) sliderImgs.push(imgs[0]);
+
+                const precio = precios[ultCol]?.v || '---';
+                const cant = cantidades[ultCol]?.v || 'X';
+
+                const card = document.createElement('div');
+                card.className = 'saga-card';
+                card.innerHTML = `
+                    <div class="header-row">
+                        <div class="pack-text">PACK DE <span>${cant}</span> PELÍCULAS</div>
+                        <div class="price-btn">$${precio}</div>
+                    </div>
+                    <div class="saga-name">${r[0].v}</div>
+                    <div class="saga-desc">Descargables y también para ver online!</div>
+                    <div class="slider-wrapper">
+                        <button class="arrow arrow-l" onclick="this.nextElementSibling.scrollLeft-=100">❮</button>
+                        <div class="track">
+                            ${sliderImgs.map(img => `<img src="${img}" onclick="abrirModal('${r[0].v}', '${cant}')">`).join('')}
+                        </div>
+                        <button class="arrow arrow-r" onclick="this.previousElementSibling.scrollLeft+=100">❯</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        function abrirModal(nom, cant) {
+            document.getElementById('m-name').innerText = nom;
+            document.getElementById('m-pack').innerText = `PACK DE ${cant} PELÍCULAS`;
+            document.getElementById('modalSaga').style.display = 'flex';
+        }
+        function cerrarModal() { document.getElementById('modalSaga').style.display = 'none'; }
+        
+        cargarSagas();
+    </script>
+</body>
+</html>
