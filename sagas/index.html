@@ -5,144 +5,403 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigiStock 24 - Promo Sagas</title>
     <style>
+        /* ================= CSS: ESTILOS BASE (COINCIDENTES CON INDEX) ================= */
         :root {
-            --bg-color: #0d1117; --card-bg: #080a0d; --pack-green: #00ff00; --saga-red: #ff0000; --accent-pink: #ff00ff;
+            --bg-color: #0d1117; /* Fondo oscuro para Sagas */
+            --card-bg: #161b22;  
+            --text-main: #ffffff; 
+            --text-muted: #8b949e; 
+            --accent-cyan: #005691; 
+            --accent-pink: #ff00ff; 
+            --search-accent: #007acc; 
+            --pack-green: #00ff00;
+            --saga-red: #ff0000;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: white; padding-top: 80px; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
+        body { background-color: var(--bg-color); color: var(--text-main); padding-top: 70px; }
+
+        /* Barra de navegación superior */
         header {
             position: fixed; top: 0; left: 0; width: 100%; height: 70px;
             background: linear-gradient(90deg, #002857 0%, #005691 100%);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; z-index: 1000;
+            padding: 0 20px; z-index: 1000; box-shadow: 0 2px 7px rgba(0,0,0,0.4);
         }
-        .logo img { height: 45px; }
+        
+        .logo img { height: 45px; width: auto; filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.6)); display: block; cursor: pointer;}
+        
+        .nav-icons { display: flex; gap: 32px; align-items: center; cursor: pointer; color: white; }
+        .nav-icons a { display: flex; align-items: center; transition: transform 0.2s; text-decoration: none; color: white; }
+        .menu-icon-symbol { font-size: 26px; font-weight: bold; line-height: 1; }
 
-        .section-header { padding: 0 20px 20px 20px; font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        /* Título de sección */
+        .section-title {
+            margin: 20px 20px 16px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase;
+            border-left: 4px solid #004379; padding-left: 10px;
+            display: flex; align-items: center; gap: 12px;
+        }
 
-        /* GRID: 1 columna en móvil, 3 en escritorio */
+        /* ================= DISEÑO DE RECUADROS DE SAGAS ================= */
         .sagas-grid {
-            display: grid; grid-template-columns: 1fr; gap: 20px; padding: 0 20px 40px 20px;
-            max-width: 1400px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 0 20px 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
-        @media (min-width: 900px) { .sagas-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        /* RECUADRO DE SAGA */
+        @media (min-width: 900px) {
+            .sagas-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
         .saga-card {
-            background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; padding: 20px;
+            background: #080a0d;
+            border: 1px solid #30363d;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .pack-text { color: var(--pack-green); font-weight: bold; font-size: 15px; text-transform: uppercase; }
-        .pack-text span { font-size: 20px; margin: 0 2px; }
-        .price-btn { background: var(--accent-pink); color: white; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 17px; }
-        
-        .saga-name { color: var(--saga-red); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-        .saga-desc { color: #888; font-size: 13px; margin-bottom: 15px; }
 
-        /* SLIDER */
-        .slider-wrapper { position: relative; display: flex; align-items: center; }
-        .track { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
-        .track::-webkit-scrollbar { display: none; }
-        .track img { width: 100px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
-        
-        .arrow { 
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8);
-            color: white; border: 1px solid #444; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5;
+        .saga-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
         }
-        .arrow-l { left: -10px; } .arrow-r { right: -10px; }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9000; justify-content:center; align-items:center; }
-        .modal-content { background:#161b22; padding:30px; border-radius:20px; text-align:center; border: 2px solid var(--accent-pink); width: 90%; max-width: 350px;}
-        .close-btn { background: var(--accent-pink); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; margin-top: 20px; cursor: pointer; }
+        .pack-label {
+            color: var(--pack-green);
+            font-weight: bold;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        .pack-label span { font-size: 22px; }
+
+        .price-btn {
+            background: var(--accent-pink);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(255, 0, 255, 0.3);
+        }
+
+        .saga-name {
+            color: var(--saga-red);
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .saga-desc {
+            color: #cccccc;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Slider / Carrousel */
+        .slider-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            padding-bottom: 5px;
+        }
+        .slider-track::-webkit-scrollbar { display: none; }
+
+        .poster-img {
+            width: 110px;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .poster-img:hover { transform: scale(1.05); }
+
+        .slide-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #444;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 5;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .arrow-prev { left: -10px; }
+        .arrow-next { right: -10px; }
+
+        /* ================= MENÚ LATERAL (ESTILO ORIGINAL) ================= */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 4000;
+            display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        
+        .sidebar-container {
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+            background: #005691; z-index: 4001; transition: right 0.3s ease;
+            display: flex; flex-direction: column; padding-top: 40px;
+        }
+        .sidebar-container.active { right: 0; }
+
+        .menu-item {
+            display: flex; align-items: center; padding: 16px 25px; color: white;
+            font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s;
+            text-transform: uppercase; gap: 15px;
+        }
+        .menu-item:hover { background: rgba(255,255,255,0.1); }
+        .menu-item svg, .menu-item span.icon { width: 20px; text-align: center; font-size: 18px; }
+
+        /* ================= MODAL DETALLES ================= */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); z-index: 5000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background-color: #161b22; border: 2px solid var(--accent-pink);
+            border-radius: 15px; padding: 25px;
+            width: 100%; max-width: 350px; text-align: center; color: white;
+        }
+        .close-btn {
+            background: var(--accent-pink); color: white; border: none; width: 40px; height: 40px;
+            border-radius: 50%; font-size: 22px; cursor: pointer; margin-top: 20px;
+        }
+
+        /* ================= FOOTER UNIVERSAL ================= */
+        .site-footer {
+            margin-top: 30px; padding: 24px 20px; border-top: 1px solid #30363d; background: #080a0d;
+        }
+        .footer-inner {
+            display: flex; flex-direction: column; align-items: center; gap: 22px; max-width: 1200px; margin: 0 auto;
+        }
+        .footer-social { display: flex; gap: 34px; align-items: center; }
+        .footer-social a { color: var(--search-accent); transition: transform 0.2s; }
+        .footer-social a:hover { transform: scale(1.12); color: white; }
+        .footer-copy { font-size: 12.5px; color: var(--text-muted); text-align: center; }
+
+        @media (min-width: 700px) {
+            .footer-inner { flex-direction: row; justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- BARRA SUPERIOR -->
     <header>
-        <div class="logo" onclick="location.href='index.html'" style="cursor:pointer"><img src="https://i.imgur.com/2XOt5Zx.png"></div>
-        <div style="color:white; font-size:24px; cursor:pointer" onclick="location.href='index.html'">☰</div>
+        <div class="logo" onclick="location.href='index.html'">
+            <img src="https://i.imgur.com/2XOt5Zx.png" alt="DigiStock 24">
+        </div>
+        <div class="nav-icons">
+            <a href="https://wa.me/5491125122574" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                    <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                </svg>
+            </a>
+            <span class="menu-icon-symbol" onclick="abrirMenu()">☰</span>
+        </div>
     </header>
 
-    <div class="section-header"><span>🍿</span> PROMO SAGAS</div>
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="cerrarMenu()"></div>
+    <nav class="sidebar-container" id="sidebar-container">
+        <div class="menu-item" onclick="location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            INICIO
+        </div>
+        <div class="menu-item" onclick="location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
+            ESTRENOS
+        </div>
+        <div class="menu-item" onclick="location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
+            MÁS RECIENTES
+        </div>
+        <!-- BOTÓN PROMO SAGAS ACTIVO -->
+        <div class="menu-item" onclick="location.reload()" style="background: rgba(255,255,255,0.1); color: var(--pack-green); font-weight: bold;">
+            <span class="icon">🍿</span>
+            PROMO SAGAS
+        </div>
+    </nav>
 
-    <main class="sagas-grid" id="sagas-grid"></main>
+    <!-- TÍTULO DE SECCIÓN -->
+    <div class="section-title">
+        <span>🍿</span> PROMO SAGAS
+    </div>
 
-    <div class="modal" id="modalSaga">
+    <!-- CONTENEDOR DE SAGAS -->
+    <main class="sagas-grid" id="sagas-container"></main>
+
+    <!-- FOOTER UNIVERSAL -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-social">
+                <a href="https://www.instagram.com/digistock24/" target="_blank" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="https://www.facebook.com/digistock24" target="_blank" aria-label="Facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="https://wa.me/5491125122574" target="_blank" aria-label="WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path><path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path></svg>
+                </a>
+            </div>
+            <div class="footer-copy" id="footer-copy"></div>
+        </div>
+    </footer>
+
+    <!-- MODAL INFORMATIVO -->
+    <div class="modal-overlay" id="modalSaga">
         <div class="modal-content">
-            <div style="font-size:40px">🍿</div>
-            <h3 style="color:var(--accent-pink); margin:10px 0;">PROMO SAGAS</h3>
-            <h2 id="m-name" style="margin-bottom:10px; text-transform:uppercase;"></h2>
-            <p id="m-pack" style="color:var(--pack-green); font-weight:bold;"></p>
+            <div style="font-size: 40px; margin-bottom: 10px;">🍿</div>
+            <h3 style="color: var(--accent-pink); margin-bottom: 10px;">PROMO SAGAS</h3>
+            <h2 id="modal-saga-name" style="margin-bottom: 15px; text-transform: uppercase;"></h2>
+            <p id="modal-saga-pack" style="font-weight: bold; color: var(--pack-green); font-size: 18px;"></p>
             <button class="close-btn" onclick="cerrarModal()">✕</button>
         </div>
     </div>
 
     <script>
+        /* ================= JAVASCRIPT: LÓGICA DE DATOS Y MENÚ ================= */
+        
         const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
         const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
 
+        // Footer Copyright
+        document.getElementById('footer-copy').textContent = `\u00A9 ${new Date().getFullYear()} DIGISTOCK24 | Todos los derechos reservados`;
+
         async function cargarSagas() {
-            const resp = await fetch(urlSagas);
-            const text = await resp.text();
-            const json = JSON.parse(text.substring(47).slice(0, -2));
-            const rows = json.table.rows;
+            try {
+                const response = await fetch(urlSagas);
+                const data = await response.text();
+                const json = JSON.parse(data.substring(47).slice(0, -2));
+                const rows = json.table.rows;
 
-            const precios = rows[0].c; // Fila 1
-            const cantidades = rows[1].c; // Fila 2
-            const grid = document.getElementById('sagas-grid');
+                // Fila 1 (Indice 0 en JS): Precios
+                // Fila 2 (Indice 1 en JS): Cantidades
+                const filaPrecios = rows[0].c;
+                const filaCantidades = rows[1].c;
+                
+                const container = document.getElementById('sagas-container');
 
-            for (let i = 2; i < rows.length; i++) {
-                const r = rows[i].c;
-                if (!r || !r[0]) continue;
+                // Fila 3 en adelante (Indice 2 en JS): Las Sagas
+                for (let i = 2; i < rows.length; i++) {
+                    const celdasSaga = rows[i].c;
+                    if (!celdasSaga || !celdasSaga[0]) continue;
 
-                let imgs = [];
-                let ultCol = 0;
-                // Buscar última columna con imagen (B hasta Z)
-                for (let j = 1; j < r.length; j++) {
-                    if (r[j]?.v) {
-                        imgs.push(r[j].v);
-                        ultCol = j;
+                    const nombreSaga = celdasSaga[0].v;
+                    
+                    // Identificar la última columna con texto/link de imagen (Col B en adelante)
+                    let ultimaColIndex = 1;
+                    let imagenesOriginales = [];
+
+                    for (let j = 1; j < celdasSaga.length; j++) {
+                        if (celdasSaga[j] && celdasSaga[j].v) {
+                            imagenesOriginales.push(celdasSaga[j].v);
+                            ultimaColIndex = j;
+                        }
                     }
-                }
 
-                // Mínimo 5 imágenes (repetir la primera si falta)
-                let sliderImgs = [...imgs];
-                while(sliderImgs.length > 0 && sliderImgs.length < 5) sliderImgs.push(imgs[0]);
+                    // Obtener Precio (Fila 1) y Cantidad (Fila 2) usando la columna detectada
+                    const precio = filaPrecios[ultimaColIndex] ? filaPrecios[ultimaColIndex].v : '---';
+                    const cantidadX = filaCantidades[ultimaColIndex] ? filaCantidades[ultimaColIndex].v : 'X';
 
-                const precio = precios[ultCol]?.v || '---';
-                const cant = cantidades[ultCol]?.v || 'X';
+                    // Preparar Carrousel (mínimo 5 imágenes)
+                    let imagenesParaSlider = [...imagenesOriginales];
+                    if (imagenesParaSlider.length > 0) {
+                        while (imagenesParaSlider.length < 5) {
+                            imagenesParaSlider.push(imagenesOriginales[0]);
+                        }
+                    }
 
-                const card = document.createElement('div');
-                card.className = 'saga-card';
-                card.innerHTML = `
-                    <div class="header-row">
-                        <div class="pack-text">PACK DE <span>${cant}</span> PELÍCULAS</div>
-                        <div class="price-btn">$${precio}</div>
-                    </div>
-                    <div class="saga-name">${r[0].v}</div>
-                    <div class="saga-desc">Descargables y también para ver online!</div>
-                    <div class="slider-wrapper">
-                        <button class="arrow arrow-l" onclick="this.nextElementSibling.scrollLeft-=100">❮</button>
-                        <div class="track">
-                            ${sliderImgs.map(img => `<img src="${img}" onclick="abrirModal('${r[0].v}', '${cant}')">`).join('')}
+                    // Crear la tarjeta (Card)
+                    const card = document.createElement('div');
+                    card.className = 'saga-card';
+                    card.innerHTML = `
+                        <div class="saga-header-row">
+                            <div class="pack-label">PACK DE <span>${cantidadX}</span> PELÍCULAS</div>
+                            <div class="price-btn">$${precio}</div>
                         </div>
-                        <button class="arrow arrow-r" onclick="this.previousElementSibling.scrollLeft+=100">❯</button>
-                    </div>
-                `;
-                grid.appendChild(card);
+                        <div class="saga-name">${nombreSaga}</div>
+                        <div class="saga-desc">Descargables y también para ver online!</div>
+                        
+                        <div class="slider-container">
+                            <button class="slide-arrow arrow-prev" onclick="moverSlider(this, -1)">❮</button>
+                            <div class="slider-track">
+                                ${imagenesParaSlider.map(img => `
+                                    <img src="${img}" class="poster-img" onclick="abrirModal('${nombreSaga}', '${cantidadX}')">
+                                `).join('')}
+                            </div>
+                            <button class="slide-arrow arrow-next" onclick="moverSlider(this, 1)">❯</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            } catch (error) {
+                console.error("Error al cargar la hoja de sagas:", error);
             }
         }
 
-        function abrirModal(nom, cant) {
-            document.getElementById('m-name').innerText = nom;
-            document.getElementById('m-pack').innerText = `PACK DE ${cant} PELÍCULAS`;
+        // Funciones del Carrousel
+        function moverSlider(boton, direccion) {
+            const track = boton.parentElement.querySelector('.slider-track');
+            track.scrollLeft += direccion * 130;
+        }
+
+        // Funciones del Menú Lateral
+        const sidebar = document.getElementById('sidebar-container');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function abrirMenu() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function cerrarMenu() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        // Funciones del Modal
+        function abrirModal(nombre, cant) {
+            document.getElementById('modal-saga-name').textContent = nombre;
+            document.getElementById('modal-saga-pack').textContent = `PACK DE ${cant} PELÍCULAS`;
             document.getElementById('modalSaga').style.display = 'flex';
         }
-        function cerrarModal() { document.getElementById('modalSaga').style.display = 'none'; }
-        
+
+        function cerrarModal() {
+            document.getElementById('modalSaga').style.display = 'none';
+        }
+
+        // Clic fuera del modal para cerrar
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalSaga');
+            if (event.target == modal) cerrarModal();
+        }
+
+        // Iniciar carga
         cargarSagas();
     </script>
 </body>
