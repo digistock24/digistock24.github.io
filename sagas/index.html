@@ -3,471 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigiStock 24 - Catálogo</title>
+    <title>DigiStock 24 - Promo Sagas</title>
     <style>
-        /* ================= CSS: DISEÑO Y ESTILOS ================= */
         :root {
-            --bg-color: #f4f6f8; 
-            --card-bg: #ffffff;  
-            --text-main: #222222; 
-            --text-muted: #666666; 
-            --accent-cyan: #005691; 
-            --accent-pink: #ff00ff; 
-            --search-accent: #007acc;
-            /* Nuevos colores para Sagas */
-            --saga-bg: #0d1117;
-            --pack-green: #00ff00;
-            --saga-red: #ff0000;
+            --bg-color: #0d1117; --card-bg: #080a0d; --pack-green: #00ff00; --saga-red: #ff0000; --accent-pink: #ff00ff;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: white; padding-top: 80px; }
         
-        body { background-color: var(--bg-color); color: var(--text-main); padding-top: 70px; }
-
-        /* Barra de navegación superior (Fija) */
         header {
             position: fixed; top: 0; left: 0; width: 100%; height: 70px;
             background: linear-gradient(90deg, #002857 0%, #005691 100%);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; z-index: 1000; box-shadow: 0 2px 7px rgba(0,0,0,0.4);
+            padding: 0 20px; z-index: 1000;
         }
-        
-        .logo img { height: 45px; width: auto; filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.6)); display: block; }
-        .nav-icons { display: flex; gap: 32px; align-items: center; cursor: pointer; color: white; }
-        .nav-icons a { display: flex; align-items: center; transition: transform 0.2s; text-decoration: none; color: white; }
-        .nav-icons span:hover, .nav-icons a:hover { transform: scale(1.1); }
-        .menu-icon-symbol { font-size: 26px; font-weight: bold; line-height: 1; }
+        .logo img { height: 45px; }
 
-        /* Título de sección */
-        .section-title {
-            margin: 20px 20px 16px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase;
-            border-left: 4px solid #004379; padding-left: 10px;
-            display: flex; align-items: center; justify-content: space-between; gap: 12px;
-        }
-        .section-title.search-active { border-left: none; padding-left: 0; }
-        .section-title-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .section-header { padding: 0 20px 20px 20px; font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
 
-        /* Botón Ordenar */
-        .sort-wrapper { position: relative; flex-shrink: 0; }
-        .sort-btn {
-            background: var(--search-accent); color: white; border: none; width: 38px; height: 34px;
-            border-radius: 8px; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3); transition: all 0.2s;
+        /* GRID: 1 columna en móvil, 3 en escritorio */
+        .sagas-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px; padding: 0 20px 40px 20px;
+            max-width: 1400px; margin: 0 auto;
         }
-        .sort-dropdown {
-            display: none; position: absolute; top: calc(100% + 8px); right: 0;
-            background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 10; min-width: 195px;
-        }
-        .sort-dropdown.open { display: block; }
-        .sort-option { padding: 14px 18px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #eee; }
-        .sort-option:hover { background: #f0f7fc; color: var(--search-accent); }
+        @media (min-width: 900px) { .sagas-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        /* Grilla Principal */
-        .movie-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px; padding: 0 20px 20px 20px;
-        }
-
-        /* Estilos específicos para la Grilla de SAGAS (3 columnas en desktop) */
-        .movie-grid.sagas-mode {
-            grid-template-columns: 1fr; /* 1 columna en móvil */
-        }
-        @media (min-width: 900px) {
-            .movie-grid.sagas-mode { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        /* Tarjeta de Película/Serie */
-        .movie-card { 
-            cursor: pointer; transition: transform 0.2s; background-color: var(--card-bg); 
-            border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column;
-        }
-        .img-container { position: relative; width: 100%; aspect-ratio: 2/3; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .year-badge { position: absolute; top: 8px; left: 8px; background: var(--accent-pink); color: white; padding: 2px 7px; font-size: 12px; border-radius: 4px; }
-        .movie-title { font-size: 14px; font-weight: bold; padding: 8px 10px 0 10px; }
-        .movie-genre { font-size: 11px; color: var(--text-muted); padding: 4px 10px 10px 10px; text-transform: uppercase; }
-
-        /* ================= ESTILOS PARA TARJETAS DE SAGAS ================= */
+        /* RECUADRO DE SAGA */
         .saga-card {
-            background: #080a0d; border: 1px solid #30363d; border-radius: 12px;
-            padding: 15px; position: relative; color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .saga-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .saga-pack-text { color: var(--pack-green); font-weight: bold; font-size: 14px; text-transform: uppercase; }
-        .saga-pack-text span { font-size: 18px; } /* El número X más grande */
-        .saga-price-btn { 
-            background: var(--accent-pink); color: white; padding: 4px 12px; 
-            border-radius: 6px; font-weight: bold; font-size: 15px; 
-        }
-        .saga-name-text { color: var(--saga-red); font-size: 20px; font-weight: 800; text-transform: uppercase; margin-bottom: 2px; }
-        .saga-desc-text { color: #bbbbbb; font-size: 12px; margin-bottom: 12px; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .pack-text { color: var(--pack-green); font-weight: bold; font-size: 15px; text-transform: uppercase; }
+        .pack-text span { font-size: 20px; margin: 0 2px; }
+        .price-btn { background: var(--accent-pink); color: white; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 17px; }
         
-        /* Slider de Sagas */
-        .saga-slider-container { position: relative; display: flex; align-items: center; }
-        .saga-track {
-            display: flex; gap: 8px; overflow-x: auto; scroll-behavior: smooth;
-            scrollbar-width: none; padding-bottom: 5px;
-        }
-        .saga-track::-webkit-scrollbar { display: none; }
-        .saga-poster { width: 85px; aspect-ratio: 2/3; object-fit: cover; border-radius: 5px; flex-shrink: 0; cursor: pointer; }
-        .slide-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.7); color: white; border: 1px solid #444;
-            width: 28px; height: 28px; border-radius: 50%; cursor: pointer; z-index: 2;
-            display: flex; justify-content: center; align-items: center; font-size: 12px;
-        }
-        .arrow-prev { left: -10px; }
-        .arrow-next { right: -10px; }
+        .saga-name { color: var(--saga-red); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .saga-desc { color: #888; font-size: 13px; margin-bottom: 15px; }
 
-        /* ================= MODALES Y MENÚ LATERAL ================= */
-        .modal-overlay, .search-overlay, .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 2000; justify-content: center; align-items: center; padding: 20px;
-            backdrop-filter: blur(3px); background: rgba(0, 0, 0, 0.7);
-        }
-        .modal-content {
-            background: white; border-radius: 15px; padding: 20px;
-            width: 100%; max-width: 350px; text-align: center; position: relative;
-        }
-        /* Ajuste modal para modo Sagas */
-        .modal-content.dark { background: #161b22; color: white; border: 2px solid var(--accent-pink); }
-
-        .sidebar-container {
-            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
-            background: #005691; z-index: 4001; transition: right 0.3s ease;
-            display: flex; flex-direction: column; padding-top: 40px;
-        }
-        .sidebar-container.active { right: 0; }
-        .sidebar-overlay.active { display: block; opacity: 1; }
-        .menu-item { padding: 16px 25px; color: white; font-weight: 500; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; gap: 15px; }
-        .menu-item:hover { background: rgba(255,255,255,0.1); }
-        .genres-grid { display: none; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; background: rgba(0,0,0,0.1); }
-        .genres-grid.open { display: grid; }
+        /* SLIDER */
+        .slider-wrapper { position: relative; display: flex; align-items: center; }
+        .track { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; }
+        .track::-webkit-scrollbar { display: none; }
+        .track img { width: 100px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
         
-        .close-btn { background: var(--accent-pink); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; margin-top: 15px; }
+        .arrow { 
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8);
+            color: white; border: 1px solid #444; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5;
+        }
+        .arrow-l { left: -10px; } .arrow-r { right: -10px; }
 
-        /* Footer */
-        .site-footer { padding: 24px 20px; border-top: 1px solid #dde3e8; margin-top: 20px; }
-        .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .footer-social { display: flex; gap: 30px; }
-        .footer-social a { color: var(--search-accent); }
-        @media (min-width: 700px) { .footer-inner { flex-direction: row; justify-content: space-between; } }
+        /* MODAL */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9000; justify-content:center; align-items:center; }
+        .modal-content { background:#161b22; padding:30px; border-radius:20px; text-align:center; border: 2px solid var(--accent-pink); width: 90%; max-width: 350px;}
+        .close-btn { background: var(--accent-pink); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- BARRA SUPERIOR -->
     <header>
-        <div class="logo">
-            <img src="https://i.imgur.com/2XOt5Zx.png" alt="DigiStock 24">
-        </div>
-        <div class="nav-icons">
-            <a href="https://wa.me/5491125122574" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path><path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path></svg></a>
-            <span onclick="abrirBuscador()"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></span>
-            <span class="menu-icon-symbol" onclick="abrirMenu()">☰</span>
-        </div>
+        <div class="logo" onclick="location.href='index.html'" style="cursor:pointer"><img src="https://i.imgur.com/2XOt5Zx.png"></div>
+        <div style="color:white; font-size:24px; cursor:pointer" onclick="location.href='index.html'">☰</div>
     </header>
 
-    <!-- MENÚ LATERAL -->
-    <div class="sidebar-overlay" id="sidebar-overlay" onclick="cerrarMenu()"></div>
-    <nav class="sidebar-container" id="sidebar-container">
-        <div class="menu-item" onclick="mostrarEstrenos()">INICIO</div>
-        <div class="menu-item" onclick="mostrarEstrenos()">ESTRENOS</div>
-        <div class="menu-item" onclick="mostrarMasRecientes()">MÁS RECIENTES</div>
-        <!-- NUEVA OPCIÓN PROMO SAGAS -->
-        <div class="menu-item" onclick="mostrarSagas()" style="color: var(--pack-green); font-weight: bold;">🍿 PROMO SAGAS</div>
-        
-        <div class="menu-item" onclick="toggleGeneros()">GÉNEROS ▾</div>
-        <div class="genres-grid" id="genres-grid">
-            <span onclick="filtrarPorGenero('Acción')">Acción</span>
-            <span onclick="filtrarPorGenero('Comedia')">Comedia</span>
-            <span onclick="filtrarPorGenero('Terror')">Terror</span>
-            <span onclick="filtrarPorGenero('Drama')">Drama</span>
-            <span onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</span>
-            <span onclick="filtrarPorGenero('Infantil')">Infantil</span>
-        </div>
-        <div class="menu-item" onclick="mostrarSeries()">SERIES</div>
-    </nav>
+    <div class="section-header"><span>🍿</span> PROMO SAGAS</div>
 
-    <!-- TÍTULO DE SECCIÓN -->
-    <div class="section-title" id="section-title-container">
-        <div class="section-title-left">
-            <span id="section-title-text">ESTRENOS</span>
-        </div>
-        <div class="sort-wrapper" id="sort-wrapper">
-            <button class="sort-btn" onclick="toggleSortMenu(event)">⇅</button>
-            <div class="sort-dropdown" id="sort-dropdown">
-                <div class="sort-option" onclick="ordenarPeliculas('recientes')">Recién añadidas</div>
-                <div class="sort-option" onclick="ordenarPeliculas('anio')">Año</div>
-                <div class="sort-option" onclick="ordenarPeliculas('nombre')">Nombre</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- CONTENEDOR PRINCIPAL -->
-    <main class="movie-grid" id="movie-grid"></main>
-    
-    <button id="load-more" style="display:none; width: 200px; margin: 20px auto; padding: 12px; cursor: pointer;">Cargar más</button>
+    <main class="sagas-grid" id="sagas-grid"></main>
 
-    <!-- MODAL DETALLES -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content" id="modal-content">
-            <div id="modal-body">
-                <img src="" id="modal-img" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
-                <h2 id="modal-title"></h2>
-                <div id="modal-info"></div>
-            </div>
+    <div class="modal" id="modalSaga">
+        <div class="modal-content">
+            <div style="font-size:40px">🍿</div>
+            <h3 style="color:var(--accent-pink); margin:10px 0;">PROMO SAGAS</h3>
+            <h2 id="m-name" style="margin-bottom:10px; text-transform:uppercase;"></h2>
+            <p id="m-pack" style="color:var(--pack-green); font-weight:bold;"></p>
             <button class="close-btn" onclick="cerrarModal()">✕</button>
         </div>
     </div>
 
-    <!-- BUSCADOR -->
-    <div class="search-overlay" id="search-modal">
-        <div class="modal-content">
-            <input type="text" id="search-input" placeholder="Buscar..." style="width: 100%; padding: 10px; border-radius: 20px; border: 1px solid #ccc;">
-            <div id="search-results" style="margin-top: 15px; text-align: left;"></div>
-            <button class="close-btn" onclick="cerrarBuscador()">✕</button>
-        </div>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="footer-social">
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-                <a href="#">WhatsApp</a>
-            </div>
-            <div class="footer-copy" id="footer-copy"></div>
-        </div>
-    </footer>
-
     <script>
         const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
-        const urlPeliculas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=peliculas`;
-        const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
         const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
 
-        let todasLasPeliculas = [], todasLasSeries = [], todasLasSagas = [];
-        let peliculasActivas = [], peliculasMostradas = 0;
-        let modoActual = 'peliculas'; 
+        async function cargarSagas() {
+            const resp = await fetch(urlSagas);
+            const text = await resp.text();
+            const json = JSON.parse(text.substring(47).slice(0, -2));
+            const rows = json.table.rows;
 
-        // CARGA DE DATOS
-        Promise.all([
-            fetch(urlPeliculas).then(r => r.text()),
-            fetch(urlSeries).then(r => r.text()),
-            fetch(urlSagas).then(r => r.text())
-        ]).then(([dataPeli, dataSerie, dataSaga]) => {
-            todasLasPeliculas = procesarJSON(dataPeli, 'pelicula');
-            todasLasSeries = procesarJSON(dataSerie, 'serie');
-            todasLasSagas = procesarSagas(dataSaga);
-            mostrarEstrenos();
-        });
-
-        function procesarJSON(data, tipo) {
-            const rows = JSON.parse(data.substring(47).slice(0, -2)).table.rows;
-            return rows.map(r => ({
-                tipo,
-                nombre: r.c[0]?.v || '',
-                año: r.c[1]?.v || '',
-                generos: r.c[2]?.v || '',
-                imagen: r.c[3]?.v || '',
-                episodios: r.c[2]?.v || ''
-            })).filter(i => i.nombre && i.nombre !== 'NOMBRE');
-        }
-
-        function procesarSagas(data) {
-            const rows = JSON.parse(data.substring(47).slice(0, -2)).table.rows;
             const precios = rows[0].c; // Fila 1
             const cantidades = rows[1].c; // Fila 2
-            const sagas = [];
+            const grid = document.getElementById('sagas-grid');
 
             for (let i = 2; i < rows.length; i++) {
                 const r = rows[i].c;
                 if (!r || !r[0]) continue;
 
-                let imagenes = [];
-                let ultimaCol = 0;
+                let imgs = [];
+                let ultCol = 0;
+                // Buscar última columna con imagen (B hasta Z)
                 for (let j = 1; j < r.length; j++) {
                     if (r[j]?.v) {
-                        imagenes.push(r[j].v);
-                        ultimaCol = j;
+                        imgs.push(r[j].v);
+                        ultCol = j;
                     }
                 }
-                
-                // Si hay menos de 5, repetimos la primera
-                let sliderImgs = [...imagenes];
-                while(sliderImgs.length > 0 && sliderImgs.length < 5) {
-                    sliderImgs.push(imagenes[0]);
-                }
 
-                sagas.push({
-                    nombre: r[0].v,
-                    imagenes: sliderImgs,
-                    precio: precios[ultimaCol]?.v || '0',
-                    cantidad: cantidades[ultimaCol]?.v || '0'
-                });
-            }
-            return sagas;
-        }
+                // Mínimo 5 imágenes (repetir la primera si falta)
+                let sliderImgs = [...imgs];
+                while(sliderImgs.length > 0 && sliderImgs.length < 5) sliderImgs.push(imgs[0]);
 
-        // RENDERIZADO
-        function mostrarPeliculas(reiniciar = false) {
-            const grid = document.getElementById('movie-grid');
-            if (reiniciar) { grid.innerHTML = ''; peliculasMostradas = 0; }
-            
-            if (modoActual === 'sagas') {
-                grid.classList.add('sagas-mode');
-                peliculasActivas.forEach(saga => grid.appendChild(crearCardSaga(saga)));
-                document.getElementById('load-more').style.display = 'none';
-                return;
-            }
+                const precio = precios[ultCol]?.v || '---';
+                const cant = cantidades[ultCol]?.v || 'X';
 
-            grid.classList.remove('sagas-mode');
-            const limit = Math.min(peliculasMostradas + 20, peliculasActivas.length);
-            for (let i = peliculasMostradas; i < limit; i++) {
-                grid.appendChild(crearCardNormal(peliculasActivas[i]));
-            }
-            peliculasMostradas = limit;
-            document.getElementById('load-more').style.display = peliculasMostradas < peliculasActivas.length ? 'block' : 'none';
-        }
-
-        function crearCardNormal(item) {
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.onclick = () => abrirModal(item);
-            card.innerHTML = `
-                <div class="img-container">
-                    <div class="year-badge">${item.año}</div>
-                    <img src="${item.imagen}" loading="lazy">
-                </div>
-                <div class="movie-title">${item.nombre}</div>
-                <div class="movie-genre">${item.tipo === 'serie' ? (item.episodios || 'Completa') : item.generos}</div>
-            `;
-            return card;
-        }
-
-        function crearCardSaga(saga) {
-            const card = document.createElement('div');
-            card.className = 'saga-card';
-            card.innerHTML = `
-                <div class="saga-header-row">
-                    <div class="saga-pack-text">PACK DE <span>${saga.cantidad}</span> PELIS</div>
-                    <div class="saga-price-btn">$${saga.precio}</div>
-                </div>
-                <div class="saga-name-text">${saga.nombre}</div>
-                <div class="saga-desc-text">Descargables y también para ver online!</div>
-                <div class="saga-slider-container">
-                    <button class="slide-arrow arrow-prev" onclick="moverSlider(this, -1)">❮</button>
-                    <div class="saga-track">
-                        ${saga.imagenes.map(img => `<img src="${img}" class="saga-poster" onclick="abrirModalSaga('${saga.nombre}', '${saga.cantidad}')">`).join('')}
+                const card = document.createElement('div');
+                card.className = 'saga-card';
+                card.innerHTML = `
+                    <div class="header-row">
+                        <div class="pack-text">PACK DE <span>${cant}</span> PELÍCULAS</div>
+                        <div class="price-btn">$${precio}</div>
                     </div>
-                    <button class="slide-arrow arrow-next" onclick="moverSlider(this, 1)">❯</button>
-                </div>
-            `;
-            return card;
+                    <div class="saga-name">${r[0].v}</div>
+                    <div class="saga-desc">Descargables y también para ver online!</div>
+                    <div class="slider-wrapper">
+                        <button class="arrow arrow-l" onclick="this.nextElementSibling.scrollLeft-=100">❮</button>
+                        <div class="track">
+                            ${sliderImgs.map(img => `<img src="${img}" onclick="abrirModal('${r[0].v}', '${cant}')">`).join('')}
+                        </div>
+                        <button class="arrow arrow-r" onclick="this.previousElementSibling.scrollLeft+=100">❯</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
         }
 
-        function moverSlider(btn, dir) {
-            const track = btn.parentElement.querySelector('.saga-track');
-            track.scrollLeft += dir * 100;
+        function abrirModal(nom, cant) {
+            document.getElementById('m-name').innerText = nom;
+            document.getElementById('m-pack').innerText = `PACK DE ${cant} PELÍCULAS`;
+            document.getElementById('modalSaga').style.display = 'flex';
         }
-
-        // NAVEGACIÓN
-        function mostrarEstrenos() {
-            modoActual = 'peliculas';
-            document.getElementById('section-title-text').innerText = 'ESTRENOS';
-            document.getElementById('sort-wrapper').style.display = 'block';
-            peliculasActivas = [...todasLasPeliculas].reverse();
-            cerrarMenu();
-            mostrarPeliculas(true);
-        }
-
-        function mostrarSagas() {
-            modoActual = 'sagas';
-            document.getElementById('section-title-text').innerHTML = '🍿 PROMO SAGAS';
-            document.getElementById('sort-wrapper').style.display = 'none';
-            peliculasActivas = todasLasSagas;
-            cerrarMenu();
-            mostrarPeliculas(true);
-        }
-
-        function mostrarSeries() {
-            modoActual = 'series';
-            document.getElementById('section-title-text').innerText = 'SERIES';
-            document.getElementById('sort-wrapper').style.display = 'block';
-            peliculasActivas = todasLasSeries;
-            cerrarMenu();
-            mostrarPeliculas(true);
-        }
-
-        function mostrarMasRecientes() {
-            modoActual = 'peliculas';
-            document.getElementById('section-title-text').innerText = 'MÁS RECIENTES';
-            peliculasActivas = [...todasLasPeliculas].reverse();
-            cerrarMenu();
-            mostrarPeliculas(true);
-        }
-
-        function filtrarPorGenero(g) {
-            modoActual = 'peliculas';
-            document.getElementById('section-title-text').innerText = g;
-            peliculasActivas = todasLasPeliculas.filter(p => p.generos.includes(g));
-            cerrarMenu();
-            mostrarPeliculas(true);
-        }
-
-        // MODALES
-        function abrirModal(item) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-content');
-            content.classList.remove('dark');
-            document.getElementById('modal-img').src = item.imagen;
-            document.getElementById('modal-img').style.display = 'block';
-            document.getElementById('modal-title').innerText = item.nombre;
-            document.getElementById('modal-info').innerText = item.año + " | " + (item.tipo === 'serie' ? 'Serie' : 'Película');
-            modal.style.display = 'flex';
-        }
-
-        function abrirModalSaga(nombre, cant) {
-            const modal = document.getElementById('modal');
-            const content = document.getElementById('modal-content');
-            content.classList.add('dark');
-            document.getElementById('modal-img').style.display = 'none';
-            document.getElementById('modal-title').innerHTML = `<span style="font-size:30px">🍿</span><br>PROMO SAGAS`;
-            document.getElementById('modal-info').innerHTML = `
-                <h2 style="color:white; margin: 15px 0;">${nombre}</h2>
-                <div style="color:var(--pack-green); font-weight:bold; font-size:18px;">PACK DE ${cant} PELÍCULAS</div>
-            `;
-            modal.style.display = 'flex';
-        }
-
-        function cerrarModal() { document.getElementById('modal').style.display = 'none'; }
+        function cerrarModal() { document.getElementById('modalSaga').style.display = 'none'; }
         
-        // MENÚ Y OTROS
-        function abrirMenu() { document.getElementById('sidebar-container').classList.add('active'); document.getElementById('sidebar-overlay').classList.add('active'); }
-        function cerrarMenu() { document.getElementById('sidebar-container').classList.remove('active'); document.getElementById('sidebar-overlay').classList.remove('active'); }
-        function toggleGeneros() { document.getElementById('genres-grid').classList.toggle('open'); }
-        function toggleSortMenu(e) { e.stopPropagation(); document.getElementById('sort-dropdown').classList.toggle('open'); }
-
-        document.getElementById('footer-copy').innerText = `© ${new Date().getFullYear()} DIGISTOCK24`;
-        
-        window.onclick = (e) => {
-            if (e.target.className === 'modal-overlay') cerrarModal();
-            if (!e.target.closest('.sort-wrapper')) document.getElementById('sort-dropdown').classList.remove('open');
-        }
-
-        // BUSCADOR SIMPLE
-        function abrirBuscador() { document.getElementById('search-modal').style.display = 'flex'; document.getElementById('search-input').focus(); }
-        function cerrarBuscador() { document.getElementById('search-modal').style.display = 'none'; }
-        document.getElementById('search-input').oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            const res = document.getElementById('search-results');
-            if (val.length < 2) { res.innerHTML = ''; return; }
-            const filtered = [...todasLasPeliculas, ...todasLasSeries].filter(i => i.nombre.toLowerCase().includes(val)).slice(0, 5);
-            res.innerHTML = filtered.map(i => `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="abrirModal(${JSON.stringify(i).replace(/"/g, '&quot;')}); cerrarBuscador();">${i.nombre}</div>`).join('');
-        };
+        cargarSagas();
     </script>
 </body>
 </html>
