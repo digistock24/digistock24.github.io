@@ -14,6 +14,7 @@
             --accent-cyan: #005691; 
             --accent-pink: #ff00ff; 
             --search-accent: #007acc; 
+            --pack-green: #00e600;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -33,6 +34,7 @@
             width: auto;
             filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.6)); 
             display: block; 
+            cursor: pointer;
         }
         
         .nav-icons { display: flex; gap: 32px; align-items: center; cursor: pointer; color: white; }
@@ -49,7 +51,7 @@
 
         /* Título de sección */
         .section-title {
-            margin: 20px 20px 16px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase;
+            margin: 25px 20px 18px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase;
             border-left: 4px solid #004379; padding-left: 10px;
             display: flex;
             align-items: center;
@@ -141,14 +143,27 @@
             transform: translateY(-1px); 
         }
 
-        /* Grilla de películas (Responsive) */
-        .movie-grid {
+        /* ================= GRILLA PRINCIPAL (RESPONSIVE) ================= */
+        .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 15px; padding: 0 20px 20px 20px;
         }
 
-        /* Tarjeta de cada película */
+        /* Grilla adaptada a 3 columnas para Promo Sagas en Escritorio */
+        .content-grid.sagas-layout {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media (min-width: 992px) {
+            .content-grid.sagas-layout {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tarjeta de Película / Serie */
         .movie-card { 
             cursor: pointer; 
             transition: transform 0.2s; 
@@ -164,7 +179,6 @@
         .img-container { position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; }
         .img-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
         
-        /* Etiqueta del Año */
         .year-badge {
             position: absolute; top: 8px; left: 8px; background-color: var(--accent-pink);
             color: white; padding: 2px 7px; font-size: 12px; font-weight: bold; border-radius: 4px;
@@ -172,7 +186,6 @@
             z-index: 2;
         }
 
-        /* Textos debajo de la imagen */
         .movie-title {
             font-size: 14px; font-weight: bold; margin-top: 8px; padding: 0 10px;
             display: -webkit-box; -webkit-line-clamp: 2;
@@ -190,10 +203,135 @@
             text-overflow: ellipsis;
         }
 
+        /* ================= RECUADROS DE SAGAS ================= */
+        .saga-card {
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            padding: 15px 17px 6px 17px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .saga-card:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .saga-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .pack-badge {
+            color: var(--accent-pink);
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pack-badge .pack-num {
+            font-size: 20px;
+            font-weight: 900;
+            display: inline-block;
+        }
+
+        .price-badge {
+            background-color: var(--accent-pink);
+            color: white;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(255, 0, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        .saga-title {
+            color: #222222;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            line-height: 1.2;
+            letter-spacing: 0.1px;
+        }
+
+        .saga-subtitle {
+            color: #5f5f5f;
+            font-size: 13.5px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            letter-spacing: 0.2px;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-top: auto;
+            padding: 4px 0;
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            padding: 4px 2px;
+            width: 100%;
+        }
+        .slider-track::-webkit-scrollbar { display: none; }
+
+        .poster-card {
+            width: 95px;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .poster-card:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.8);
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(18, 22, 30, 0.85);
+            border: 1.5px solid rgba(255,255,255,0.4);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            z-index: 5;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .slider-btn:hover {
+            background: #005590;
+            border-color: #0261a2;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-btn.prev { left: -8px; }
+        .slider-btn.next { right: -8px; }
+
         /* ================= VENTANA FLOTANTE (MODAL DETALLES) ================= */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); z-index: 2000;
+            background: rgba(0, 0, 0, 0.75); z-index: 2000;
             justify-content: center; align-items: center; padding: 20px;
             backdrop-filter: blur(3px); 
         }
@@ -201,14 +339,14 @@
             background-color: rgba(255, 255, 255, 0.98); 
             border-radius: 15px; padding: 20px 20px 15px 20px;
             width: 100%; max-width: 350px; text-align: center; position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
         .modal-img { 
-            width: 90%; 
-            max-height: 400px; 
+            width: 85%; 
+            max-height: 380px; 
             object-fit: cover; 
             border-radius: 14px; 
-            margin-bottom: 13px; 
+            margin-bottom: 12px; 
             box-shadow: 0 2px 9px rgba(0,0,0,0.4);
         }
         
@@ -216,16 +354,17 @@
             color: var(--accent-cyan); 
             font-size: 14px; 
             font-weight: bold; 
-            margin-bottom: 8px; 
+            margin-bottom: 7px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             gap: 6px; 
+            text-transform: uppercase;
         }
         .modal-meta svg { transform: translateY(-1px); }
         .modal-type-label { display: inline-flex; align-items: center; gap: 6px; }
         
-        .modal-title { font-size: 21px; margin-bottom: 15px; color: var(--text-main);}
+        .modal-title { font-size: 21px; margin-bottom: 11px; color: #222222; font-weight: 700;}
         .modal-genres { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
         .modal-episodios {
             font-size: 14px;
@@ -250,6 +389,15 @@
             transform: scale(1.05); 
         }
         
+        .modal-pack-info {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-pink);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
         .close-btn {
             background: var(--accent-pink); 
             color: white; border: none; width: 40px; height: 40px;
@@ -403,7 +551,6 @@
         }
         .sidebar-close-btn:hover { background: var(--search-accent); color: white; transform: translateY(-50%) scale(1.1); }
 
-        /* Solo se muestra cuando el menú lateral está abierto */
         .sidebar-container.active .sidebar-close-btn {
             opacity: 1;
             visibility: visible;
@@ -491,14 +638,13 @@
                 order: 2;
             }
         }
-
     </style>
 </head>
 <body>
 
     <!-- BARRA SUPERIOR -->
     <header>
-        <div class="logo">
+        <div class="logo" onclick="irAInicio()">
             <img src="https://i.imgur.com/2XOt5Zx.png" alt="DigiStock 24">
         </div>
         <div class="nav-icons">
@@ -509,10 +655,8 @@
                 </svg>
             </a>
             <span id="open-search-btn" onclick="abrirBuscador()">
-                <!-- ÍCONO SVG DE LUPA -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
             </span>
-            <!-- Bóton que abre el menú -->
             <span class="menu-icon-symbol" onclick="abrirMenu()">☰</span>
         </div>
     </header>
@@ -520,7 +664,6 @@
     <!-- MENÚ LATERAL Y OVERLAY -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="cerrarMenu()"></div>
     <nav class="sidebar-container" id="sidebar-container">
-        <!-- Botón circular sobresaliente centrado -->
         <button class="sidebar-close-btn" onclick="cerrarMenu()">✕</button>
         
         <div class="sidebar-content">
@@ -536,6 +679,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
                 MÁS RECIENTES
             </div>
+           
             <div class="menu-item has-dropdown" onclick="toggleGeneros()">
                 <div class="menu-item-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
@@ -564,6 +708,24 @@
                 <span class="genre-item" onclick="filtrarPorGenero('Terror')">Terror</span>
                 <span class="genre-item" onclick="filtrarPorGenero('Western')">Western</span>
             </div>
+           <!-- SECCIÓN PROMO SAGAS -->
+            <div class="menu-item" onclick="mostrarSagas()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);">
+    <!-- Rectángulo con height aumentado a 18 (era 16) -->
+    <rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect>
+    
+    <!-- Resto de líneas superiores intactas -->
+    <path d="M2 9h20"></path>
+    <path d="M4 9l2.5-5"></path>
+    <path d="M9 9l2.5-5"></path>
+    <path d="M14 9l2.5-5"></path>
+    <path d="M19 9l2.5-5"></path>
+    
+    <!-- Botón de Play ajustado a y=12.5 para centrarlo (era 11.5) -->
+    <path d="M10 12.5l6 3-6 3z"></path>
+</svg>
+                PROMO SAGAS
+            </div>
             <div class="menu-item" onclick="mostrarSeries()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
                 SERIES
@@ -589,7 +751,7 @@
                 PELÍCULAS
             </div>
         </div>
-        <div class="sort-wrapper">
+        <div class="sort-wrapper" id="sort-wrapper">
             <button class="sort-btn" id="sort-btn" onclick="toggleSortMenu(event)" aria-label="Ordenar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m21 16-4 4-4-4"></path>
@@ -607,8 +769,8 @@
         </div>
     </div>
     
-    <!-- CONTENEDOR DE PELÍCULAS -->
-    <main class="movie-grid" id="movie-grid"></main>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="content-grid" id="main-grid"></main>
     
     <!-- BOTÓN CARGAR MÁS -->
     <button id="load-more" style="display:none;">Cargar más películas</button>
@@ -649,7 +811,7 @@
                 <span id="modal-type-label" class="modal-type-label"></span>
             </div>
             <h2 class="modal-title" id="modal-title"></h2>
-            <div class="modal-genres" id="modal-info"></div>
+            <div id="modal-info"></div>
             <button class="close-btn" onclick="cerrarModal()">✕</button>
         </div>
     </div>
@@ -680,92 +842,157 @@
     </div>
 
     <script>
-        /* ================= JAVASCRIPT: LÓGICA Y DATOS ================= */
+        /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS ================= */
         
         const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
         const urlPeliculas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=peliculas`;
         const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
+        const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
 
-        let todasLasPeliculas = []; // Mantiene el orden original puro de la hoja de películas
-        let todasLasSeries = [];    // Mantiene el orden original puro de la hoja de series
-        let peliculasActivas = [];  // Lo que se está mostrando actualmente (películas o series)
-        let peliculasMostradas = 0;
+        let todasLasPeliculas = []; 
+        let todasLasSeries = [];    
+        let todasLasSagas = [];
+        let elementosActivos = [];  
+        let itemsMostrados = 0;
         const CANTIDAD_POR_PAGINA = 20;
         let terminoBusquedaActual = '';
-        let modoActual = 'peliculas'; // 'peliculas' | 'series' -> define cómo se arman las tarjetas y el modal
+        let modoActual = 'peliculas'; // 'peliculas' | 'series' | 'sagas'
 
-        // Constantes para actualizar títulos
+        // Constantes SVG
         const iconoPeliculaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
         const iconoSerieSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-2px);"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
+        const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 11.5l6 3-6 3z"></path></svg>`;
         const iconoPeliculaSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
         const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
         const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
 
-        // Devuelve el texto de episodios a mostrar, o "✔ Completa" si el casillero está vacío
         function textoEpisodios(serie) {
             const texto = String(serie.episodios || '').trim();
-            return texto !== '' ? texto : '\u2714 Completa';
+            return texto !== '' ? texto : '✔ Completa';
         }
 
-        // Footer: año de copyright siempre actualizado
+        // Footer copyright
         document.getElementById('footer-copy').textContent = `\u00A9 ${new Date().getFullYear()} DIGISTOCK24 | Todos los derechos reservados`;
 
-        fetch(urlPeliculas)
-            .then(response => response.text())
-            .then(data => {
-                const jsonStr = data.substring(47).slice(0, -2);
-                const jsonData = JSON.parse(jsonStr);
-                
-                // Guardamos la lista intacta y original
-                todasLasPeliculas = jsonData.table.rows.map(row => {
-                    return {
-                        tipo: 'pelicula',
-                        nombre: row.c[0] ? row.c[0].v : '',
-                        año: row.c[1] ? row.c[1].v : '',
-                        generos: row.c[2] ? row.c[2].v : '',
-                        imagen: row.c[3] ? row.c[3].v : ''
-                    };
-                }).filter(peli => peli.nombre !== 'NOMBRE');
+        // Carga simultánea de todas las bases de datos
+        Promise.all([
+            fetch(urlPeliculas).then(r => r.text()),
+            fetch(urlSeries).then(r => r.text()),
+            fetch(urlSagas).then(r => r.text())
+        ]).then(([dataPeli, dataSerie, dataSaga]) => {
+            // Películas
+            const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
+            todasLasPeliculas = jsonPeli.table.rows.map(row => ({
+                tipo: 'pelicula',
+                nombre: row.c[0] ? row.c[0].v : '',
+                año: row.c[1] ? row.c[1].v : '',
+                generos: row.c[2] ? row.c[2].v : '',
+                imagen: row.c[3] ? row.c[3].v : ''
+            })).filter(peli => peli.nombre !== 'NOMBRE');
 
-                // Por defecto iniciamos con Estrenos
-                mostrarEstrenos();
-            })
-            .catch(error => console.error('Error al cargar la base de datos de películas:', error));
+            // Series
+            const jsonSerie = JSON.parse(dataSerie.substring(47).slice(0, -2));
+            todasLasSeries = jsonSerie.table.rows.map(row => ({
+                tipo: 'serie',
+                nombre: row.c[0] ? row.c[0].v : '',
+                año: row.c[1] ? row.c[1].v : '',
+                episodios: (row.c[2] && row.c[2].v != null) ? row.c[2].v : '',
+                pack: (row.c[3] && row.c[3].v != null) ? row.c[3].v : '',
+                imagen: row.c[4] ? row.c[4].v : ''
+            })).filter(serie => serie.nombre !== 'NOMBRE');
 
-        fetch(urlSeries)
-            .then(response => response.text())
-            .then(data => {
-                const jsonStr = data.substring(47).slice(0, -2);
-                const jsonData = JSON.parse(jsonStr);
+            // Sagas
+            const jsonSaga = JSON.parse(dataSaga.substring(47).slice(0, -2));
+            const rowsSagas = jsonSaga.table.rows;
+            const filaPrecios = rowsSagas[0]?.c || [];
+            const filaCantidades = rowsSagas[1]?.c || [];
+            todasLasSagas = [];
 
-                todasLasSeries = jsonData.table.rows.map(row => {
-                    return {
-                        tipo: 'serie',
-                        nombre: row.c[0] ? row.c[0].v : '',
-                        año: row.c[1] ? row.c[1].v : '',
-                        episodios: (row.c[2] && row.c[2].v != null) ? row.c[2].v : '',
-                        pack: (row.c[3] && row.c[3].v != null) ? row.c[3].v : '',
-                        imagen: row.c[4] ? row.c[4].v : ''
-                    };
-                }).filter(serie => serie.nombre !== 'NOMBRE');
-            })
-            .catch(error => console.error('Error al cargar la base de datos de series:', error));
+            for (let i = 2; i < rowsSagas.length; i++) {
+                const celdas = rowsSagas[i]?.c;
+                if (!celdas || !celdas[0] || celdas[0].v === null || String(celdas[0].v).trim() === '') continue;
 
-        function mostrarPeliculas(reiniciar = false) {
-            const grid = document.getElementById('movie-grid');
+                const nombreSaga = String(celdas[0].v).trim();
+                let ultimaColumna = 1;
+                let imagenes = [];
+
+                for (let j = 1; j < celdas.length; j++) {
+                    if (celdas[j] && celdas[j].v !== null && String(celdas[j].v).trim() !== '') {
+                        imagenes.push(String(celdas[j].v).trim());
+                        ultimaColumna = j;
+                    }
+                }
+
+                if (imagenes.length === 0) continue;
+
+                let precio = (filaPrecios[ultimaColumna] && filaPrecios[ultimaColumna].v !== null)
+                    ? String(filaPrecios[ultimaColumna].v).trim()
+                    : '0';
+                if (!precio.startsWith('$')) precio = '$' + precio;
+
+                const cantidadX = (filaCantidades[ultimaColumna] && filaCantidades[ultimaColumna].v !== null)
+                    ? String(filaCantidades[ultimaColumna].v).trim()
+                    : String(imagenes.length);
+
+                todasLasSagas.push({
+                    tipo: 'saga',
+                    nombre: nombreSaga,
+                    precio: precio,
+                    cantidad: cantidadX,
+                    imagenesSlider: [...imagenes]
+                });
+            }
+
+            // Revisar si se entró con enlace directo (#sagas, #series, etc.)
+            verificarRutaDirecta();
+        }).catch(err => console.error('Error cargando bases de datos:', err));
+
+        // RENDERIZADO PRINCIPAL
+        function mostrarContenido(reiniciar = false) {
+            const grid = document.getElementById('main-grid');
             if (reiniciar) {
                 grid.innerHTML = '';
-                peliculasMostradas = 0;
+                itemsMostrados = 0;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            const limit = Math.min(peliculasMostradas + CANTIDAD_POR_PAGINA, peliculasActivas.length);
+            if (modoActual === 'sagas') {
+                grid.classList.add('sagas-layout');
+                elementosActivos.forEach(saga => {
+                    const card = document.createElement('div');
+                    card.className = 'saga-card';
+                    card.innerHTML = `
+                        <div class="saga-header-row">
+                            <div class="pack-badge">PACK DE <span class="pack-num">${saga.cantidad}</span> PELÍS</div>
+                            <div class="price-badge">${saga.precio}</div>
+                        </div>
+                        <div class="saga-title">${saga.nombre}</div>
+                        <div class="saga-subtitle">Descargables y también para ver online!</div>
+                        <div class="slider-wrapper">
+                            <button class="slider-btn prev" onclick="moverSlider(this, -1)">❮</button>
+                            <div class="slider-track">
+                                ${saga.imagenesSlider.map(img => `
+                                    <img src="${img}" alt="${saga.nombre}" class="poster-card" loading="lazy" onclick="abrirModalSaga('${saga.nombre}', '${saga.cantidad}', '${img}')">
+                                `).join('')}
+                            </div>
+                            <button class="slider-btn next" onclick="moverSlider(this, 1)">❯</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                document.getElementById('load-more').style.display = 'none';
+                return;
+            }
+
+            // Modo Películas o Series
+            grid.classList.remove('sagas-layout');
+            const limit = Math.min(itemsMostrados + CANTIDAD_POR_PAGINA, elementosActivos.length);
             
-            for (let i = peliculasMostradas; i < limit; i++) {
-                const item = peliculasActivas[i];
+            for (let i = itemsMostrados; i < limit; i++) {
+                const item = elementosActivos[i];
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                card.onclick = () => abrirModal(item);
+                card.onclick = () => abrirModalPeliculaOSerie(item);
 
                 const lineaInferior = item.tipo === 'serie'
                     ? textoEpisodios(item)
@@ -783,25 +1010,27 @@
                 grid.appendChild(card);
             }
 
-            peliculasMostradas = limit;
+            itemsMostrados = limit;
 
             const btn = document.getElementById('load-more');
             btn.textContent = modoActual === 'series' ? 'Cargar más series' : 'Cargar más películas';
-            if (peliculasMostradas < peliculasActivas.length) {
-                btn.style.display = 'block';
-                btn.onclick = () => mostrarPeliculas(false);
-            } else {
-                btn.style.display = 'none';
-            }
+            btn.style.display = itemsMostrados < elementosActivos.length ? 'block' : 'none';
+            btn.onclick = () => mostrarContenido(false);
         }
 
-        /* ================= FUNCIONES DE TÍTULOS Y SECCIONES ================= */
+        function moverSlider(btn, dir) {
+            btn.parentElement.querySelector('.slider-track').scrollBy({ left: dir * 120, behavior: 'smooth' });
+        }
+
+        /* ================= TÍTULOS Y SECCIONES ================= */
         function cambiarTitulo(titulo, modo = 'normal') {
             const titleContainer = document.getElementById('section-title-container');
             const titleText = document.getElementById('section-title-text');
             const subtitle = document.getElementById('section-subtitle');
+            const sortWrapper = document.getElementById('sort-wrapper');
 
-            subtitle.style.display = 'flex'; // visible por defecto; se oculta solo en modo series
+            subtitle.style.display = 'flex';
+            sortWrapper.style.display = 'block';
 
             if (modo === 'busqueda') {
                 titleContainer.classList.add('search-active');
@@ -821,9 +1050,19 @@
                         ${titulo.toUpperCase()}
                     </span>
                 `;
-                // No hace falta un subtítulo aparte: el título ya dice "SERIES"
                 subtitle.innerHTML = '';
                 subtitle.style.display = 'none';
+            } else if (modo === 'sagas') {
+                titleContainer.classList.add('search-active');
+                titleText.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                        ${iconoClaquetaSVG}
+                        ${titulo.toUpperCase()}
+                    </span>
+                `;
+                subtitle.innerHTML = '';
+                subtitle.style.display = 'none';
+                sortWrapper.style.display = 'none';
             } else {
                 titleContainer.classList.remove('search-active');
                 titleText.textContent = titulo.toUpperCase();
@@ -832,8 +1071,8 @@
         }
 
         function irAInicio() {
-            cerrarMenu();
-            mostrarEstrenos(); // Inicio por defecto devuelve a Estrenos
+            history.pushState(null, null, '#estrenos');
+            mostrarEstrenos();
         }
 
         function mostrarEstrenos() {
@@ -841,63 +1080,87 @@
             modoActual = 'peliculas';
             const anioActual = new Date().getFullYear().toString();
             
-            // Hacemos una copia de la base de datos y la ordenamos para dejar el año actual primero
-            peliculasActivas = [...todasLasPeliculas].sort((a, b) => {
-                const esAAnioActual = String(a.año).trim() === anioActual;
-                const esBAnioActual = String(b.año).trim() === anioActual;
-                if (esAAnioActual && !esBAnioActual) return -1;
-                if (!esAAnioActual && esBAnioActual) return 1; 
+            elementosActivos = [...todasLasPeliculas].sort((a, b) => {
+                const esA = String(a.año).trim() === anioActual;
+                const esB = String(b.año).trim() === anioActual;
+                if (esA && !esB) return -1;
+                if (!esA && esB) return 1; 
                 return 0;
             });
             
             cambiarTitulo('ESTRENOS');
             cerrarMenu();
-            mostrarPeliculas(true);
+            mostrarContenido(true);
         }
 
         function mostrarMasRecientes() {
+            history.pushState(null, null, '#mas-recientes');
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
-            // Clonamos la lista original sin ordenar (tal cual viene de la hoja)
-            peliculasActivas = [...todasLasPeliculas];
+            elementosActivos = [...todasLasPeliculas];
             
             cambiarTitulo('MÁS RECIENTES');
             cerrarMenu();
-            mostrarPeliculas(true);
+            mostrarContenido(true);
+        }
+
+        function mostrarSeries() {
+            history.pushState(null, null, '#series');
+            terminoBusquedaActual = '';
+            modoActual = 'series';
+            elementosActivos = [...todasLasSeries];
+
+            cambiarTitulo('SERIES', 'series');
+            cerrarMenu();
+            mostrarContenido(true);
+        }
+
+        function mostrarSagas() {
+            history.pushState(null, null, '#sagas');
+            terminoBusquedaActual = '';
+            modoActual = 'sagas';
+            elementosActivos = [...todasLasSagas];
+
+            cambiarTitulo('PROMO SAGAS', 'sagas');
+            cerrarMenu();
+            mostrarContenido(true);
         }
 
         function filtrarPorGenero(genero) {
+            history.pushState(null, null, '#' + encodeURIComponent(genero));
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
-            peliculasActivas = todasLasPeliculas.filter(peli => 
-                peli.generos.toLowerCase().includes(genero.toLowerCase())
+            elementosActivos = todasLasPeliculas.filter(p => 
+                p.generos.toLowerCase().includes(genero.toLowerCase())
             );
             
             cambiarTitulo(genero);
             cerrarMenu();
-            mostrarPeliculas(true);
+            mostrarContenido(true);
         }
 
-        function mostrarSeries() {
-            terminoBusquedaActual = '';
-            modoActual = 'series';
-            // Tal como vienen en la hoja "series" (más nuevas arriba)
-            peliculasActivas = [...todasLasSeries];
-
-            cambiarTitulo('SERIES', 'series');
-            cerrarMenu();
-            mostrarPeliculas(true);
+        // CONTROL DE ENLACES DIRECTOS (#sagas, #series, etc.)
+        function verificarRutaDirecta() {
+            const hash = window.location.hash.toLowerCase();
+            if (hash === '#sagas' || hash === '#promo-sagas') {
+                mostrarSagas();
+            } else if (hash === '#series') {
+                mostrarSeries();
+            } else if (hash === '#mas-recientes') {
+                mostrarMasRecientes();
+            } else {
+                mostrarEstrenos();
+            }
         }
+        window.addEventListener('popstate', verificarRutaDirecta);
 
-        /* ================= CONTROL DE ORDENAMIENTO ================= */
+        /* ================= ORDENAMIENTO ================= */
         const sortDropdown = document.getElementById('sort-dropdown');
-
         function toggleSortMenu(e) {
             if (e) e.stopPropagation();
             sortDropdown.classList.toggle('open');
         }
 
-        // Cierra el menú de ordenar si se hace clic afuera
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.sort-wrapper')) {
                 sortDropdown.classList.remove('open');
@@ -907,29 +1170,25 @@
         function ordenarPeliculas(tipo) {
             switch (tipo) {
                 case 'recientes': {
-                    // Vuelve al orden original de la hoja correspondiente (tal como fueron añadidas)
                     const listaBase = modoActual === 'series' ? todasLasSeries : todasLasPeliculas;
-                    peliculasActivas.sort((a, b) => listaBase.indexOf(a) - listaBase.indexOf(b));
+                    elementosActivos.sort((a, b) => listaBase.indexOf(a) - listaBase.indexOf(b));
                     break;
                 }
                 case 'anio':
-                    // De más reciente a más antigua
-                    peliculasActivas.sort((a, b) => Number(b.año) - Number(a.año));
+                    elementosActivos.sort((a, b) => Number(b.año) - Number(a.año));
                     break;
                 case 'nombre':
-                    // Alfabético de la A a la Z
-                    peliculasActivas.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+                    elementosActivos.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
                     break;
                 case 'antiguas':
-                    // De más antigua a más reciente
-                    peliculasActivas.sort((a, b) => Number(a.año) - Number(b.año));
+                    elementosActivos.sort((a, b) => Number(a.año) - Number(b.año));
                     break;
             }
             sortDropdown.classList.remove('open');
-            mostrarPeliculas(true);
+            mostrarContenido(true);
         }
 
-        /* ================= CONTROL DE MENÚ LATERAL ================= */
+        /* ================= MENÚ LATERAL ================= */
         const sidebarContainer = document.getElementById('sidebar-container');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const genresGrid = document.getElementById('genres-grid');
@@ -943,7 +1202,6 @@
         function cerrarMenu() {
             sidebarContainer.classList.remove('active');
             sidebarOverlay.classList.remove('active');
-            // Cierra el panel de géneros para la próxima vez
             genresGrid.classList.remove('open');
             genresChevron.classList.remove('open');
         }
@@ -953,10 +1211,10 @@
             genresChevron.classList.toggle('open');
         }
 
-        /* ================= CONTROL DE MODAL DE DETALLES ================= */
+        /* ================= MODALES ================= */
         const modal = document.getElementById('modal');
 
-        function abrirModal(item) {
+        function abrirModalPeliculaOSerie(item) {
             document.getElementById('modal-img').src = item.imagen;
             document.getElementById('modal-year').textContent = item.año;
             document.getElementById('modal-title').textContent = item.nombre;
@@ -970,7 +1228,6 @@
             contenedorInfo.innerHTML = '';
 
             if (esSerie) {
-                // Las series no tienen botones de género: mostramos el texto de episodios completo
                 contenedorInfo.className = 'modal-episodios';
                 contenedorInfo.innerHTML = textoEpisodios(item);
             } else {
@@ -996,6 +1253,19 @@
             modal.style.display = 'flex';
         }
 
+        function abrirModalSaga(nombre, cantidad, imagenUrl) {
+            document.getElementById('modal-img').src = imagenUrl;
+            document.getElementById('modal-year').textContent = '';
+            document.getElementById('modal-type-label').innerHTML = `${iconoClaquetaSVG} PROMO SAGAS`;
+            document.getElementById('modal-title').textContent = nombre;
+
+            const contenedorInfo = document.getElementById('modal-info');
+            contenedorInfo.className = 'modal-pack-info';
+            contenedorInfo.textContent = `PACK DE ${cantidad} PELÍCULAS`;
+
+            modal.style.display = 'flex';
+        }
+
         function cerrarModal() {
             modal.style.display = 'none';
         }
@@ -1004,7 +1274,7 @@
             if (e.target === modal) cerrarModal();
         });
 
-        /* ================= CONTROL DE BUSCADOR FLOTANTE ================= */
+        /* ================= BUSCADOR EXCLUSIVO DE PELÍCULAS Y SERIES ================= */
         const searchModal = document.getElementById('search-modal');
         const searchInput = document.getElementById('search-input');
         const clearSearchBtn = document.getElementById('clear-search-btn');
@@ -1012,9 +1282,8 @@
         const viewAllResultsBtn = document.getElementById('view-all-results-btn');
         const btnBuscarPeliculas = document.getElementById('btn-buscar-peliculas');
         const btnBuscarSeries = document.getElementById('btn-buscar-series');
-        let tipoBusquedaActual = 'peliculas'; // 'peliculas' | 'series' -> en cuál de las 2 hojas se busca
+        let tipoBusquedaActual = 'peliculas'; // 'peliculas' | 'series'
 
-        // Quita tildes/acentos y pasa a minúsculas, para que la búsqueda no distinga "arbol" de "árbol"
         function normalizarTexto(texto) {
             return String(texto || '')
                 .normalize('NFD')
@@ -1044,7 +1313,6 @@
             tipoBusquedaActual = tipo;
             btnBuscarPeliculas.classList.toggle('active', tipo === 'peliculas');
             btnBuscarSeries.classList.toggle('active', tipo === 'series');
-            // Si ya había una búsqueda en curso, la volvemos a ejecutar con el nuevo tipo
             ejecutarBusqueda(searchInput.value.trim());
         }
 
@@ -1069,7 +1337,7 @@
                         el.className = 'search-result-item';
                         el.onclick = () => {
                             cerrarBuscador();
-                            abrirModal(item);
+                            abrirModalPeliculaOSerie(item);
                         };
 
                         const iconoTipo = item.tipo === 'serie' ? iconoSerieSVG : iconoPeliculaSVG;
@@ -1114,14 +1382,13 @@
             const listaBase = tipoBusquedaActual === 'series' ? todasLasSeries : todasLasPeliculas;
             const queryNormalizada = normalizarTexto(terminoBusquedaActual);
 
-            // Filtramos siempre desde el listado completo e intacto
-            peliculasActivas = listaBase.filter(item => 
+            elementosActivos = listaBase.filter(item => 
                 normalizarTexto(item.nombre).includes(queryNormalizada)
             );
 
             cambiarTitulo(terminoBusquedaActual, 'busqueda');
             cerrarBuscador();
-            mostrarPeliculas(true); 
+            mostrarContenido(true); 
         }
 
         searchModal.addEventListener('click', function(e) {
