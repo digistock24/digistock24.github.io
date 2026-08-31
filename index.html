@@ -695,7 +695,7 @@
             padding: 0 14px 20px 14px;
             display: flex;
             flex-direction: column;
-            gap: 34px; /* Separación amplia entre bloques */
+            gap: 34px;
         }
 
         /* 1. Header con año y líneas neón alternantes (Imagen 1) */
@@ -846,7 +846,7 @@
             height: 32px;
             padding: 0 20px;
             font-size: 13px;
-            margin: 10px auto 6px auto; /* Margen para no pegar con la siguiente sección */
+            margin: 10px auto 6px auto;
             border-radius: 8px;
             display: inline-flex;
         }
@@ -880,7 +880,7 @@
             box-shadow: 0 4px 10px rgba(0, 85, 145, 0.2);
         }
 
-        /* Banner de Pack Digital Inicio (Imagen 2 - Imagen inicia desde arriba) */
+        /* Banner de Pack Digital Inicio (Imagen inicia desde arriba de 0) */
         .home-pack-banner-card {
             position: relative;
             width: 100%;
@@ -888,7 +888,7 @@
             border-radius: 16px;
             overflow: hidden;
             background-size: cover !important;
-            background-position: center top !important; /* Inicia desde arriba de 0 */
+            background-position: center top !important; /* Inicia desde arriba */
             box-shadow: 0 4px 14px rgba(0,0,0,0.15);
             cursor: pointer;
             display: flex;
@@ -934,54 +934,42 @@
             display: flex;
         }
 
-        /* Sistema de Grid Responsivo para Inicio (Móvil vs PC) */
-        .home-main-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 34px;
-            width: 100%;
+        /* ================= ESTRUCTURA RESPONSIVA INICIO (Móvil vs PC) ================= */
+        /* En móvil (< 900px): flujo lineal perfecto con orden exacto */
+        @media (max-width: 899px) {
+            .home-desktop-columns,
+            .home-col-left,
+            .home-col-right {
+                display: contents;
+            }
+            #home-block-carousel { order: 1; }
+            #home-block-generos   { order: 2; }
+            #home-block-recientes { order: 3; }
+            #home-block-series    { order: 4; }
+            #home-block-sagas     { order: 5; }
+            #home-block-packs     { order: 6; }
         }
 
-        /* En móvil: orden requerido */
-        #home-block-generos { order: 1; }
-        #home-block-recientes { order: 2; }
-        #home-block-series { order: 3; }
-        #home-block-sagas { order: 4; }
-        #home-block-packs { order: 5; }
-
+        /* En PC (>= 900px): 2 Columnas continuas sin espacios vacíos */
         @media (min-width: 900px) {
-            .home-main-grid {
+            .home-desktop-columns {
                 display: grid;
                 grid-template-columns: 1fr 390px;
                 gap: 30px;
                 align-items: start;
             }
-
-            /* Reordenamiento en columnas en PC */
-            #home-block-recientes {
-                grid-column: 1;
-                grid-row: 1;
+            .home-col-left {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
             }
-            #home-block-series {
-                grid-column: 1;
-                grid-row: 2;
+            .home-col-right {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                width: 100%;
+                max-width: 390px;
             }
-            #home-block-generos {
-                grid-column: 2;
-                grid-row: 1;
-                order: unset;
-            }
-            #home-block-sagas {
-                grid-column: 2;
-                grid-row: 2;
-                order: unset;
-            }
-            #home-block-packs {
-                grid-column: 2;
-                grid-row: 3;
-                order: unset;
-            }
-
             .home-grid-desktop-5 {
                 grid-template-columns: repeat(5, 1fr) !important;
             }
@@ -989,7 +977,7 @@
                 width: 120px;
             }
 
-            /* Ocultar el elemento 16 y 6 en PC para mantener múltiplos de 5 */
+            /* Ocultar el 16° y el 6° en PC */
             .home-item-16th,
             .home-item-6th {
                 display: none !important;
@@ -2086,7 +2074,7 @@
 
         // Constantes SVG
         const iconoPeliculaSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
-        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
+        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
         const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoClaquetaSVG17 = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
@@ -3433,6 +3421,13 @@
         const btnBuscarPeliculas = document.getElementById('btn-buscar-peliculas');
         const btnBuscarSeries = document.getElementById('btn-buscar-series');
         let tipoBusquedaActual = 'peliculas';
+
+        function normalizarTexto(texto) {
+            return String(texto || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+        }
 
         function abrirBuscador() {
             registrarEstadoModal();
