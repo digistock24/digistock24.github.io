@@ -695,7 +695,7 @@
             padding: 0 14px 20px 14px;
             display: flex;
             flex-direction: column;
-            gap: 26px;
+            gap: 34px; /* Separación amplia entre bloques */
         }
 
         /* 1. Header con año y líneas neón alternantes (Imagen 1) */
@@ -816,6 +816,10 @@
             align-items: center;
             gap: 8px;
         }
+        .home-section-title svg {
+            flex-shrink: 0;
+            transform: translateY(-1px);
+        }
         .home-btn-ver-mas {
             background: #005591;
             color: white;
@@ -842,7 +846,7 @@
             height: 32px;
             padding: 0 20px;
             font-size: 13px;
-            margin: 4px auto 0 auto;
+            margin: 10px auto 6px auto; /* Margen para no pegar con la siguiente sección */
             border-radius: 8px;
             display: inline-flex;
         }
@@ -876,15 +880,15 @@
             box-shadow: 0 4px 10px rgba(0, 85, 145, 0.2);
         }
 
-        /* Banner de Pack Digital Inicio (Imagen 2) */
+        /* Banner de Pack Digital Inicio (Imagen 2 - Imagen inicia desde arriba) */
         .home-pack-banner-card {
             position: relative;
             width: 100%;
             height: 270px;
             border-radius: 16px;
             overflow: hidden;
-            background-size: cover;
-            background-position: center 25%;
+            background-size: cover !important;
+            background-position: center top !important; /* Inicia desde arriba de 0 */
             box-shadow: 0 4px 14px rgba(0,0,0,0.15);
             cursor: pointer;
             display: flex;
@@ -924,38 +928,71 @@
             background: #e600e6;
         }
 
-        /* División de 2 Columnas en Escritorio (PC) */
-        .home-desktop-columns {
+        /* Control de visualización: 16 y 6 en móvil / 15 y 5 en PC */
+        .home-item-16th,
+        .home-item-6th {
+            display: flex;
+        }
+
+        /* Sistema de Grid Responsivo para Inicio (Móvil vs PC) */
+        .home-main-grid {
             display: flex;
             flex-direction: column;
-            gap: 26px;
+            gap: 34px;
             width: 100%;
         }
 
+        /* En móvil: orden requerido */
+        #home-block-generos { order: 1; }
+        #home-block-recientes { order: 2; }
+        #home-block-series { order: 3; }
+        #home-block-sagas { order: 4; }
+        #home-block-packs { order: 5; }
+
         @media (min-width: 900px) {
-            .home-desktop-columns {
+            .home-main-grid {
                 display: grid;
                 grid-template-columns: 1fr 390px;
                 gap: 30px;
                 align-items: start;
             }
-            .home-col-left {
-                display: flex;
-                flex-direction: column;
-                gap: 28px;
+
+            /* Reordenamiento en columnas en PC */
+            #home-block-recientes {
+                grid-column: 1;
+                grid-row: 1;
             }
-            .home-col-right {
-                display: flex;
-                flex-direction: column;
-                gap: 28px;
-                width: 100%;
-                max-width: 390px;
+            #home-block-series {
+                grid-column: 1;
+                grid-row: 2;
             }
+            #home-block-generos {
+                grid-column: 2;
+                grid-row: 1;
+                order: unset;
+            }
+            #home-block-sagas {
+                grid-column: 2;
+                grid-row: 2;
+                order: unset;
+            }
+            #home-block-packs {
+                grid-column: 2;
+                grid-row: 3;
+                order: unset;
+            }
+
             .home-grid-desktop-5 {
                 grid-template-columns: repeat(5, 1fr) !important;
             }
             .home-carousel-poster {
                 width: 120px;
+            }
+
+            /* Ocultar el elemento 16 y 6 en PC para mantener múltiplos de 5 */
+            .home-item-16th,
+            .home-item-6th {
+                display: none !important;
             }
         }
 
@@ -1099,7 +1136,7 @@
             border-radius: 10px;
         }
 
-        /* ================= VENTANA FLOTANTE INFO GENERAL ================= */
+        /* ================= VENTANA FLOTANTE INFO GENERAL (RESPONSIVE) ================= */
         #modal-info-general {
             display: none;
             position: fixed;
@@ -1168,6 +1205,7 @@
             border-radius: 10px;
         }
 
+        /* Botón de Cierre Circular Unificado */
         .modal-info-close-btn {
             margin-top: 14px;
             width: 44px;
@@ -1752,7 +1790,7 @@
         }
     </style>
 </head>
-  <body>
+<body>
 
     <!-- BARRA SUPERIOR -->
     <header>
@@ -1822,7 +1860,15 @@
             </div>
             <!-- SECCIÓN PROMO SAGAS -->
             <div class="menu-item" onclick="mostrarSagas()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);">
+                    <rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect>
+                    <path d="M2 9h20"></path>
+                    <path d="M4 9l2.5-5"></path>
+                    <path d="M9 9l2.5-5"></path>
+                    <path d="M14 9l2.5-5"></path>
+                    <path d="M19 9l2.5-5"></path>
+                    <path d="M10 12.5l6 3-6 3z"></path>
+                </svg>
                 PROMO SAGAS
             </div>
             <!-- SECCIÓN PACK DIGITAL -->
@@ -1831,7 +1877,7 @@
                 PACK DIGITAL
             </div>
             <div class="menu-item" onclick="mostrarSeries()">
-                <svg style="transform: translateY(-1px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                <svg style="transform: translateY(-1px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="15" x="2" y="7" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
                 SERIES
             </div>
         </div>
@@ -2012,7 +2058,7 @@
         const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
         const urlPacks = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=packs`;
 
-        const ANIO_ACTUAL = new Date().getFullYear(); // Año dinámico actual (2026)
+        const ANIO_ACTUAL = new Date().getFullYear(); // Año actual dinámico (2026)
 
         let todasLasPeliculas = []; 
         let todasLasSeries = [];    
@@ -2040,7 +2086,7 @@
 
         // Constantes SVG
         const iconoPeliculaSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
-        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
+        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
         const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoClaquetaSVG17 = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
@@ -2050,7 +2096,7 @@
         const iconoVistaSquareSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect></svg>`;
         const iconoVistaGridSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>`;
 
-        // Actualizar textos del menú lateral
+        // Actualizar textos del menú lateral dinámicamente
         const menuItemEstrenos = document.getElementById('menu-item-estrenos');
         if (menuItemEstrenos) menuItemEstrenos.textContent = `ESTRENOS ${ANIO_ACTUAL}`;
 
@@ -2108,7 +2154,7 @@
             return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
         }
 
-        // Formatea el texto para interpretar negritas escritas como **texto** o *texto*
+        // Formatea el texto para interpretar negritas
         function formatearTextoContenido(texto) {
             if (!texto) return '';
             let html = String(texto)
@@ -2120,7 +2166,6 @@
             return html;
         }
 
-        // Control centralizado del bloqueo de scroll
         function bloquearScroll(activar) {
             if (activar) {
                 posicionScrollGuardada = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -2133,7 +2178,6 @@
             }
         }
 
-        // Gestión del historial del navegador
         function registrarEstadoModal() {
             if (!modalHistorialActivo) {
                 modalHistorialActivo = true;
@@ -2175,7 +2219,7 @@
             fetch(urlSagas).then(r => r.text()),
             fetch(urlPacks).then(r => r.text())
         ]).then(([dataPeli, dataSerie, dataSaga, dataPack]) => {
-            // 1. PELÍCULAS (Con lectura de Columna G para posición en carrusel)
+            // 1. PELÍCULAS (Lectura de Columna G para posición en carrusel de Inicio)
             const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
             const rowsPelis = jsonPeli.table.rows || [];
             
@@ -2266,7 +2310,7 @@
                 };
             }).filter(pack => pack.nombre !== '' && pack.nombre !== 'NOMBRE');
 
-            // Cargar ruta inicial
+            // Cargar ruta directa
             verificarRutaDirecta();
         }).catch(err => console.error('Error cargando bases de datos:', err));
 
@@ -2301,13 +2345,13 @@
             return slots.filter(p => p !== null);
         }
 
-        function generarTarjetaPeliculaOSerieHTML(item) {
+        function generarTarjetaPeliculaOSerieHTML(item, claseExtra = '') {
             const lineaInferior = item.tipo === 'serie'
                 ? textoEpisodios(item)
                 : item.generos.replace(/\//g, ' • ');
 
             return `
-                <div class="movie-card" onclick="abrirModalPeliculaOSerieDirecto('${item.nombre.replace(/'/g, "\\'")}')">
+                <div class="movie-card ${claseExtra}" onclick="abrirModalPeliculaOSerieDirecto('${item.nombre.replace(/'/g, "\\'")}')">
                     <div class="img-container">
                         <div class="year-badge">${item.año}</div>
                         <img src="${item.imagen}" alt="${item.nombre}" loading="lazy">
@@ -2327,15 +2371,17 @@
             document.getElementById('section-title-container').style.display = 'none';
 
             const estrenos12 = obtener12EstrenosCarousel();
-            const recienAnadidas15 = todasLasPeliculas.slice(0, 15);
-            const series5 = todasLasSeries.slice(0, 5);
+            // 16 películas en móvil / 15 en PC
+            const recienAnadidas16 = todasLasPeliculas.slice(0, 16);
+            // 6 series en móvil / 5 en PC
+            const series6 = todasLasSeries.slice(0, 6);
             
-            // Elegir saga al azar
+            // Saga al azar
             const sagaRandom = (todasLasSagas.length > 0)
                 ? todasLasSagas[Math.floor(Math.random() * todasLasSagas.length)]
                 : null;
 
-            // Pack inicial para el banner
+            // Pack inicial para el banner de inicio
             const primerPackImg = (todosLosPacks.length > 0) ? todosLosPacks[0].imagen : '';
 
             let htmlSagaRandom = '';
@@ -2372,7 +2418,7 @@
             grid.innerHTML = `
                 <div class="home-container">
                     <!-- 1. Carrusel Superior de Estrenos -->
-                    <div class="home-section-block">
+                    <div class="home-section-block" id="home-block-carousel">
                         <div class="home-year-header">
                             <div class="home-year-line left"></div>
                             <span class="home-year-text">${ANIO_ACTUAL}</span>
@@ -2391,78 +2437,73 @@
                         <button class="btn-ver-mas-estrenos" onclick="mostrarEstrenos()">VER MÁS ESTRENOS</button>
                     </div>
 
-                    <!-- Contenedor Responsivo (Columna Izquierda + Derecha en PC) -->
-                    <div class="home-desktop-columns">
+                    <!-- Grilla Principal de Inicio (Ordenada en móvil / 2 Columnas en PC) -->
+                    <div class="home-main-grid">
                         
-                        <!-- COLUMNA IZQUIERDA (Recién Añadidas 15 + Series 5) -->
-                        <div class="home-col-left">
-                            <!-- Recién Añadidas (15 películas) -->
-                            <div class="home-section-block">
-                                <div class="home-section-header-row">
-                                    <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
-                                    <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
-                                </div>
-                                <div class="content-grid home-grid-desktop-5" style="padding: 0;">
-                                    ${recienAnadidas15.map(p => generarTarjetaPeliculaOSerieHTML(p)).join('')}
-                                </div>
-                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
+                        <!-- BLOQUE GÉNEROS MÁS BUSCADOS (Primero en móvil debajo del carrusel) -->
+                        <div class="home-section-block" id="home-block-generos">
+                            <div class="home-section-header-row">
+                                <h3 class="home-section-title">
+                                    ${iconoPeliculaSVG15}
+                                    GÉNEROS MÁS BUSCADOS
+                                </h3>
                             </div>
+                            <div class="home-genres-grid">
+                                <div class="home-genre-card" onclick="filtrarPorGenero('Terror')">Terror</div>
+                                <div class="home-genre-card" onclick="filtrarPorGenero('Infantil')">Infantil</div>
+                                <div class="home-genre-card" onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</div>
+                                <div class="home-genre-card" onclick="filtrarPorGenero('Comedia')">Comedia</div>
+                            </div>
+                            <button class="btn-ver-mas-estrenos" onclick="abrirMenuGeneros()">VER GÉNEROS</button>
+                        </div>
 
-                            <!-- Series (5 series) -->
-                            <div class="home-section-block">
-                                <div class="home-section-header-row">
-                                    <h3 class="home-section-title">
-                                        ${iconoSerieSVG15}
-                                        SERIES
-                                    </h3>
-                                    <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER MÁS</button>
-                                </div>
-                                <div class="content-grid home-grid-desktop-5" style="padding: 0;">
-                                    ${series5.map(s => generarTarjetaPeliculaOSerieHTML(s)).join('')}
-                                </div>
-                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS</button>
+                        <!-- BLOQUE RECIÉN AÑADIDAS (16 en móvil / 15 en PC) -->
+                        <div class="home-section-block" id="home-block-recientes">
+                            <div class="home-section-header-row">
+                                <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
+                                <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
+                            </div>
+                            <div class="content-grid home-grid-desktop-5" style="padding: 0;">
+                                ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '')).join('')}
+                            </div>
+                            <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
+                        </div>
+
+                        <!-- BLOQUE SERIES (6 en móvil / 5 en PC) -->
+                        <div class="home-section-block" id="home-block-series">
+                            <div class="home-section-header-row">
+                                <h3 class="home-section-title">
+                                    ${iconoSerieSVG15}
+                                    SERIES
+                                </h3>
+                                <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER MÁS</button>
+                            </div>
+                            <div class="content-grid home-grid-desktop-5" style="padding: 0;">
+                                ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '')).join('')}
+                            </div>
+                            <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS</button>
+                        </div>
+
+                        <!-- BLOQUE PROMO SAGAS (1 Saga al azar) -->
+                        <div class="home-section-block" id="home-block-sagas">
+                            <div class="home-section-header-row">
+                                <h3 class="home-section-title">
+                                    ${iconoClaquetaSVG17}
+                                    PROMO SAGAS
+                                </h3>
+                                <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
+                            </div>
+                            ${htmlSagaRandom}
+                        </div>
+
+                        <!-- BLOQUE PACK DIGITAL (Slideshow que inicia arriba) -->
+                        <div class="home-section-block" id="home-block-packs">
+                            <div class="home-pack-banner-card" id="home-pack-banner" style="background-image: url('${primerPackImg}');" onclick="mostrarPacks()">
+                                <div class="home-pack-banner-overlay"></div>
+                                <button class="btn-ver-mas-packs" onclick="event.stopPropagation(); mostrarPacks();">VER MÁS PACKS</button>
                             </div>
                         </div>
 
-                        <!-- COLUMNA DERECHA (Géneros + Promo Saga Random + Banner Pack) -->
-                        <div class="home-col-right">
-                            <!-- Géneros Más Buscados -->
-                            <div class="home-section-block">
-                                <div class="home-section-header-row">
-                                    <h3 class="home-section-title">
-                                        ${iconoPeliculaSVG15}
-                                        GÉNEROS MÁS BUSCADOS
-                                    </h3>
-                                </div>
-                                <div class="home-genres-grid">
-                                    <div class="home-genre-card" onclick="filtrarPorGenero('Terror')">Terror</div>
-                                    <div class="home-genre-card" onclick="filtrarPorGenero('Infantil')">Infantil</div>
-                                    <div class="home-genre-card" onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</div>
-                                    <div class="home-genre-card" onclick="filtrarPorGenero('Comedia')">Comedia</div>
-                                </div>
-                                <button class="btn-ver-mas-estrenos" onclick="abrirMenuGeneros()">VER GÉNEROS</button>
-                            </div>
-
-                            <!-- Promo Sagas (1 Random) -->
-                            <div class="home-section-block">
-                                <div class="home-section-header-row">
-                                    <h3 class="home-section-title">
-                                        ${iconoClaquetaSVG17}
-                                        PROMO SAGAS
-                                    </h3>
-                                    <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
-                                </div>
-                                ${htmlSagaRandom}
-                            </div>
-
-                            <!-- Banner Pack Digital Animado (Slideshow) -->
-                            <div class="home-section-block">
-                                <div class="home-pack-banner-card" id="home-pack-banner" style="background-image: url('${primerPackImg}');" onclick="mostrarPacks()">
-                                    <div class="home-pack-banner-overlay"></div>
-                                    <button class="btn-ver-mas-packs" onclick="event.stopPropagation(); mostrarPacks();">VER MÁS PACKS</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             `;
@@ -2555,7 +2596,8 @@
                             </svg>
                             SOLICITAR POR WHATSAPP
                         </a>
-                    `;
+                    </div>
+                `;
                     grid.appendChild(card);
                 });
                 document.getElementById('load-more').style.display = 'none';
