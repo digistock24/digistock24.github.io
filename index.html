@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigiStock 24 - Catálogo</title>
+    <title>Digistock24</title>
     <style>
         /* ================= CSS: DISEÑO Y ESTILOS ================= */
         :root {
@@ -17,9 +17,22 @@
             --pack-green: #00e600;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            -webkit-tap-highlight-color: transparent; /* Quita el recuadro azul al tocar en celular */
+        }
         
         body { background-color: var(--bg-color); color: var(--text-main); padding-top: 70px; }
+
+        /* Bloqueo blindado de scroll sin perder la posición en pantalla */
+        body.no-scroll {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
 
         /* Barra de navegación superior (Fija) */
         header {
@@ -49,26 +62,144 @@
             line-height: 1;
         }
 
-        /* Título de sección */
+        /* Título de sección (-4px arriba y -3px abajo) */
         .section-title {
-            margin: 25px 20px 18px 20px; font-size: 20px; font-weight: bold; text-transform: uppercase;
-            border-left: 4px solid #004379; padding-left: 10px;
+            margin: 16px 20px 13px 20px; 
+            font-size: 20px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            border-left: none;
+            padding-left: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
+            min-height: 32px;
+            line-height: 1.2;
         }
-
         .section-title.search-active {
             border-left: none;
             padding-left: 0;
         }
-
         .section-title-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             min-width: 0;
+            line-height: 1.2;
+        }
+        .section-title-left svg {
+            flex-shrink: 0;
+            transform: translateY(-1px);
+        }
+
+        /* ================= AJUSTES DE ALINEACIÓN POR SECCIÓN ================= */
+        .section-title.modo-sagas {
+            max-width: 420px;
+            margin: 16px auto 13px auto;
+            padding: 0 14px;
+            border-left: none;
+        }
+        @media (min-width: 768px) {
+            .section-title.modo-sagas {
+                max-width: 1400px;
+                padding: 0 20px;
+            }
+        }
+
+        /* Ajuste en Pack Digital móvil */
+        .section-title.modo-packs {
+            max-width: 420px; 
+            margin: 16px auto 13px auto;
+            padding: 0 14px;
+            border-left: none;
+        }
+        .section-title.modo-packs .section-title-left {
+            transform: translateY(1px);
+        }
+
+        /* Ajuste en Resultados de Búsqueda */
+        .section-title.search-active .section-title-left {
+            transform: translateY(2px);
+        }
+
+        .header-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Botón INFO en Películas y Series */
+        .btn-info-section {
+            background: #005591;
+            color: white;
+            border: none;
+            height: 32px;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.4px;
+            box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3);
+            transition: all 0.2s;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-info-section:hover {
+            background: var(--search-accent);
+            transform: scale(1.05);
+        }
+        .btn-info-section svg {
+            flex-shrink: 0;
+        }
+
+        /* Botón VER LISTA */
+        .ver-lista-btn {
+            background: #005591;
+            color: white;
+            border: none;
+            height: 32px;
+            padding: 0 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.4px;
+            box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3);
+            transition: all 0.2s;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        .ver-lista-btn:hover {
+            background: var(--search-accent);
+            transform: scale(1.05);
+        }
+
+        /* Botón Selector de Vista en Packs */
+        .toggle-view-btn {
+            background: #005591;
+            color: white;
+            border: none;
+            width: 34px;
+            height: 32px;
+            border-radius: 8px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3);
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .toggle-view-btn:hover {
+            background: var(--search-accent);
+            transform: scale(1.06);
         }
 
         /* Botón y menú de Ordenar */
@@ -78,11 +209,11 @@
         }
 
         .sort-btn {
-            background: var(--search-accent);
+            background: #005591;
             color: white;
             border: none;
-            width: 38px;
-            height: 34px;
+            width: 34px;
+            height: 32px;
             border-radius: 8px;
             display: flex;
             justify-content: center;
@@ -90,9 +221,10 @@
             cursor: pointer;
             box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3);
             transition: all 0.2s;
+            padding: 0;
         }
         .sort-btn:hover {
-            background: #005591;
+            background: var(--search-accent);
             transform: scale(1.06);
         }
 
@@ -130,37 +262,54 @@
             border-bottom: 1px solid #eeeeee;
         }
 
-        .section-subtitle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #848484;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .section-subtitle svg {
-            transform: translateY(-1px); 
-        }
-
-        /* ================= GRILLA PRINCIPAL (RESPONSIVE) ================= */
+        /* ================= GRILLA PRINCIPAL (2 COLUMNAS EN MÓVILES) ================= */
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px; padding: 0 20px 20px 20px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 14px 12px; 
+            padding: 0 14px 20px 14px;
         }
 
-        /* Grilla adaptada a 3 columnas para Promo Sagas en Escritorio */
+        @media (min-width: 480px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+                padding: 0 20px 20px 20px;
+            }
+        }
+
+        /* Grilla de Promo Sagas */
         .content-grid.sagas-layout {
             grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 1400px;
+            gap: 16px;
+            max-width: 420px;
             margin: 0 auto;
+            padding: 0 14px 20px 14px;
         }
-        @media (min-width: 992px) {
+        @media (min-width: 768px) {
             .content-grid.sagas-layout {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                max-width: 1400px;
+                gap: 20px;
+                padding: 0 20px 20px 20px;
             }
+        }
+
+        /* ================= GRILLAS PARA PACK DIGITAL ================= */
+        .content-grid.packs-wide-layout {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            max-width: 420px; 
+            margin: 0 auto;
+            padding: 0 14px 20px 14px;
+        }
+
+        .content-grid.packs-grid-layout {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 420px; 
+            margin: 0 auto;
+            padding: 0 14px 20px 14px;
         }
 
         /* Tarjeta de Película / Serie */
@@ -208,12 +357,15 @@
             background-color: #ffffff;
             border-radius: 14px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-            padding: 15px 17px 6px 17px;
+            padding: 12px 17px 13px 17px;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
         }
         .saga-card:hover {
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
@@ -231,11 +383,11 @@
             font-size: 15px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.9px;
         }
         .pack-badge .pack-num {
-            font-size: 20px;
-            font-weight: 900;
+            font-size: 21px;
+            font-weight: 700;
             display: inline-block;
         }
 
@@ -272,7 +424,7 @@
             display: flex;
             align-items: center;
             margin-top: auto;
-            padding: 4px 0;
+            padding: 0;
         }
 
         .slider-track {
@@ -281,7 +433,7 @@
             overflow-x: auto;
             scroll-behavior: smooth;
             scrollbar-width: none;
-            padding: 4px 2px;
+            padding: 8px 4px 14px 4px;
             width: 100%;
         }
         .slider-track::-webkit-scrollbar { display: none; }
@@ -293,12 +445,12 @@
             border-radius: 8px;
             flex-shrink: 0;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .poster-card:hover {
-            transform: scale(1.06);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.8);
+            transform: scale(1.05);
+            box-shadow: 0 4px 5px rgba(0,0,0,0.6);
         }
 
         .slider-btn {
@@ -328,12 +480,769 @@
         .slider-btn.prev { left: -8px; }
         .slider-btn.next { right: -8px; }
 
-        /* ================= VENTANA FLOTANTE (MODAL DETALLES) ================= */
+        /* Botón Verde Solicitar por WhatsApp para Sagas */
+        .btn-whatsapp-saga {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #00a82d;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin: 3px auto 0 auto;
+            width: 100%;
+            box-shadow: 0 2px 6px rgba(0, 168, 45, 0.3);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0px 2px 0px #00751f;
+        }
+        .btn-whatsapp-saga:hover {
+            background-color: #009226;
+            transform: scale(1.02);
+            color: #ffffff;
+        }
+        .btn-whatsapp-saga svg {
+            flex-shrink: 0;
+            transform: translateY(0px);
+        }     
+        .btn-whatsapp-saga:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px #00751f; 
+        }
+
+        /* ================= DISEÑOS DE TARJETAS DE PACK DIGITAL ================= */
+        .pack-card-big {
+            position: relative;
+            width: 100%;
+            height: 350px; 
+            border-radius: 16px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center top;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px 16px 12px 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .pack-card-big:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .pack-card-big .pack-gradient-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0, 24, 55, 0.96) 0%, rgba(0, 35, 75, 0.8) 18%, rgba(0, 45, 95, 0.35) 35%, transparent 60%);
+            z-index: 1;
+        }
+        .pack-card-big .pack-big-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .pack-card-big .pack-big-title {
+            color: #ffffff;
+            font-size: 16.5px;
+            font-weight: 700;
+            line-height: 1.25;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .pack-card-big .pack-big-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .pack-card-big .pack-big-price {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            line-height: 1;
+        }
+        .btn-whatsapp-comprar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #00a82d;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 7px 16px;
+            border-radius: 7px;
+            box-shadow: 0px 2px 0px #00751f;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-whatsapp-comprar:hover {
+            background-color: #009226;
+            transform: scale(1.03);
+            color: #ffffff;
+        }
+        .btn-whatsapp-comprar:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px #00751f;
+        }
+        .btn-whatsapp-comprar svg {
+            flex-shrink: 0;
+        }
+
+        /* Tarjeta Cuadrícula 2 Columnas */
+        .pack-card-grid {
+            position: relative;
+            width: 100%;
+            height: 165px; 
+            border-radius: 14px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center 29%;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 8px 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .pack-card-grid:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+        }
+        .pack-card-grid .pack-gradient-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 25, 55, 0.83) 80%, rgba(0, 24, 54, 0.95) 90%);
+            z-index: 1;
+        }
+        .pack-card-grid .pack-grid-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 2px;
+        }
+        .pack-card-grid .pack-grid-price {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            text-shadow: 0px 1px 2px black, 0px 3px 12px #0064b9, 0 1px 3px #000000;
+            line-height: 1.1;
+        }
+        .pack-card-grid .pack-grid-title {
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 700;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0px 1px 2px #000000;
+        }
+
+        .whatsapp-pack-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background-color: #00a82d;
+            border: none;
+            border-radius: 50%;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            transition: transform 0.2s, background-color 0.2s;
+            text-decoration: none;
+        }
+        .whatsapp-pack-btn:hover {
+            transform: scale(1.08);
+            background-color: #009226;
+        }
+        .whatsapp-pack-btn svg {
+            flex-shrink: 0;
+            transform: translateY(-1px);
+        }
+
+        /* ================= ESTILOS EXCLUSIVOS DE LA SECCIÓN INICIO ================= */
+        .home-container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 14px 20px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        /* 1. Header con año y líneas neón alternantes (Imagen 1) */
+        .home-year-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 10px 0 0 0;
+        }
+        .home-year-line {
+            height: 2px;
+            flex: 1;
+            max-width: 130px;
+            border-radius: 2px;
+            animation: linePulse 4s infinite ease-in-out;
+        }
+        .home-year-line.left {
+            background: linear-gradient(to left, #00d4ff, transparent);
+        }
+        .home-year-line.right {
+            background: linear-gradient(to right, #00d4ff, transparent);
+        }
+        .home-year-text {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            animation: textPulse 4s infinite ease-in-out;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { color: #00d4ff; text-shadow: 0 0 12px rgba(0,212,255,0.7); }
+            50% { color: #ff00ff; text-shadow: 0 0 12px rgba(255,0,255,0.7); }
+        }
+        @keyframes linePulse {
+            0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 4px #00d4ff); }
+            50% { opacity: 0.9; filter: drop-shadow(0 0 4px #ff00ff); }
+        }
+
+        /* Slider de Estrenos Inicio */
+        .home-carousel-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-top: -6px;
+        }
+        .home-carousel-track {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            padding: 8px 4px 10px 4px;
+            width: 100%;
+        }
+        .home-carousel-track::-webkit-scrollbar { display: none; }
+        .home-carousel-poster {
+            width: 105px;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .home-carousel-poster:hover {
+            transform: scale(1.06);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+        }
+
+        /* Botón Ver Más Estrenos */
+        .btn-ver-mas-estrenos {
+            background: #005591;
+            color: white;
+            border: none;
+            height: 32px;
+            padding: 0 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 8px rgba(0, 122, 204, 0.3);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-ver-mas-estrenos:hover {
+            background: var(--search-accent);
+            transform: scale(1.05);
+        }
+
+        /* Bloques de la página Inicio */
+        .home-section-block {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+        .home-section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .home-section-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-main);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .home-btn-ver-mas {
+            background: #005591;
+            color: white;
+            border: none;
+            height: 28px;
+            padding: 0 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 2px 6px rgba(0, 122, 204, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .home-btn-ver-mas:hover {
+            background: var(--search-accent);
+            transform: scale(1.04);
+        }
+        .home-btn-ver-mas-bottom {
+            height: 32px;
+            padding: 0 20px;
+            font-size: 13px;
+            margin: 4px auto 0 auto;
+            border-radius: 8px;
+            display: inline-flex;
+        }
+
+        /* 2. Cuadrícula de Géneros Más Buscados */
+        .home-genres-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+        .home-genre-card {
+            background: #ffffff;
+            border: 1.5px solid #d2e4f0;
+            border-radius: 10px;
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #005591;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+        .home-genre-card:hover {
+            background: #005591;
+            color: #ffffff;
+            border-color: #005591;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 85, 145, 0.2);
+        }
+
+        /* Banner de Pack Digital Inicio (Imagen 2) */
+        .home-pack-banner-card {
+            position: relative;
+            width: 100%;
+            height: 270px;
+            border-radius: 16px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center 25%;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
+            transition: transform 0.2s;
+        }
+        .home-pack-banner-card:hover {
+            transform: translateY(-3px);
+        }
+        .home-pack-banner-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0, 24, 55, 0.95) 0%, rgba(0, 35, 75, 0.4) 30%, transparent 60%);
+            z-index: 1;
+        }
+        .btn-ver-mas-packs {
+            position: relative;
+            z-index: 2;
+            background: var(--accent-pink);
+            color: #ffffff;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            box-shadow: 0 4px 12px rgba(255, 0, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-ver-mas-packs:hover {
+            transform: scale(1.05);
+            background: #e600e6;
+        }
+
+        /* División de 2 Columnas en Escritorio (PC) */
+        .home-desktop-columns {
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+            width: 100%;
+        }
+
+        @media (min-width: 900px) {
+            .home-desktop-columns {
+                display: grid;
+                grid-template-columns: 1fr 390px;
+                gap: 30px;
+                align-items: start;
+            }
+            .home-col-left {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+            }
+            .home-col-right {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                width: 100%;
+                max-width: 390px;
+            }
+            .home-grid-desktop-5 {
+                grid-template-columns: repeat(5, 1fr) !important;
+            }
+            .home-carousel-poster {
+                width: 120px;
+            }
+        }
+
+        /* ================= VENTANA FLOTANTE DE PACK DIGITAL (RESPONSIVE) ================= */
+        #modal-pack-info {
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); 
+            z-index: 4000; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+            backdrop-filter: blur(3px); 
+            overscroll-behavior: contain;
+        }
+        .modal-pack-card {
+            background: #004578;
+            border-radius: 16px;
+            padding: 0 0 10px 0;
+            width: 100%;
+            max-width: 350px; 
+            height: 505px;
+            min-height: 505px;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-pack-banner {
+            position: relative;
+            width: 100%;
+            height: 168px; 
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center 30%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 12px 16px 1px 16px; 
+        }
+        .modal-pack-banner-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 50%, rgb(0, 69,120, 1.94) 90%, rgb(0, 69,120, 1.94) 120%);
+            z-index: 1;
+        }
+        .modal-pack-banner-info {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 2px;
+        }
+        #modal-pack-banner { background-position-y: top 14%; }
+        .modal-pack-price {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            text-shadow: 0px 1px 2px black, 0px 3px 12px #0064b9, 0 1px 3px #000000;
+        }
+        .modal-pack-title {
+            color: #ffffff;
+            font-size: 13.5px;
+            font-weight: 700;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0px 1px 2px black, 0px 3px 12px #0064b9, 0 1px 3px #000000;
+        }
+
+        .modal-pack-tabs {
+            display: flex;
+            background: #003660;
+            margin: 5px 14px 8px 14px;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .modal-pack-tab {
+            flex: 1;
+            padding: 8px 4px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-pack-tab.active {
+            background: #007acc;
+            color: #d3fafc;
+            text-shadow: 0 0px 3px rgba(255,255,255,0.24);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .modal-pack-body {
+            margin: 0 14px 10px 14px;
+            padding: 12px 14px;
+            background: rgba(0, 30, 58, 0.45);
+            border-radius: 12px;
+            height: 250px;
+            min-height: 269px;
+            max-height: 250px;
+            overflow-y: scroll;
+            color: #e5f2fc;
+            font-size: 13.5px;
+            line-height: 1.5;
+            white-space: pre-line;
+            scrollbar-width: thin;
+            scrollbar-color: #00e8fc #00284d;
+        }
+        .modal-pack-body strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+        .modal-pack-body::-webkit-scrollbar {
+            width: 5px;
+            display: block !important;
+        }
+        .modal-pack-body::-webkit-scrollbar-track {
+            background: #00284d;
+            border-radius: 10px;
+            margin: 45px 0; 
+        }
+        .modal-pack-body::-webkit-scrollbar-thumb {
+            background: #00b4d8;
+            border-radius: 10px;
+        }
+
+        /* ================= VENTANA FLOTANTE INFO GENERAL ================= */
+        #modal-info-general {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 4000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+            overscroll-behavior: contain;
+        }
+        .modal-info-dialog {
+            background: #004578;
+            border-radius: 16px;
+            padding: 20px 20px 18px 20px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-info-title {
+            color: #ffffff;
+            font-size: 16.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .modal-info-separator {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.25);
+            margin-bottom: 14px;
+        }
+        .modal-info-body {
+            background: transparent;
+            padding: 0 4px;
+            max-height: 280px;
+            overflow-y: auto;
+            color: #ffffff;
+            font-size: 13.5px;
+            line-height: 1.5;
+            white-space: pre-line;
+            scrollbar-width: thin;
+            scrollbar-color: #00b4d8 transparent;
+        }
+        .modal-info-body strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+        .modal-info-body::-webkit-scrollbar {
+            width: 5px;
+            display: block !important;
+        }
+        .modal-info-body::-webkit-scrollbar-track {
+            background: transparent;
+            margin: 6px 0;
+        }
+        .modal-info-body::-webkit-scrollbar-thumb {
+            background: #00b4d8;
+            border-radius: 10px;
+        }
+
+        .modal-info-close-btn {
+            margin-top: 14px;
+            width: 44px;
+            height: 44px;
+            background: rgba(18, 22, 30, 0.85);
+            border: 2px solid rgba(255,255,255,0.4);
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 19px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+        .modal-info-close-btn:hover {
+            background: var(--search-accent); 
+            color: white; 
+            transform: scale(1.1); 
+        }
+
+        /* Ajustes responsivos para PC */
+        @media (min-width: 768px) {
+            .modal-info-dialog {
+                max-width: 520px;
+                padding: 24px 26px 22px 26px;
+            }
+            .modal-info-title {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            .modal-info-body {
+                max-height: 420px;
+                font-size: 14.5px;
+                line-height: 1.6;
+                padding: 0 8px;
+            }
+
+            .modal-pack-card {
+                max-width: 450px;
+                height: 570px;
+                min-height: 570px;
+            }
+            .modal-pack-banner {
+                height: 200px;
+                padding: 16px 20px 4px 20px;
+            }
+            .modal-pack-price {
+                font-size: 25px;
+            }
+            .modal-pack-title {
+                font-size: 15px;
+            }
+            .modal-pack-tabs {
+                margin: 8px 18px 10px 18px;
+            }
+            .modal-pack-body {
+                margin: 0 18px 12px 18px;
+                padding: 14px 16px;
+                height: 275px;
+                min-height: 275px;
+                max-height: 275px;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        }
+
+        /* ================= VENTANA FLOTANTE (MODAL DETALLES PELIS/SERIES) ================= */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); z-index: 2000;
+            background: rgba(0, 0, 0, 0.75); z-index: 4000;
             justify-content: center; align-items: center; padding: 20px;
             backdrop-filter: blur(3px); 
+            overscroll-behavior: contain;
         }
         .modal-content {
             background-color: rgba(255, 255, 255, 0.98); 
@@ -341,14 +1250,78 @@
             width: 100%; max-width: 350px; text-align: center; position: relative;
             box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
-        .modal-img { 
-            width: 85%; 
-            max-height: 380px; 
-            object-fit: cover; 
-            border-radius: 14px; 
-            margin-bottom: 12px; 
-            box-shadow: 0 2px 9px rgba(0,0,0,0.4);
+
+        .modal-img-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 12px;
+            touch-action: pan-y;
         }
+
+        .modal-img-container {
+            width: 85%;
+            aspect-ratio: 2/3;
+            max-height: 380px;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 9px rgba(0,0,0,0.4);
+            margin: 0 auto;
+            position: relative;
+            background: #eef2f5;
+            cursor: grab;
+        }
+        .modal-img-container:active {
+            cursor: grabbing;
+        }
+
+        .modal-slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+
+        .modal-img, .modal-slide-img { 
+            width: 100%; 
+            height: 100%; 
+            aspect-ratio: 2/3;
+            object-fit: cover; 
+            flex-shrink: 0;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .modal-slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(18, 22, 30, 0.85);
+            border: 1.5px solid rgba(255,255,255,0.4);
+            color: white;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            z-index: 10;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .modal-slide-btn:hover {
+            background: #005590;
+            border-color: #0261a2;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .modal-slide-btn.prev { left: 4px; }
+        .modal-slide-btn.next { right: 4px; }
         
         .modal-meta { 
             color: var(--accent-cyan); 
@@ -409,12 +1382,146 @@
         }
         .close-btn:hover { transform: scale(1.1); }
 
+        /* ================= VENTANA FLOTANTE LISTA ================= */
+        .modal-lista-content {
+            max-width: 440px;
+            padding: 16px 0 14px 0; 
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            max-height: 82vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .modal-lista-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 18px 10px 18px; 
+            border-bottom: 1px solid #e5e8ec;
+            margin-bottom: 0;
+        }
+        .modal-lista-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-lista-close {
+            background: #e2e7ec; 
+            border: none;
+            color: #111111; 
+            font-weight: 700;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .modal-lista-close:hover {
+            background: var(--accent-pink);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .sagas-list-scroll {
+            overflow-y: scroll;
+            max-height: 60vh;
+            padding: 4px 8px 4px 18px; 
+            scrollbar-width: thin;
+            scrollbar-color: #005691 #f0f3f6;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sagas-list-scroll::-webkit-scrollbar {
+            width: 5px;
+            display: block !important;
+        }
+        .sagas-list-scroll::-webkit-scrollbar-track {
+            background: #f0f3f6;
+            border-radius: 10px;
+            margin: 6px 0; 
+        }
+        .sagas-list-scroll::-webkit-scrollbar-thumb {
+            background: #005691;
+            border-radius: 10px;
+        }
+
+        .saga-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        .saga-list-item:last-child {
+            border-bottom: none;
+        }
+        .saga-list-item:hover {
+            background: #f0f7fc;
+            transform: translateX(4px);
+        }
+        .saga-list-item:hover .saga-list-name {
+            color: var(--search-accent);
+        }
+        .saga-list-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: color 0.2s;
+        }
+        
+        .saga-list-badge {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-pink);
+            background: rgba(255, 0, 255, 0.08);
+            padding: 3.5px 6px;
+            border-radius: 12px;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            min-width: 68px; 
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .saga-highlight {
+            animation: highlightPulse 1.8s ease-out;
+        }
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: 0 0 0 3px var(--search-accent), 0 8px 25px rgba(0, 122, 204, 0.4);
+                transform: scale(1.02);
+            }
+            50% {
+                box-shadow: 0 0 0 3px var(--search-accent), 0 8px 25px rgba(0, 122, 204, 0.25);
+            }
+            100% {
+                box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+                transform: scale(1);
+            }
+        }
+
         /* ================= VENTANA FLOTANTE DE BÚSQUEDA ================= */
         .search-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.97); z-index: 3000;
             flex-direction: column; align-items: center; padding: 30px 20px;
             overflow-y: auto; backdrop-filter: blur(8px);
+            overscroll-behavior: contain;
         }
         .search-container {
             width: 100%; max-width: 490px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;
@@ -525,26 +1632,30 @@
         /* ================= MENÚ LATERAL DESLIZABLE ================= */
         .sidebar-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); z-index: 4000;
+            background: rgba(0, 0, 0, 0.5); z-index: 5000;
             opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            overscroll-behavior: contain;
         }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
         
         .sidebar-container {
             position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
             background: #005691; 
-            box-shadow: -4px 0 15px rgba(0,0,0,0.3); z-index: 4001;
+            box-shadow: -4px 0 15px rgba(0,0,0,0.3); z-index: 5001;
             transition: right 0.3s ease; display: flex; flex-direction: column;
+            overscroll-behavior: contain;
         }
         .sidebar-container.active { right: 0; }
 
         .sidebar-close-btn {
             position: absolute; left: -28px; top: 50%; transform: translateY(-50%);
-            width: 50px; height: 50px; background: white; 
-            border: 2px solid var(--search-accent); color: var(--search-accent);
+            width: 50px; height: 50px; 
+            background: rgba(18, 22, 30, 0.85); 
+            border: 2px solid rgba(255,255,255,0.4);
+            color: #c3c3c3;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             font-size: 20px; cursor: pointer; box-shadow: -2px 2px 10px rgba(0,0,0,0.2);
-            z-index: 4002; transition: all 0.2s, opacity 0.25s ease;
+            z-index: 5002; transition: all 0.2s, opacity 0.25s ease;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -560,6 +1671,7 @@
         .sidebar-content {
             flex: 1; overflow-y: auto; overflow-x: hidden;
             padding: 40px 0 20px 0; display: flex; flex-direction: column;
+            -webkit-overflow-scrolling: touch;
         }
 
         .menu-item {
@@ -640,7 +1752,7 @@
         }
     </style>
 </head>
-<body>
+  <body>
 
     <!-- BARRA SUPERIOR -->
     <header>
@@ -673,11 +1785,11 @@
             </div>
             <div class="menu-item" onclick="mostrarEstrenos()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
-                ESTRENOS
+                <span id="menu-item-estrenos">ESTRENOS 2026</span>
             </div>
             <div class="menu-item" onclick="mostrarMasRecientes()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>
-                MÁS RECIENTES
+                RECIÉN AÑADIDAS
             </div>
            
             <div class="menu-item has-dropdown" onclick="toggleGeneros()">
@@ -706,28 +1818,20 @@
                 <span class="genre-item" onclick="filtrarPorGenero('Superhéroe')">Superhéroe</span>
                 <span class="genre-item" onclick="filtrarPorGenero('Suspenso')">Suspenso</span>
                 <span class="genre-item" onclick="filtrarPorGenero('Terror')">Terror</span>
-                <span class="genre-item" onclick="filtrarPorGenero('Western')">Western</span>
+                <span class="genre-item" onclick="filtrarPorGenero('Wéstern')">Wéstern</span>
             </div>
-           <!-- SECCIÓN PROMO SAGAS -->
+            <!-- SECCIÓN PROMO SAGAS -->
             <div class="menu-item" onclick="mostrarSagas()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);">
-    <!-- Rectángulo con height aumentado a 18 (era 16) -->
-    <rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect>
-    
-    <!-- Resto de líneas superiores intactas -->
-    <path d="M2 9h20"></path>
-    <path d="M4 9l2.5-5"></path>
-    <path d="M9 9l2.5-5"></path>
-    <path d="M14 9l2.5-5"></path>
-    <path d="M19 9l2.5-5"></path>
-    
-    <!-- Botón de Play ajustado a y=12.5 para centrarlo (era 11.5) -->
-    <path d="M10 12.5l6 3-6 3z"></path>
-</svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>
                 PROMO SAGAS
             </div>
+            <!-- SECCIÓN PACK DIGITAL -->
+            <div class="menu-item" onclick="mostrarPacks()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+                PACK DIGITAL
+            </div>
             <div class="menu-item" onclick="mostrarSeries()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                <svg style="transform: translateY(-1px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
                 SERIES
             </div>
         </div>
@@ -736,35 +1840,36 @@
     <!-- TÍTULO DE SECCIÓN -->
     <div class="section-title" id="section-title-container">
         <div class="section-title-left">
-            <span id="section-title-text">ESTRENOS</span>
-            <div class="section-subtitle" id="section-subtitle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                    <path d="M7 3v18"></path>
-                    <path d="M3 7.5h4"></path>
-                    <path d="M3 12h18"></path>
-                    <path d="M3 16.5h4"></path>
-                    <path d="M17 3v18"></path>
-                    <path d="M17 7.5h4"></path>
-                    <path d="M17 16.5h4"></path>
-                </svg>
-                PELÍCULAS
-            </div>
+            <span id="section-title-text">ESTRENOS 2026</span>
         </div>
-        <div class="sort-wrapper" id="sort-wrapper">
-            <button class="sort-btn" id="sort-btn" onclick="toggleSortMenu(event)" aria-label="Ordenar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m21 16-4 4-4-4"></path>
-                    <path d="M17 20V4"></path>
-                    <path d="m3 8 4-4 4 4"></path>
-                    <path d="M7 4v16"></path>
-                </svg>
-            </button>
-            <div class="sort-dropdown" id="sort-dropdown">
-                <div class="sort-option" onclick="ordenarPeliculas('recientes')">Recién añadidas</div>
-                <div class="sort-option" onclick="ordenarPeliculas('anio')">Año</div>
-                <div class="sort-option" onclick="ordenarPeliculas('nombre')">Nombre</div>
-                <div class="sort-option" onclick="ordenarPeliculas('antiguas')">Antiguas</div>
+
+        <div class="header-actions-right">
+            <!-- BOTÓN INFO (Películas y Series) -->
+            <button class="btn-info-section" id="btn-info-section" onclick="abrirModalInfoSeccion()" aria-label="Información"></button>
+
+            <!-- BOTÓN SELECTOR DE VISTA (Pack Digital) -->
+            <button class="toggle-view-btn" id="toggle-view-btn" onclick="toggleVistaPacks()" aria-label="Cambiar vista"></button>
+
+            <!-- BOTÓN VER LISTA (Promo Sagas y Pack Digital) -->
+            <button class="ver-lista-btn" id="ver-lista-btn" onclick="abrirModalListaActual()">VER LISTA</button>
+
+            <!-- BOTÓN ORDENAR (Películas y Series) -->
+            <div class="sort-wrapper" id="sort-wrapper">
+                <button class="sort-btn" id="sort-btn" onclick="toggleSortMenu(event)" aria-label="Ordenar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21 16-4 4-4-4"></path>
+                        <path d="M17 20V4"></path>
+                        <path d="m3 8 4-4 4 4"></path>
+                        <path d="M7 4v16"></path>
+                    </svg>
+                </button>
+                <div class="sort-dropdown" id="sort-dropdown">
+                    <div class="sort-option" onclick="ordenarPeliculas('recientes')">Recién añadidas</div>
+                    <div class="sort-option" id="sort-opt-anio" onclick="ordenarPeliculas('anio')">Año</div>
+                    <div class="sort-option" onclick="ordenarPeliculas('az')">A - Z</div>
+                    <div class="sort-option" onclick="ordenarPeliculas('za')">Z - A</div>
+                    <div class="sort-option" onclick="ordenarPeliculas('antiguas')">Antiguas</div>
+                </div>
             </div>
         </div>
     </div>
@@ -802,10 +1907,18 @@
         </div>
     </footer>
 
-    <!-- VENTANA FLOTANTE (MODAL DETALLES) -->
+    <!-- VENTANA FLOTANTE (MODAL DETALLES PELIS/SERIES/SAGAS) -->
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <img src="" alt="Poster" class="modal-img" id="modal-img">
+            <div class="modal-img-wrapper" id="modal-img-wrapper">
+                <button class="modal-slide-btn prev" id="modal-prev-btn" onclick="modalMoverSlide(-1)">❮</button>
+                <div class="modal-img-container">
+                    <div class="modal-slider-track" id="modal-slider-track">
+                        <img src="" alt="Poster" class="modal-img" id="modal-img">
+                    </div>
+                </div>
+                <button class="modal-slide-btn next" id="modal-next-btn" onclick="modalMoverSlide(1)">❯</button>
+            </div>
             <div class="modal-meta">
                 <span id="modal-year"></span>
                 <span id="modal-type-label" class="modal-type-label"></span>
@@ -813,6 +1926,56 @@
             <h2 class="modal-title" id="modal-title"></h2>
             <div id="modal-info"></div>
             <button class="close-btn" onclick="cerrarModal()">✕</button>
+        </div>
+    </div>
+
+    <!-- VENTANA FLOTANTE DE PACK DIGITAL (Imagen ccc) -->
+    <div class="modal-overlay" id="modal-pack-info">
+        <div class="modal-pack-card">
+            <div class="modal-pack-banner" id="modal-pack-banner">
+                <div class="modal-pack-banner-overlay"></div>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-pack-btn" id="modal-pack-whatsapp-btn" onclick="event.stopPropagation()" aria-label="Comprar por WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                        <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                    </svg>
+                </a>
+                <div class="modal-pack-banner-info">
+                    <div class="modal-pack-price" id="modal-pack-price"></div>
+                    <div class="modal-pack-title" id="modal-pack-title"></div>
+                </div>
+            </div>
+
+            <!-- Selector de pestañas -->
+            <div class="modal-pack-tabs">
+                <button class="modal-pack-tab active" id="tab-btn-info" onclick="cambiarPestanaPack('info')">INFORMACIÓN</button>
+                <button class="modal-pack-tab" id="tab-btn-contenido" onclick="cambiarPestanaPack('contenido')">CONTENIDO</button>
+            </div>
+
+            <!-- Cuerpo de texto con scroll permanente y tamaño fijo -->
+            <div class="modal-pack-body" id="modal-pack-body"></div>
+        </div>
+        <button class="modal-info-close-btn" onclick="cerrarModalPack()">✕</button>
+    </div>
+
+    <!-- VENTANA FLOTANTE INFO GENERAL (PELÍCULAS / SERIES) -->
+    <div class="modal-overlay" id="modal-info-general">
+        <div class="modal-info-dialog">
+            <h3 class="modal-info-title" id="modal-info-general-title">PELÍCULAS DIGITALES</h3>
+            <div class="modal-info-separator"></div>
+            <div class="modal-info-body" id="modal-info-general-body"></div>
+        </div>
+        <button class="modal-info-close-btn" onclick="cerrarModalInfoGeneral()">✕</button>
+    </div>
+
+    <!-- VENTANA FLOTANTE DE LISTA (Promo Sagas y Pack Digital) -->
+    <div class="modal-overlay" id="modal-lista-sagas">
+        <div class="modal-content modal-lista-content">
+            <div class="modal-lista-header">
+                <h3 class="modal-lista-title" id="modal-lista-title"></h3>
+                <button class="modal-lista-close" onclick="cerrarModalListaSagas()">✕</button>
+            </div>
+            <div class="sagas-list-scroll" id="sagas-list-scroll"></div>
         </div>
     </div>
 
@@ -840,7 +2003,6 @@
             <button class="search-close-circle" onclick="cerrarBuscador()">✕</button>
         </div>
     </div>
-
     <script>
         /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS ================= */
         
@@ -848,60 +2010,202 @@
         const urlPeliculas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=peliculas`;
         const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
         const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
+        const urlPacks = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=packs`;
+
+        const ANIO_ACTUAL = new Date().getFullYear(); // Año dinámico actual (2026)
 
         let todasLasPeliculas = []; 
         let todasLasSeries = [];    
         let todasLasSagas = [];
+        let todosLosPacks = [];
+        let infoGeneralPeliculas = '';
+        let infoGeneralSeries = '';
+        let infoGeneralPacks = '';
         let elementosActivos = [];  
         let itemsMostrados = 0;
         const CANTIDAD_POR_PAGINA = 20;
         let terminoBusquedaActual = '';
-        let modoActual = 'peliculas'; // 'peliculas' | 'series' | 'sagas'
+        let modoActual = 'inicio'; // 'inicio' | 'peliculas' | 'series' | 'sagas' | 'packs'
+        let esSeccionEstrenos = false;
+        let vistaPacksActual = 'big'; // 'big' (Imagen 1) | 'grid' (Imagen 2)
+        let posicionScrollGuardada = 0;
+        let modalHistorialActivo = false;
+        let ignorarSiguientePopstate = false;
+        let slideshowPackInterval = null;
+
+        // Control del carrusel de imágenes dentro del modal de Sagas
+        let modalSagaImagenes = [];
+        let modalSagaIndexActual = 0;
+        let packActualModal = null;
 
         // Constantes SVG
-        const iconoPeliculaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
-        const iconoSerieSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-2px);"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
-        const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 11.5l6 3-6 3z"></path></svg>`;
         const iconoPeliculaSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>`;
-        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
+        const iconoSerieSVG15 = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>`;
+        const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
+        const iconoClaquetaSVG17 = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
+        const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
         const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
+        
+        // Íconos para alternar vistas (Cuadro Grande vs Cuadrícula 4 cuadrados)
+        const iconoVistaSquareSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect></svg>`;
+        const iconoVistaGridSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>`;
+
+        // Actualizar textos del menú lateral
+        const menuItemEstrenos = document.getElementById('menu-item-estrenos');
+        if (menuItemEstrenos) menuItemEstrenos.textContent = `ESTRENOS ${ANIO_ACTUAL}`;
 
         function textoEpisodios(serie) {
             const texto = String(serie.episodios || '').trim();
             return texto !== '' ? texto : '✔ Completa';
         }
 
-        // Footer copyright
-        document.getElementById('footer-copy').textContent = `\u00A9 ${new Date().getFullYear()} DIGISTOCK24 | Todos los derechos reservados`;
+        // Extractor universal para celdas F2 o E
+        function extraerTextoCelda(json, colIndexPref, rowIndexPref) {
+            if (!json || !json.table) return '';
+            const rows = json.table.rows || [];
+            
+            for (let r = 0; r < Math.min(rows.length, 6); r++) {
+                if (rows[r]?.c && rows[r].c[colIndexPref] && rows[r].c[colIndexPref].v != null) {
+                    const v = String(rows[r].c[colIndexPref].v).trim();
+                    if (v !== '' && v !== 'null') return v;
+                }
+            }
+            for (let r = 0; r < Math.min(rows.length, 6); r++) {
+                if (rows[r]?.c && rows[r].c[4] && rows[r].c[4].v != null) {
+                    const v = String(rows[r].c[4].v).trim();
+                    if (v !== '' && v !== 'null') return v;
+                }
+            }
+            if (json.table.cols) {
+                if (json.table.cols[colIndexPref]?.label && String(json.table.cols[colIndexPref].label).trim() !== '') {
+                    return String(json.table.cols[colIndexPref].label).trim();
+                }
+                if (json.table.cols[4]?.label && String(json.table.cols[4].label).trim() !== '') {
+                    return String(json.table.cols[4].label).trim();
+                }
+            }
+            for (let r = 0; r < rows.length; r++) {
+                if (rows[r]?.c) {
+                    if (rows[r].c[colIndexPref]?.v && String(rows[r].c[colIndexPref].v).trim() !== '') return String(rows[r].c[colIndexPref].v).trim();
+                    if (rows[r].c[4]?.v && String(rows[r].c[4].v).trim() !== '') return String(rows[r].c[4].v).trim();
+                }
+            }
+            return '';
+        }
+
+        // Genera el enlace directo a WhatsApp para Sagas
+        function generarLinkWhatsappSaga(saga) {
+            const emojiCarrito = String.fromCodePoint(0x1F6D2);
+            const puntoMedio = '\u00B7';
+            const mensaje = `Hola! Quiero realizar esta compra:\n${emojiCarrito} *Saga ${saga.nombre}* ${puntoMedio} Pack de *${saga.cantidad}* películas\n-------------------------\n*TOTAL: ${saga.precio}*`;
+            return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
+        }
+
+        // Genera el enlace directo a WhatsApp para Pack Digital
+        function generarLinkWhatsappPack(pack) {
+            const emojiCarrito = String.fromCodePoint(0x1F6D2);
+            const mensaje = `Hola! Quiero realizar esta compra:\n${emojiCarrito} Pack digital *${pack.nombre}*\n-------------------------\n*TOTAL: ${pack.precio}*`;
+            return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
+        }
+
+        // Formatea el texto para interpretar negritas escritas como **texto** o *texto*
+        function formatearTextoContenido(texto) {
+            if (!texto) return '';
+            let html = String(texto)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+            return html;
+        }
+
+        // Control centralizado del bloqueo de scroll
+        function bloquearScroll(activar) {
+            if (activar) {
+                posicionScrollGuardada = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                document.body.style.top = `-${posicionScrollGuardada}px`;
+                document.body.classList.add('no-scroll');
+            } else {
+                document.body.classList.remove('no-scroll');
+                document.body.style.top = '';
+                window.scrollTo(0, posicionScrollGuardada);
+            }
+        }
+
+        // Gestión del historial del navegador
+        function registrarEstadoModal() {
+            if (!modalHistorialActivo) {
+                modalHistorialActivo = true;
+                history.pushState({ modalAbierto: true }, '');
+            }
+        }
+
+        function limpiarEstadoModal() {
+            if (modalHistorialActivo) {
+                modalHistorialActivo = false;
+                if (history.state && history.state.modalAbierto) {
+                    ignorarSiguientePopstate = true;
+                    history.back();
+                }
+            }
+        }
+
+        function obtenerImagenHD(url) {
+            if (!url) return '';
+            if (url.includes('image.tmdb.org/t/p/w342/')) {
+                return url.replace('/w342/', '/w500/');
+            }
+            return url;
+        }
+
+        function normalizarTexto(texto) {
+            return String(texto || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+        }
+
+        document.getElementById('footer-copy').textContent = `\u00A9 ${ANIO_ACTUAL} DIGISTOCK24 | Todos los derechos reservados`;
 
         // Carga simultánea de todas las bases de datos
         Promise.all([
             fetch(urlPeliculas).then(r => r.text()),
             fetch(urlSeries).then(r => r.text()),
-            fetch(urlSagas).then(r => r.text())
-        ]).then(([dataPeli, dataSerie, dataSaga]) => {
-            // Películas
+            fetch(urlSagas).then(r => r.text()),
+            fetch(urlPacks).then(r => r.text())
+        ]).then(([dataPeli, dataSerie, dataSaga, dataPack]) => {
+            // 1. PELÍCULAS (Con lectura de Columna G para posición en carrusel)
             const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
-            todasLasPeliculas = jsonPeli.table.rows.map(row => ({
+            const rowsPelis = jsonPeli.table.rows || [];
+            
+            infoGeneralPeliculas = extraerTextoCelda(jsonPeli, 5, 0);
+
+            todasLasPeliculas = rowsPelis.map(row => ({
                 tipo: 'pelicula',
-                nombre: row.c[0] ? row.c[0].v : '',
-                año: row.c[1] ? row.c[1].v : '',
-                generos: row.c[2] ? row.c[2].v : '',
-                imagen: row.c[3] ? row.c[3].v : ''
-            })).filter(peli => peli.nombre !== 'NOMBRE');
+                nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                año: row.c[1] ? String(row.c[1].v).trim() : '',
+                generos: row.c[2] ? String(row.c[2].v).trim() : '',
+                imagen: row.c[3] ? String(row.c[3].v).trim() : '',
+                posicionCarousel: (row.c[6] && row.c[6].v != null && !isNaN(parseInt(row.c[6].v))) ? parseInt(row.c[6].v) : null
+            })).filter(peli => peli.nombre !== 'NOMBRE' && peli.nombre !== '');
 
-            // Series
+            // 2. SERIES
             const jsonSerie = JSON.parse(dataSerie.substring(47).slice(0, -2));
-            todasLasSeries = jsonSerie.table.rows.map(row => ({
-                tipo: 'serie',
-                nombre: row.c[0] ? row.c[0].v : '',
-                año: row.c[1] ? row.c[1].v : '',
-                episodios: (row.c[2] && row.c[2].v != null) ? row.c[2].v : '',
-                pack: (row.c[3] && row.c[3].v != null) ? row.c[3].v : '',
-                imagen: row.c[4] ? row.c[4].v : ''
-            })).filter(serie => serie.nombre !== 'NOMBRE');
+            const rowsSeries = jsonSerie.table.rows || [];
 
-            // Sagas
+            infoGeneralSeries = extraerTextoCelda(jsonSerie, 5, 0);
+
+            todasLasSeries = rowsSeries.map(row => ({
+                tipo: 'serie',
+                nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                año: row.c[1] ? String(row.c[1].v).trim() : '',
+                episodios: (row.c[2] && row.c[2].v != null) ? String(row.c[2].v).trim() : '',
+                pack: (row.c[3] && row.c[3].v != null) ? String(row.c[3].v).trim() : '',
+                imagen: row.c[4] ? String(row.c[4].v).trim() : ''
+            })).filter(serie => serie.nombre !== 'NOMBRE' && serie.nombre !== '');
+
+            // 3. SAGAS
             const jsonSaga = JSON.parse(dataSaga.substring(47).slice(0, -2));
             const rowsSagas = jsonSaga.table.rows;
             const filaPrecios = rowsSagas[0]?.c || [];
@@ -943,24 +2247,291 @@
                 });
             }
 
-            // Revisar si se entró con enlace directo (#sagas, #series, etc.)
+            // 4. PACKS DIGITALES
+            const jsonPack = JSON.parse(dataPack.substring(47).slice(0, -2));
+            const rowsPacks = jsonPack.table.rows || [];
+            
+            infoGeneralPacks = extraerTextoCelda(jsonPack, 4, 0);
+
+            todosLosPacks = rowsPacks.map(row => {
+                let precio = row.c[1] ? String(row.c[1].v).trim() : '';
+                if (precio && !precio.startsWith('$')) precio = '$' + precio;
+
+                return {
+                    tipo: 'pack',
+                    nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                    precio: precio,
+                    contenido: (row.c[2] && row.c[2].v != null) ? String(row.c[2].v).trim() : '',
+                    imagen: (row.c[3] && row.c[3].v != null) ? String(row.c[3].v).trim() : ''
+                };
+            }).filter(pack => pack.nombre !== '' && pack.nombre !== 'NOMBRE');
+
+            // Cargar ruta inicial
             verificarRutaDirecta();
         }).catch(err => console.error('Error cargando bases de datos:', err));
 
-        // RENDERIZADO PRINCIPAL
+        /* ================= PANTALLA DE INICIO (HOME) ================= */
+        function obtener12EstrenosCarousel() {
+            const pelisAnioActual = todasLasPeliculas.filter(p => String(p.año).trim() === String(ANIO_ACTUAL));
+            let slots = Array(12).fill(null);
+
+            // 1. Colocar las que tienen posición forzada en Columna G (1 a 12)
+            pelisAnioActual.forEach(p => {
+                if (p.posicionCarousel !== null && p.posicionCarousel >= 1 && p.posicionCarousel <= 12) {
+                    if (!slots[p.posicionCarousel - 1]) {
+                        slots[p.posicionCarousel - 1] = p;
+                    }
+                }
+            });
+
+            // 2. Rellenar los espacios vacíos con las recién añadidas del año actual
+            let indexPeli = 0;
+            for (let i = 0; i < 12; i++) {
+                if (!slots[i]) {
+                    while (indexPeli < pelisAnioActual.length && slots.includes(pelisAnioActual[indexPeli])) {
+                        indexPeli++;
+                    }
+                    if (indexPeli < pelisAnioActual.length) {
+                        slots[i] = pelisAnioActual[indexPeli];
+                        indexPeli++;
+                    }
+                }
+            }
+
+            return slots.filter(p => p !== null);
+        }
+
+        function generarTarjetaPeliculaOSerieHTML(item) {
+            const lineaInferior = item.tipo === 'serie'
+                ? textoEpisodios(item)
+                : item.generos.replace(/\//g, ' • ');
+
+            return `
+                <div class="movie-card" onclick="abrirModalPeliculaOSerieDirecto('${item.nombre.replace(/'/g, "\\'")}')">
+                    <div class="img-container">
+                        <div class="year-badge">${item.año}</div>
+                        <img src="${item.imagen}" alt="${item.nombre}" loading="lazy">
+                    </div>
+                    <div class="movie-title">${item.nombre}</div>
+                    <div class="movie-genre">${lineaInferior}</div>
+                </div>
+            `;
+        }
+
+        function renderizarPantallaInicio() {
+            if (slideshowPackInterval) clearInterval(slideshowPackInterval);
+
+            const grid = document.getElementById('main-grid');
+            grid.className = '';
+            document.getElementById('load-more').style.display = 'none';
+            document.getElementById('section-title-container').style.display = 'none';
+
+            const estrenos12 = obtener12EstrenosCarousel();
+            const recienAnadidas15 = todasLasPeliculas.slice(0, 15);
+            const series5 = todasLasSeries.slice(0, 5);
+            
+            // Elegir saga al azar
+            const sagaRandom = (todasLasSagas.length > 0)
+                ? todasLasSagas[Math.floor(Math.random() * todasLasSagas.length)]
+                : null;
+
+            // Pack inicial para el banner
+            const primerPackImg = (todosLosPacks.length > 0) ? todosLosPacks[0].imagen : '';
+
+            let htmlSagaRandom = '';
+            if (sagaRandom) {
+                const linkWhatsapp = generarLinkWhatsappSaga(sagaRandom);
+                htmlSagaRandom = `
+                    <div class="saga-card">
+                        <div class="saga-header-row">
+                            <div class="pack-badge">PACK DE <span class="pack-num">${sagaRandom.cantidad}</span> PELÍS</div>
+                            <div class="price-badge">${sagaRandom.precio}</div>
+                        </div>
+                        <div class="saga-title">${sagaRandom.nombre}</div>
+                        <div class="saga-subtitle">Descargables y también para ver online!</div>
+                        <div class="slider-wrapper">
+                            <button class="slider-btn prev" onclick="moverSlider(this, -1)">❮</button>
+                            <div class="slider-track">
+                                ${sagaRandom.imagenesSlider.map((img, i) => `
+                                    <img src="${img}" alt="${sagaRandom.nombre}" class="poster-card" loading="lazy" onclick="abrirModalSaga('${sagaRandom.nombre.replace(/'/g, "\\'")}', '${sagaRandom.cantidad}', ${i})">
+                                `).join('')}
+                            </div>
+                            <button class="slider-btn next" onclick="moverSlider(this, 1)">❯</button>
+                        </div>
+                        <a href="${linkWhatsapp}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-saga" onclick="event.stopPropagation()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                                <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                            </svg>
+                            SOLICITAR POR WHATSAPP
+                        </a>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = `
+                <div class="home-container">
+                    <!-- 1. Carrusel Superior de Estrenos -->
+                    <div class="home-section-block">
+                        <div class="home-year-header">
+                            <div class="home-year-line left"></div>
+                            <span class="home-year-text">${ANIO_ACTUAL}</span>
+                            <div class="home-year-line right"></div>
+                        </div>
+
+                        <div class="home-carousel-wrapper">
+                            <button class="slider-btn prev" onclick="moverSliderHome(this, -1)">❮</button>
+                            <div class="home-carousel-track">
+                                ${estrenos12.map(p => `
+                                    <img src="${p.imagen}" alt="${p.nombre}" class="home-carousel-poster" loading="lazy" onclick="abrirModalPeliculaOSerieDirecto('${p.nombre.replace(/'/g, "\\'")}')">
+                                `).join('')}
+                            </div>
+                            <button class="slider-btn next" onclick="moverSliderHome(this, 1)">❯</button>
+                        </div>
+                        <button class="btn-ver-mas-estrenos" onclick="mostrarEstrenos()">VER MÁS ESTRENOS</button>
+                    </div>
+
+                    <!-- Contenedor Responsivo (Columna Izquierda + Derecha en PC) -->
+                    <div class="home-desktop-columns">
+                        
+                        <!-- COLUMNA IZQUIERDA (Recién Añadidas 15 + Series 5) -->
+                        <div class="home-col-left">
+                            <!-- Recién Añadidas (15 películas) -->
+                            <div class="home-section-block">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
+                                </div>
+                                <div class="content-grid home-grid-desktop-5" style="padding: 0;">
+                                    ${recienAnadidas15.map(p => generarTarjetaPeliculaOSerieHTML(p)).join('')}
+                                </div>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
+                            </div>
+
+                            <!-- Series (5 series) -->
+                            <div class="home-section-block">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoSerieSVG15}
+                                        SERIES
+                                    </h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER MÁS</button>
+                                </div>
+                                <div class="content-grid home-grid-desktop-5" style="padding: 0;">
+                                    ${series5.map(s => generarTarjetaPeliculaOSerieHTML(s)).join('')}
+                                </div>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS</button>
+                            </div>
+                        </div>
+
+                        <!-- COLUMNA DERECHA (Géneros + Promo Saga Random + Banner Pack) -->
+                        <div class="home-col-right">
+                            <!-- Géneros Más Buscados -->
+                            <div class="home-section-block">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoPeliculaSVG15}
+                                        GÉNEROS MÁS BUSCADOS
+                                    </h3>
+                                </div>
+                                <div class="home-genres-grid">
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Terror')">Terror</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Infantil')">Infantil</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Comedia')">Comedia</div>
+                                </div>
+                                <button class="btn-ver-mas-estrenos" onclick="abrirMenuGeneros()">VER GÉNEROS</button>
+                            </div>
+
+                            <!-- Promo Sagas (1 Random) -->
+                            <div class="home-section-block">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoClaquetaSVG17}
+                                        PROMO SAGAS
+                                    </h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
+                                </div>
+                                ${htmlSagaRandom}
+                            </div>
+
+                            <!-- Banner Pack Digital Animado (Slideshow) -->
+                            <div class="home-section-block">
+                                <div class="home-pack-banner-card" id="home-pack-banner" style="background-image: url('${primerPackImg}');" onclick="mostrarPacks()">
+                                    <div class="home-pack-banner-overlay"></div>
+                                    <button class="btn-ver-mas-packs" onclick="event.stopPropagation(); mostrarPacks();">VER MÁS PACKS</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Iniciar pase de imágenes del Pack Banner cada 3.5 segundos
+            if (todosLosPacks.length > 1) {
+                let packIndex = 0;
+                slideshowPackInterval = setInterval(() => {
+                    packIndex = (packIndex + 1) % todosLosPacks.length;
+                    const bannerEl = document.getElementById('home-pack-banner');
+                    if (bannerEl) {
+                        bannerEl.style.backgroundImage = `url('${todosLosPacks[packIndex].imagen}')`;
+                    }
+                }, 3500);
+            }
+        }
+
+        function moverSliderHome(btn, dir) {
+            btn.parentElement.querySelector('.home-carousel-track').scrollBy({ left: dir * 130, behavior: 'smooth' });
+        }
+
+        function abrirModalPeliculaOSerieDirecto(nombre) {
+            const peli = todasLasPeliculas.find(p => p.nombre === nombre);
+            if (peli) {
+                abrirModalPeliculaOSerie(peli);
+                return;
+            }
+            const serie = todasLasSeries.find(s => s.nombre === nombre);
+            if (serie) {
+                abrirModalPeliculaOSerie(serie);
+            }
+        }
+
+        function abrirMenuGeneros() {
+            abrirMenu();
+            setTimeout(() => {
+                if (!genresGrid.classList.contains('open')) toggleGeneros();
+            }, 200);
+        }
+
+        /* ================= RENDERIZADO GENERAL ================= */
         function mostrarContenido(reiniciar = false) {
+            if (slideshowPackInterval) clearInterval(slideshowPackInterval);
+
             const grid = document.getElementById('main-grid');
             if (reiniciar) {
                 grid.innerHTML = '';
                 itemsMostrados = 0;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                posicionScrollGuardada = 0;
+                window.scrollTo(0, 0);
             }
 
+            // 0. MODO INICIO
+            if (modoActual === 'inicio') {
+                renderizarPantallaInicio();
+                return;
+            }
+
+            document.getElementById('section-title-container').style.display = 'flex';
+
+            // 1. MODO PROMO SAGAS
             if (modoActual === 'sagas') {
-                grid.classList.add('sagas-layout');
-                elementosActivos.forEach(saga => {
+                grid.className = 'content-grid sagas-layout';
+                elementosActivos.forEach((saga, idx) => {
                     const card = document.createElement('div');
                     card.className = 'saga-card';
+                    card.id = `saga-card-${idx}`;
+                    const linkWhatsapp = generarLinkWhatsappSaga(saga);
+
                     card.innerHTML = `
                         <div class="saga-header-row">
                             <div class="pack-badge">PACK DE <span class="pack-num">${saga.cantidad}</span> PELÍS</div>
@@ -971,12 +2542,19 @@
                         <div class="slider-wrapper">
                             <button class="slider-btn prev" onclick="moverSlider(this, -1)">❮</button>
                             <div class="slider-track">
-                                ${saga.imagenesSlider.map(img => `
-                                    <img src="${img}" alt="${saga.nombre}" class="poster-card" loading="lazy" onclick="abrirModalSaga('${saga.nombre}', '${saga.cantidad}', '${img}')">
+                                ${saga.imagenesSlider.map((img, i) => `
+                                    <img src="${img}" alt="${saga.nombre}" class="poster-card" loading="lazy" onclick="abrirModalSaga('${saga.nombre.replace(/'/g, "\\'")}', '${saga.cantidad}', ${i})">
                                 `).join('')}
                             </div>
                             <button class="slider-btn next" onclick="moverSlider(this, 1)">❯</button>
                         </div>
+                        <a href="${linkWhatsapp}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-saga" onclick="event.stopPropagation()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                                <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                            </svg>
+                            SOLICITAR POR WHATSAPP
+                        </a>
                     `;
                     grid.appendChild(card);
                 });
@@ -984,30 +2562,69 @@
                 return;
             }
 
-            // Modo Películas o Series
-            grid.classList.remove('sagas-layout');
+            // 2. MODO PACK DIGITAL (Imágenes 1 y 2)
+            if (modoActual === 'packs') {
+                grid.className = (vistaPacksActual === 'big') 
+                    ? 'content-grid packs-wide-layout' 
+                    : 'content-grid packs-grid-layout';
+
+                elementosActivos.forEach((pack, idx) => {
+                    const card = document.createElement('div');
+                    card.id = `pack-card-${idx}`;
+                    const linkWhatsapp = generarLinkWhatsappPack(pack);
+
+                    if (vistaPacksActual === 'big') {
+                        card.className = 'pack-card-big';
+                        card.style.backgroundImage = `url('${pack.imagen}')`;
+                        card.onclick = () => abrirModalPack(pack);
+                        card.innerHTML = `
+                            <div class="pack-gradient-overlay"></div>
+                            <div class="pack-big-content">
+                                <div class="pack-big-title">${pack.nombre}</div>
+                                <div class="pack-big-bottom">
+                                    <span class="pack-big-price">${pack.precio}</span>
+                                    <a href="${linkWhatsapp}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-comprar" onclick="event.stopPropagation()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                                            <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                                        </svg>
+                                        COMPRAR
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        card.className = 'pack-card-grid';
+                        card.style.backgroundImage = `url('${pack.imagen}')`;
+                        card.onclick = () => abrirModalPack(pack);
+                        card.innerHTML = `
+                            <div class="pack-gradient-overlay"></div>
+                            <a href="${linkWhatsapp}" target="_blank" rel="noopener noreferrer" class="whatsapp-pack-btn" onclick="event.stopPropagation()" aria-label="Comprar por WhatsApp">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                                    <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                                </svg>
+                            </a>
+                            <div class="pack-grid-content">
+                                <div class="pack-grid-price">${pack.precio}</div>
+                                <div class="pack-grid-title">${pack.nombre}</div>
+                            </div>
+                        `;
+                    }
+                    grid.appendChild(card);
+                });
+
+                document.getElementById('load-more').style.display = 'none';
+                return;
+            }
+
+            // 3. MODO PELÍCULAS O SERIES
+            grid.className = 'content-grid';
             const limit = Math.min(itemsMostrados + CANTIDAD_POR_PAGINA, elementosActivos.length);
             
             for (let i = itemsMostrados; i < limit; i++) {
                 const item = elementosActivos[i];
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.onclick = () => abrirModalPeliculaOSerie(item);
-
-                const lineaInferior = item.tipo === 'serie'
-                    ? textoEpisodios(item)
-                    : item.generos.replace(/\//g, ' • ');
-
-                card.innerHTML = `
-                    <div class="img-container">
-                        <div class="year-badge">${item.año}</div>
-                        <img src="${item.imagen}" alt="${item.nombre}" loading="lazy">
-                    </div>
-                    <div class="movie-title">${item.nombre}</div>
-                    <div class="movie-genre">${lineaInferior}</div>
-                `;
-                
-                grid.appendChild(card);
+                grid.innerHTML += generarTarjetaPeliculaOSerieHTML(item);
             }
 
             itemsMostrados = limit;
@@ -1026,133 +2643,265 @@
         function cambiarTitulo(titulo, modo = 'normal') {
             const titleContainer = document.getElementById('section-title-container');
             const titleText = document.getElementById('section-title-text');
-            const subtitle = document.getElementById('section-subtitle');
             const sortWrapper = document.getElementById('sort-wrapper');
+            const btnVerLista = document.getElementById('ver-lista-btn');
+            const btnToggleView = document.getElementById('toggle-view-btn');
+            const btnInfo = document.getElementById('btn-info-section');
 
-            subtitle.style.display = 'flex';
+            titleContainer.classList.remove('search-active', 'modo-series', 'modo-sagas', 'modo-packs');
+
             sortWrapper.style.display = 'block';
+            btnVerLista.style.display = 'none';
+            btnToggleView.style.display = 'none';
+            btnInfo.style.display = 'none';
 
             if (modo === 'busqueda') {
                 titleContainer.classList.add('search-active');
                 titleText.innerHTML = `
                     <span style="display: inline-flex; align-items: center; gap: 8px;">
                         ${iconoLupaSVG}
-                        ${titulo.toUpperCase()}
+                        <span>${titulo.toUpperCase()}</span>
                     </span>
                 `;
-                const iconoResultados = tipoBusquedaActual === 'series' ? iconoSerieSVG : iconoPeliculaSVG;
-                subtitle.innerHTML = `${iconoResultados} RESULTADOS`;
+                btnInfo.style.display = 'inline-flex';
+                btnInfo.innerHTML = (tipoBusquedaActual === 'series') ? `${iconoSerieSVG15} INFO` : `${iconoPeliculaSVG15} INFO`;
             } else if (modo === 'series') {
-                titleContainer.classList.add('search-active');
+                titleContainer.classList.add('modo-series');
                 titleText.innerHTML = `
                     <span style="display: inline-flex; align-items: center; gap: 8px;">
-                        ${iconoSerieSVG}
-                        ${titulo.toUpperCase()}
+                        ${iconoSerieSVG15}
+                        <span>${titulo.toUpperCase()}</span>
                     </span>
                 `;
-                subtitle.innerHTML = '';
-                subtitle.style.display = 'none';
+                btnInfo.style.display = 'inline-flex';
+                btnInfo.innerHTML = `${iconoSerieSVG15} INFO`;
             } else if (modo === 'sagas') {
-                titleContainer.classList.add('search-active');
+                titleContainer.classList.add('search-active', 'modo-sagas');
                 titleText.innerHTML = `
                     <span style="display: inline-flex; align-items: center; gap: 8px;">
                         ${iconoClaquetaSVG}
-                        ${titulo.toUpperCase()}
+                        <span>${titulo.toUpperCase()}</span>
                     </span>
                 `;
-                subtitle.innerHTML = '';
-                subtitle.style.display = 'none';
                 sortWrapper.style.display = 'none';
+                btnVerLista.style.display = 'inline-flex';
+            } else if (modo === 'packs') {
+                titleContainer.classList.add('search-active', 'modo-packs');
+                titleText.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                        ${iconoPacksCarpetaSVG}
+                        <span>${titulo.toUpperCase()}</span>
+                    </span>
+                `;
+                sortWrapper.style.display = 'none';
+                btnVerLista.style.display = 'inline-flex';
+                btnToggleView.style.display = 'inline-flex';
+                actualizarBotonVistaPacks();
             } else {
-                titleContainer.classList.remove('search-active');
                 titleText.textContent = titulo.toUpperCase();
-                subtitle.innerHTML = `${iconoPeliculaSVG} PELÍCULAS`;
+                btnInfo.style.display = 'inline-flex';
+                btnInfo.innerHTML = `${iconoPeliculaSVG15} INFO`;
             }
         }
 
         function irAInicio() {
-            history.pushState(null, null, '#estrenos');
-            mostrarEstrenos();
+            history.pushState(null, null, '#inicio');
+            mostrarInicio();
+        }
+
+        function mostrarInicio() {
+            terminoBusquedaActual = '';
+            modoActual = 'inicio';
+            esSeccionEstrenos = false;
+            cerrarMenu(true);
+            mostrarContenido(true);
+            window.scrollTo(0, 0);
         }
 
         function mostrarEstrenos() {
+            history.pushState(null, null, '#estrenos');
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
-            const anioActual = new Date().getFullYear().toString();
+            esSeccionEstrenos = true;
             
-            elementosActivos = [...todasLasPeliculas].sort((a, b) => {
-                const esA = String(a.año).trim() === anioActual;
-                const esB = String(b.año).trim() === anioActual;
-                if (esA && !esB) return -1;
-                if (!esA && esB) return 1; 
-                return 0;
-            });
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'none';
+
+            elementosActivos = [...todasLasPeliculas];
+            ordenarPeliculas('recientes');
             
-            cambiarTitulo('ESTRENOS');
-            cerrarMenu();
-            mostrarContenido(true);
+            cambiarTitulo(`ESTRENOS ${ANIO_ACTUAL}`);
+            cerrarMenu(true);
+            window.scrollTo(0, 0);
         }
 
         function mostrarMasRecientes() {
-            history.pushState(null, null, '#mas-recientes');
+            history.pushState(null, null, '#recien-anadidas');
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
+            esSeccionEstrenos = false;
+            
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'block';
+
             elementosActivos = [...todasLasPeliculas];
             
-            cambiarTitulo('MÁS RECIENTES');
-            cerrarMenu();
+            cambiarTitulo('RECIÉN AÑADIDAS');
+            cerrarMenu(true);
             mostrarContenido(true);
+            window.scrollTo(0, 0);
         }
 
         function mostrarSeries() {
             history.pushState(null, null, '#series');
             terminoBusquedaActual = '';
             modoActual = 'series';
+            esSeccionEstrenos = false;
+
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'block';
+
             elementosActivos = [...todasLasSeries];
 
             cambiarTitulo('SERIES', 'series');
-            cerrarMenu();
+            cerrarMenu(true);
             mostrarContenido(true);
+            window.scrollTo(0, 0);
         }
 
         function mostrarSagas() {
             history.pushState(null, null, '#sagas');
             terminoBusquedaActual = '';
             modoActual = 'sagas';
-            elementosActivos = [...todasLasSagas];
+            esSeccionEstrenos = false;
+
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'block';
+            
+            elementosActivos = [...todasLasSagas].sort((a, b) => 
+                String(a.nombre).localeCompare(String(b.nombre), 'es', { sensitivity: 'base', numeric: true })
+            );
 
             cambiarTitulo('PROMO SAGAS', 'sagas');
-            cerrarMenu();
+            cerrarMenu(true);
             mostrarContenido(true);
+            window.scrollTo(0, 0);
+        }
+
+        function mostrarPacks() {
+            history.pushState(null, null, '#pack-digital');
+            terminoBusquedaActual = '';
+            modoActual = 'packs';
+            esSeccionEstrenos = false;
+
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'block';
+
+            elementosActivos = [...todosLosPacks].sort((a, b) => 
+                String(a.nombre).localeCompare(String(b.nombre), 'es', { sensitivity: 'base', numeric: true })
+            );
+
+            cambiarTitulo('PACK DIGITAL', 'packs');
+            cerrarMenu(true);
+            mostrarContenido(true);
+            window.scrollTo(0, 0);
+        }
+
+        function toggleVistaPacks() {
+            vistaPacksActual = (vistaPacksActual === 'big') ? 'grid' : 'big';
+            actualizarBotonVistaPacks();
+            mostrarContenido(true);
+        }
+
+        function actualizarBotonVistaPacks() {
+            const btn = document.getElementById('toggle-view-btn');
+            if (btn) {
+                btn.innerHTML = (vistaPacksActual === 'big') ? iconoVistaSquareSVG : iconoVistaGridSVG;
+            }
         }
 
         function filtrarPorGenero(genero) {
             history.pushState(null, null, '#' + encodeURIComponent(genero));
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
+            esSeccionEstrenos = false;
+
+            const optAnio = document.getElementById('sort-opt-anio');
+            if (optAnio) optAnio.style.display = 'block';
+            
+            const genNormalizado = normalizarTexto(genero);
             elementosActivos = todasLasPeliculas.filter(p => 
-                p.generos.toLowerCase().includes(genero.toLowerCase())
+                normalizarTexto(p.generos).includes(genNormalizado)
             );
             
             cambiarTitulo(genero);
-            cerrarMenu();
+            cerrarMenu(true);
             mostrarContenido(true);
+            window.scrollTo(0, 0);
         }
 
-        // CONTROL DE ENLACES DIRECTOS (#sagas, #series, etc.)
+        // CONTROL DE ENLACES DIRECTOS
         function verificarRutaDirecta() {
             const hash = window.location.hash.toLowerCase();
-            if (hash === '#sagas' || hash === '#promo-sagas') {
+            if (hash === '#estrenos') {
+                mostrarEstrenos();
+            } else if (hash === '#recien-anadidas' || hash === '#mas-recientes') {
+                mostrarMasRecientes();
+            } else if (hash === '#sagas' || hash === '#promo-sagas') {
                 mostrarSagas();
+            } else if (hash === '#pack-digital' || hash === '#packs') {
+                mostrarPacks();
             } else if (hash === '#series') {
                 mostrarSeries();
-            } else if (hash === '#mas-recientes') {
-                mostrarMasRecientes();
+            } else if (hash && hash !== '#inicio' && hash !== '#') {
+                const genero = decodeURIComponent(hash.substring(1));
+                filtrarPorGenero(genero);
             } else {
-                mostrarEstrenos();
+                mostrarInicio();
             }
         }
-        window.addEventListener('popstate', verificarRutaDirecta);
+
+        // Evento que gestiona el botón "Atrás" del celular
+        window.addEventListener('popstate', function(e) {
+            if (ignorarSiguientePopstate) {
+                ignorarSiguientePopstate = false;
+                return;
+            }
+
+            const modalDetalles = document.getElementById('modal');
+            const modalPack = document.getElementById('modal-pack-info');
+            const modalInfoGen = document.getElementById('modal-info-general');
+            const modalLista = document.getElementById('modal-lista-sagas');
+            const modalSearch = document.getElementById('search-modal');
+            const sidebar = document.getElementById('sidebar-container');
+
+            if (modalDetalles && modalDetalles.style.display === 'flex') {
+                cerrarModal(false);
+                return;
+            }
+            if (modalPack && modalPack.style.display === 'flex') {
+                cerrarModalPack(false);
+                return;
+            }
+            if (modalInfoGen && modalInfoGen.style.display === 'flex') {
+                cerrarModalInfoGeneral(false);
+                return;
+            }
+            if (modalLista && modalLista.style.display === 'flex') {
+                cerrarModalListaSagas(false);
+                return;
+            }
+            if (modalSearch && modalSearch.style.display === 'flex') {
+                cerrarBuscador(false);
+                return;
+            }
+            if (sidebar && sidebar.classList.contains('active')) {
+                cerrarMenu(false, false);
+                return;
+            }
+
+            verificarRutaDirecta();
+        });
 
         /* ================= ORDENAMIENTO ================= */
         const sortDropdown = document.getElementById('sort-dropdown');
@@ -1168,21 +2917,54 @@
         });
 
         function ordenarPeliculas(tipo) {
-            switch (tipo) {
-                case 'recientes': {
-                    const listaBase = modoActual === 'series' ? todasLasSeries : todasLasPeliculas;
-                    elementosActivos.sort((a, b) => listaBase.indexOf(a) - listaBase.indexOf(b));
-                    break;
+            if (esSeccionEstrenos) {
+                elementosActivos.sort((a, b) => {
+                    const anioA = Number(a.año) || 0;
+                    const anioB = Number(b.año) || 0;
+                    if (anioA !== anioB) return anioB - anioA;
+
+                    const nomA = String(a.nombre || '').trim();
+                    const nomB = String(b.nombre || '').trim();
+
+                    if (tipo === 'recientes') {
+                        return todasLasPeliculas.indexOf(a) - todasLasPeliculas.indexOf(b);
+                    }
+                    if (tipo === 'antiguas') {
+                        return todasLasPeliculas.indexOf(b) - todasLasPeliculas.indexOf(a);
+                    }
+                    if (tipo === 'az' || tipo === 'nombre') {
+                        return nomA.localeCompare(nomB, 'es', { sensitivity: 'base', numeric: true });
+                    }
+                    if (tipo === 'za') {
+                        return nomB.localeCompare(nomA, 'es', { sensitivity: 'base', numeric: true });
+                    }
+                    return 0;
+                });
+            } else {
+                switch (tipo) {
+                    case 'recientes': {
+                        const listaBase = modoActual === 'series' ? todasLasSeries : todasLasPeliculas;
+                        elementosActivos.sort((a, b) => listaBase.indexOf(a) - listaBase.indexOf(b));
+                        break;
+                    }
+                    case 'anio':
+                        elementosActivos.sort((a, b) => Number(b.año) - Number(a.año));
+                        break;
+                    case 'az':
+                    case 'nombre':
+                        elementosActivos.sort((a, b) => 
+                            String(a.nombre || '').trim().localeCompare(String(b.nombre || '').trim(), 'es', { sensitivity: 'base', numeric: true })
+                        );
+                        break;
+                    case 'za':
+                        elementosActivos.sort((a, b) => 
+                            String(b.nombre || '').trim().localeCompare(String(a.nombre || '').trim(), 'es', { sensitivity: 'base', numeric: true })
+                        );
+                        break;
+                    case 'antiguas':
+                        elementosActivos.sort((a, b) => Number(a.año) - Number(b.año));
+                        break;
                 }
-                case 'anio':
-                    elementosActivos.sort((a, b) => Number(b.año) - Number(a.año));
-                    break;
-                case 'nombre':
-                    elementosActivos.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
-                    break;
-                case 'antiguas':
-                    elementosActivos.sort((a, b) => Number(a.año) - Number(b.año));
-                    break;
             }
             sortDropdown.classList.remove('open');
             mostrarContenido(true);
@@ -1195,11 +2977,18 @@
         const genresChevron = document.getElementById('genres-chevron');
 
         function abrirMenu() {
+            registrarEstadoModal();
+            bloquearScroll(true);
             sidebarContainer.classList.add('active');
             sidebarOverlay.classList.add('active');
         }
 
-        function cerrarMenu() {
+        function cerrarMenu(cambioDeSeccion = false, limpiarHistorial = true) {
+            if (cambioDeSeccion) {
+                posicionScrollGuardada = 0;
+            }
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
             sidebarContainer.classList.remove('active');
             sidebarOverlay.classList.remove('active');
             genresGrid.classList.remove('open');
@@ -1215,7 +3004,19 @@
         const modal = document.getElementById('modal');
 
         function abrirModalPeliculaOSerie(item) {
-            document.getElementById('modal-img').src = item.imagen;
+            registrarEstadoModal();
+            bloquearScroll(true);
+            modalSagaImagenes = [];
+            document.getElementById('modal-prev-btn').style.display = 'none';
+            document.getElementById('modal-next-btn').style.display = 'none';
+
+            const track = document.getElementById('modal-slider-track');
+            track.style.transition = 'none';
+            track.style.transform = 'none';
+            
+            const imagenHD = obtenerImagenHD(item.imagen);
+            track.innerHTML = `<img src="${imagenHD}" class="modal-img" id="modal-img" alt="${item.nombre}" style="background: url('${item.imagen}') center/cover no-repeat;">`;
+
             document.getElementById('modal-year').textContent = item.año;
             document.getElementById('modal-title').textContent = item.nombre;
 
@@ -1253,10 +3054,30 @@
             modal.style.display = 'flex';
         }
 
-        function abrirModalSaga(nombre, cantidad, imagenUrl) {
-            document.getElementById('modal-img').src = imagenUrl;
+        function abrirModalSaga(nombre, cantidad, indiceInicial = 0) {
+            registrarEstadoModal();
+            bloquearScroll(true);
+            const saga = todasLasSagas.find(s => s.nombre === nombre);
+            modalSagaImagenes = saga ? saga.imagenesSlider.map(img => obtenerImagenHD(img)) : [];
+            modalSagaIndexActual = (indiceInicial >= 0 && indiceInicial < modalSagaImagenes.length) ? indiceInicial : 0;
+
+            const track = document.getElementById('modal-slider-track');
+            track.innerHTML = modalSagaImagenes.map((imgHD, i) => {
+                const imgThumb = saga ? saga.imagenesSlider[i] : imgHD;
+                return `<img src="${imgHD}" class="modal-slide-img" alt="${nombre}" style="background: url('${imgThumb}') center/cover no-repeat;">`;
+            }).join('');
+            
+            track.style.transition = 'none';
+            track.style.transform = `translateX(-${modalSagaIndexActual * 100}%)`;
+            
+            setTimeout(() => {
+                track.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+            }, 30);
+
+            actualizarBotonesModalSaga();
+
             document.getElementById('modal-year').textContent = '';
-            document.getElementById('modal-type-label').innerHTML = `${iconoClaquetaSVG} PROMO SAGAS`;
+            document.getElementById('modal-type-label').innerHTML = `${iconoClaquetaSVG17} PROMO SAGAS`;
             document.getElementById('modal-title').textContent = nombre;
 
             const contenedorInfo = document.getElementById('modal-info');
@@ -1266,15 +3087,302 @@
             modal.style.display = 'flex';
         }
 
-        function cerrarModal() {
+        function actualizarBotonesModalSaga() {
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+            prevBtn.style.display = modalSagaIndexActual > 0 ? 'flex' : 'none';
+            nextBtn.style.display = modalSagaIndexActual < (modalSagaImagenes.length - 1) ? 'flex' : 'none';
+        }
+
+        function modalMoverSlide(direccion) {
+            const nuevoIndex = modalSagaIndexActual + direccion;
+            if (nuevoIndex >= 0 && nuevoIndex < modalSagaImagenes.length) {
+                modalSagaIndexActual = nuevoIndex;
+                const track = document.getElementById('modal-slider-track');
+                track.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+                track.style.transform = `translateX(-${modalSagaIndexActual * 100}%)`;
+                actualizarBotonesModalSaga();
+            }
+        }
+
+        function abrirModalPack(pack) {
+            packActualModal = pack;
+            registrarEstadoModal();
+            bloquearScroll(true);
+
+            document.getElementById('modal-pack-banner').style.backgroundImage = `url('${pack.imagen}')`;
+            document.getElementById('modal-pack-price').textContent = pack.precio;
+            document.getElementById('modal-pack-title').textContent = pack.nombre;
+
+            const btnWpModal = document.getElementById('modal-pack-whatsapp-btn');
+            if (btnWpModal) {
+                btnWpModal.href = generarLinkWhatsappPack(pack);
+            }
+
+            const modalEl = document.getElementById('modal-pack-info');
+            modalEl.style.display = 'flex';
+
+            cambiarPestanaPack('info');
+
+            const bodyContent = document.getElementById('modal-pack-body');
+            if (bodyContent) {
+                bodyContent.scrollTop = 0;
+                requestAnimationFrame(() => {
+                    bodyContent.scrollTop = 0;
+                });
+            }
+        }
+
+        function cambiarPestanaPack(tipo) {
+            const tabInfo = document.getElementById('tab-btn-info');
+            const tabContenido = document.getElementById('tab-btn-contenido');
+            const bodyContent = document.getElementById('modal-pack-body');
+
+            if (tipo === 'info') {
+                tabInfo.classList.add('active');
+                tabContenido.classList.remove('active');
+                bodyContent.innerHTML = formatearTextoContenido(infoGeneralPacks);
+            } else {
+                tabContenido.classList.add('active');
+                tabInfo.classList.remove('active');
+                const textoContenido = packActualModal ? packActualModal.contenido : '';
+                bodyContent.innerHTML = formatearTextoContenido(textoContenido);
+            }
+
+            bodyContent.scrollTop = 0;
+            requestAnimationFrame(() => {
+                bodyContent.scrollTop = 0;
+            });
+        }
+
+        function cerrarModalPack(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
+            const el = document.getElementById('modal-pack-info');
+            if (el) el.style.display = 'none';
+            const bodyContent = document.getElementById('modal-pack-body');
+            if (bodyContent) bodyContent.scrollTop = 0;
+        }
+
+        function abrirModalInfoSeccion() {
+            registrarEstadoModal();
+            bloquearScroll(true);
+
+            const titleEl = document.getElementById('modal-info-general-title');
+            const bodyEl = document.getElementById('modal-info-general-body');
+            const esSerie = (modoActual === 'series' || (modoActual === 'busqueda' && tipoBusquedaActual === 'series'));
+
+            titleEl.textContent = esSerie ? 'SERIES DIGITALES' : 'PELÍCULAS DIGITALES';
+            
+            const textoAUsar = esSerie ? infoGeneralSeries : infoGeneralPeliculas;
+            bodyEl.innerHTML = formatearTextoContenido(textoAUsar || 'Información no disponible actualmente.');
+
+            const modalEl = document.getElementById('modal-info-general');
+            modalEl.style.display = 'flex';
+
+            bodyEl.scrollTop = 0;
+            requestAnimationFrame(() => {
+                bodyEl.scrollTop = 0;
+            });
+        }
+
+        function cerrarModalInfoGeneral(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
+            const el = document.getElementById('modal-info-general');
+            if (el) el.style.display = 'none';
+            const bodyEl = document.getElementById('modal-info-general-body');
+            if (bodyEl) bodyEl.scrollTop = 0;
+        }
+
+        function abrirModalListaActual() {
+            if (modoActual === 'packs') {
+                abrirModalListaPacks();
+            } else {
+                abrirModalListaSagas();
+            }
+        }
+
+        function abrirModalListaSagas() {
+            registrarEstadoModal();
+            bloquearScroll(true);
+            
+            document.getElementById('modal-lista-title').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);">
+                    <rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect>
+                    <path d="M2 9h20"></path>
+                    <path d="M4 9l2.5-5"></path>
+                    <path d="M9 9l2.5-5"></path>
+                    <path d="M14 9l2.5-5"></path>
+                    <path d="M19 9l2.5-5"></path>
+                    <path d="M10 12.5l6 3-6 3z"></path>
+                </svg>
+                LISTA DE SAGAS
+            `;
+
+            const scrollContainer = document.getElementById('sagas-list-scroll');
+            scrollContainer.innerHTML = '';
+            scrollContainer.scrollTop = 0;
+
+            elementosActivos.forEach((saga, index) => {
+                const item = document.createElement('div');
+                item.className = 'saga-list-item';
+                item.onclick = () => irAElementoId(`saga-card-${index}`);
+                item.innerHTML = `
+                    <span class="saga-list-name">${saga.nombre}</span>
+                    <span class="saga-list-badge">${saga.cantidad} PELIS</span>
+                `;
+                scrollContainer.appendChild(item);
+            });
+
+            document.getElementById('modal-lista-sagas').style.display = 'flex';
+        }
+
+        function abrirModalListaPacks() {
+            registrarEstadoModal();
+            bloquearScroll(true);
+
+            document.getElementById('modal-lista-title').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);">
+                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+                </svg>
+                LISTA DE PACKS
+            `;
+
+            const scrollContainer = document.getElementById('sagas-list-scroll');
+            scrollContainer.innerHTML = '';
+            scrollContainer.scrollTop = 0;
+
+            elementosActivos.forEach((pack, index) => {
+                const item = document.createElement('div');
+                item.className = 'saga-list-item';
+                item.onclick = () => irAElementoId(`pack-card-${index}`);
+                item.innerHTML = `
+                    <span class="saga-list-name">${pack.nombre}</span>
+                    <span class="saga-list-badge">${pack.precio}</span>
+                `;
+                scrollContainer.appendChild(item);
+            });
+
+            document.getElementById('modal-lista-sagas').style.display = 'flex';
+        }
+
+        function cerrarModalListaSagas(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
+            const modalEl = document.getElementById('modal-lista-sagas');
+            if (modalEl) modalEl.style.display = 'none';
+            const scrollContainer = document.getElementById('sagas-list-scroll');
+            if (scrollContainer) scrollContainer.scrollTop = 0;
+        }
+
+        function irAElementoId(cardId) {
+            cerrarModalListaSagas();
+            setTimeout(() => {
+                const el = document.getElementById(cardId);
+                if (el) {
+                    const headerOffset = 85;
+                    const elementPosition = el.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    el.classList.add('saga-highlight');
+                    setTimeout(() => el.classList.remove('saga-highlight'), 1800);
+                }
+            }, 100);
+        }
+
+        // ================= DESLIZAMIENTO TÁCTIL =================
+        let touchStartX = 0;
+        let touchCurrentX = 0;
+        let isDraggingModal = false;
+        const modalContainer = document.querySelector('.modal-img-container');
+
+        if (modalContainer) {
+            modalContainer.addEventListener('touchstart', function(e) {
+                if (modalSagaImagenes.length <= 1) return;
+                touchStartX = e.touches[0].clientX;
+                touchCurrentX = touchStartX;
+                isDraggingModal = true;
+                const track = document.getElementById('modal-slider-track');
+                track.style.transition = 'none';
+            }, { passive: true });
+
+            modalContainer.addEventListener('touchmove', function(e) {
+                if (!isDraggingModal || modalSagaImagenes.length <= 1) return;
+                touchCurrentX = e.touches[0].clientX;
+                let diffX = touchCurrentX - touchStartX;
+
+                if (modalSagaIndexActual === 0 && diffX > 0) diffX = 0;
+                else if (modalSagaIndexActual === modalSagaImagenes.length - 1 && diffX < 0) diffX = 0;
+
+                const containerWidth = modalContainer.offsetWidth || 300;
+                const dragPercent = (diffX / containerWidth) * 100;
+                const currentBasePercent = -modalSagaIndexActual * 100;
+
+                const track = document.getElementById('modal-slider-track');
+                track.style.transform = `translateX(${currentBasePercent + dragPercent}%)`;
+            }, { passive: true });
+
+            modalContainer.addEventListener('touchend', function(e) {
+                if (!isDraggingModal || modalSagaImagenes.length <= 1) return;
+                isDraggingModal = false;
+                
+                let diffX = touchCurrentX - touchStartX;
+                if (modalSagaIndexActual === 0 && diffX > 0) diffX = 0;
+                if (modalSagaIndexActual === modalSagaImagenes.length - 1 && diffX < 0) diffX = 0;
+
+                const containerWidth = modalContainer.offsetWidth || 300;
+                const threshold = Math.min(containerWidth * 0.2, 50);
+
+                const track = document.getElementById('modal-slider-track');
+                track.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+
+                if (diffX < -threshold && modalSagaIndexActual < modalSagaImagenes.length - 1) {
+                    modalSagaIndexActual++;
+                } else if (diffX > threshold && modalSagaIndexActual > 0) {
+                    modalSagaIndexActual--;
+                }
+
+                track.style.transform = `translateX(-${modalSagaIndexActual * 100}%)`;
+                actualizarBotonesModalSaga();
+            }, { passive: true });
+        }
+
+        ['modal', 'modal-pack-info', 'modal-info-general', 'modal-lista-sagas', 'search-modal', 'sidebar-overlay'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('touchmove', function(e) {
+                    if (!e.target.closest('.sagas-list-scroll, .modal-pack-body, .modal-info-body, .search-overlay, .sidebar-content')) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
+        });
+
+        function cerrarModal(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
             modal.style.display = 'none';
+            modalSagaImagenes = [];
         }
 
         modal.addEventListener('click', function(e) {
             if (e.target === modal) cerrarModal();
         });
 
-        /* ================= BUSCADOR EXCLUSIVO DE PELÍCULAS Y SERIES ================= */
+        window.addEventListener('click', function(e) {
+            const modalLista = document.getElementById('modal-lista-sagas');
+            const modalPack = document.getElementById('modal-pack-info');
+            const modalInfoGen = document.getElementById('modal-info-general');
+            if (e.target === modalLista) cerrarModalListaSagas();
+            if (e.target === modalPack) cerrarModalPack();
+            if (e.target === modalInfoGen) cerrarModalInfoGeneral();
+        });
+
+        /* ================= BUSCADOR EXCLUSIVO ================= */
         const searchModal = document.getElementById('search-modal');
         const searchInput = document.getElementById('search-input');
         const clearSearchBtn = document.getElementById('clear-search-btn');
@@ -1282,21 +3390,18 @@
         const viewAllResultsBtn = document.getElementById('view-all-results-btn');
         const btnBuscarPeliculas = document.getElementById('btn-buscar-peliculas');
         const btnBuscarSeries = document.getElementById('btn-buscar-series');
-        let tipoBusquedaActual = 'peliculas'; // 'peliculas' | 'series'
-
-        function normalizarTexto(texto) {
-            return String(texto || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase();
-        }
+        let tipoBusquedaActual = 'peliculas';
 
         function abrirBuscador() {
+            registrarEstadoModal();
+            bloquearScroll(true);
             searchModal.style.display = 'flex';
             setTimeout(() => searchInput.focus(), 50);
         }
 
-        function cerrarBuscador() {
+        function cerrarBuscador(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
             searchModal.style.display = 'none';
         }
 
@@ -1335,12 +3440,12 @@
                     maxResultados.forEach(item => {
                         const el = document.createElement('div');
                         el.className = 'search-result-item';
+                        // Abre modal sin cerrar la pantalla del buscador
                         el.onclick = () => {
-                            cerrarBuscador();
                             abrirModalPeliculaOSerie(item);
                         };
 
-                        const iconoTipo = item.tipo === 'serie' ? iconoSerieSVG : iconoPeliculaSVG;
+                        const iconoTipo = item.tipo === 'serie' ? iconoSerieSVG15 : iconoPeliculaSVG15;
                         const etiquetaTipo = item.tipo === 'serie' ? 'SERIE' : 'PELÍCULA';
 
                         el.innerHTML = `
