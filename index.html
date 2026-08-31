@@ -22,7 +22,7 @@
             margin: 0; 
             padding: 0; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            -webkit-tap-highlight-color: transparent; /* Quita el recuadro azul al tocar en celular */
+            -webkit-tap-highlight-color: transparent;
         }
         
         body { background-color: var(--bg-color); color: var(--text-main); padding-top: 70px; }
@@ -62,7 +62,7 @@
             line-height: 1;
         }
 
-        /* Título de sección (-4px arriba y -3px abajo) */
+        /* Título de sección */
         .section-title {
             margin: 16px 20px 13px 20px; 
             font-size: 20px; 
@@ -107,7 +107,6 @@
             }
         }
 
-        /* Ajuste en Pack Digital móvil */
         .section-title.modo-packs {
             max-width: 420px; 
             margin: 16px auto 13px auto;
@@ -118,7 +117,6 @@
             transform: translateY(1px);
         }
 
-        /* Ajuste en Resultados de Búsqueda */
         .section-title.search-active .section-title-left {
             transform: translateY(2px);
         }
@@ -129,7 +127,7 @@
             gap: 8px;
         }
 
-        /* Botón INFO en Películas y Series */
+        /* Botón INFO */
         .btn-info-section {
             background: #005591;
             color: white;
@@ -262,7 +260,7 @@
             border-bottom: 1px solid #eeeeee;
         }
 
-        /* ================= GRILLA PRINCIPAL (2 COLUMNAS EN MÓVILES) ================= */
+        /* ================= GRILLAS GENERALES (2 COLUMNAS EN MÓVIL) ================= */
         .content-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
@@ -698,7 +696,7 @@
             gap: 34px;
         }
 
-        /* 1. Header con año y líneas neón alternantes (Imagen 1) */
+        /* 1. Header con año y líneas neón alternantes */
         .home-year-header {
             display: flex;
             align-items: center;
@@ -794,7 +792,7 @@
             transform: scale(1.05);
         }
 
-        /* Bloques de la página Inicio */
+        /* Bloques de sección en Inicio */
         .home-section-block {
             display: flex;
             flex-direction: column;
@@ -851,7 +849,15 @@
             display: inline-flex;
         }
 
-        /* 2. Cuadrícula de Géneros Más Buscados */
+        /* Grilla de películas en Inicio (2 columnas móvil / 5 en PC) */
+        .home-movie-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px 12px;
+            width: 100%;
+        }
+
+        /* Géneros Más Buscados */
         .home-genres-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -880,7 +886,7 @@
             box-shadow: 0 4px 10px rgba(0, 85, 145, 0.2);
         }
 
-        /* Banner de Pack Digital Inicio (Imagen inicia desde arriba de 0) */
+        /* Banner Pack Digital Inicio */
         .home-pack-banner-card {
             position: relative;
             width: 100%;
@@ -888,7 +894,7 @@
             border-radius: 16px;
             overflow: hidden;
             background-size: cover !important;
-            background-position: center top !important; /* Inicia desde arriba */
+            background-position: center top !important;
             box-shadow: 0 4px 14px rgba(0,0,0,0.15);
             cursor: pointer;
             display: flex;
@@ -928,19 +934,19 @@
             background: #e600e6;
         }
 
-        /* Control de visualización: 16 y 6 en móvil / 15 y 5 en PC */
+        /* Visibilidad de los elementos 16 y 6 */
         .home-item-16th,
         .home-item-6th {
             display: flex;
         }
 
-        /* ================= ESTRUCTURA RESPONSIVA INICIO (Móvil vs PC) ================= */
-        /* En móvil (< 900px): flujo lineal perfecto con orden exacto */
+        /* ================= ESTRUCTURA HÍBRIDA INICIO (MÓVIL vs ESCRITORIO) ================= */
+        /* En móvil (< 900px): orden lineal solicitado */
         @media (max-width: 899px) {
-            .home-desktop-columns,
+            .home-desktop-wrapper,
             .home-col-left,
             .home-col-right {
-                display: contents;
+                display: contents !important;
             }
             #home-block-carousel { order: 1; }
             #home-block-generos   { order: 2; }
@@ -952,32 +958,44 @@
 
         /* En PC (>= 900px): 2 Columnas continuas sin espacios vacíos */
         @media (min-width: 900px) {
-            .home-desktop-columns {
-                display: grid;
+            .home-desktop-wrapper {
+                display: grid !important;
                 grid-template-columns: 1fr 390px;
                 gap: 30px;
                 align-items: start;
+                width: 100%;
             }
             .home-col-left {
-                display: flex;
+                display: flex !important;
                 flex-direction: column;
                 gap: 28px;
+                width: 100%;
             }
             .home-col-right {
-                display: flex;
+                display: flex !important;
                 flex-direction: column;
                 gap: 28px;
                 width: 100%;
                 max-width: 390px;
             }
-            .home-grid-desktop-5 {
+            #home-block-carousel,
+            #home-block-generos,
+            #home-block-recientes,
+            #home-block-series,
+            #home-block-sagas,
+            #home-block-packs {
+                order: unset !important;
+            }
+
+            .home-movie-grid {
                 grid-template-columns: repeat(5, 1fr) !important;
+                gap: 15px;
             }
             .home-carousel-poster {
                 width: 120px;
             }
 
-            /* Ocultar el 16° y el 6° en PC */
+            /* Ocultar el 16° y el 6° en PC para mantener múltiplos de 5 */
             .home-item-16th,
             .home-item-6th {
                 display: none !important;
@@ -1126,9 +1144,9 @@
 
         /* ================= VENTANA FLOTANTE INFO GENERAL (RESPONSIVE) ================= */
         #modal-info-general {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.75);
             z-index: 4000;
@@ -2425,71 +2443,81 @@
                         <button class="btn-ver-mas-estrenos" onclick="mostrarEstrenos()">VER MÁS ESTRENOS</button>
                     </div>
 
-                    <!-- Grilla Principal de Inicio (Ordenada en móvil / 2 Columnas en PC) -->
-                    <div class="home-main-grid">
+                    <!-- Layout 2 Columnas Independientes en PC / Orden Lineal en Móvil -->
+                    <div class="home-desktop-wrapper">
                         
-                        <!-- BLOQUE GÉNEROS MÁS BUSCADOS (Primero en móvil debajo del carrusel) -->
-                        <div class="home-section-block" id="home-block-generos">
-                            <div class="home-section-header-row">
-                                <h3 class="home-section-title">
-                                    ${iconoPeliculaSVG15}
-                                    GÉNEROS MÁS BUSCADOS
-                                </h3>
+                        <!-- Columna Izquierda (en PC): Películas y Series -->
+                        <div class="home-col-left">
+                            
+                            <!-- Recién Añadidas (16 en móvil / 15 en PC) -->
+                            <div class="home-section-block" id="home-block-recientes">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
+                                </div>
+                                <div class="home-movie-grid">
+                                    ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '')).join('')}
+                                </div>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
                             </div>
-                            <div class="home-genres-grid">
-                                <div class="home-genre-card" onclick="filtrarPorGenero('Terror')">Terror</div>
-                                <div class="home-genre-card" onclick="filtrarPorGenero('Infantil')">Infantil</div>
-                                <div class="home-genre-card" onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</div>
-                                <div class="home-genre-card" onclick="filtrarPorGenero('Comedia')">Comedia</div>
+
+                            <!-- Series (6 en móvil / 5 en PC) -->
+                            <div class="home-section-block" id="home-block-series">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoSerieSVG15}
+                                        SERIES
+                                    </h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER MÁS</button>
+                                </div>
+                                <div class="home-movie-grid">
+                                    ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '')).join('')}
+                                </div>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS</button>
                             </div>
-                            <button class="btn-ver-mas-estrenos" onclick="abrirMenuGeneros()">VER GÉNEROS</button>
+
                         </div>
 
-                        <!-- BLOQUE RECIÉN AÑADIDAS (16 en móvil / 15 en PC) -->
-                        <div class="home-section-block" id="home-block-recientes">
-                            <div class="home-section-header-row">
-                                <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
-                                <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
-                            </div>
-                            <div class="content-grid home-grid-desktop-5" style="padding: 0;">
-                                ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '')).join('')}
-                            </div>
-                            <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
-                        </div>
+                        <!-- Columna Derecha (en PC): Géneros, Sagas y Packs -->
+                        <div class="home-col-right">
 
-                        <!-- BLOQUE SERIES (6 en móvil / 5 en PC) -->
-                        <div class="home-section-block" id="home-block-series">
-                            <div class="home-section-header-row">
-                                <h3 class="home-section-title">
-                                    ${iconoSerieSVG15}
-                                    SERIES
-                                </h3>
-                                <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER MÁS</button>
+                            <!-- Géneros Más Buscados -->
+                            <div class="home-section-block" id="home-block-generos">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoPeliculaSVG15}
+                                        GÉNEROS MÁS BUSCADOS
+                                    </h3>
+                                </div>
+                                <div class="home-genres-grid">
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Terror')">Terror</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Infantil')">Infantil</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Ciencia ficción')">Ciencia ficción</div>
+                                    <div class="home-genre-card" onclick="filtrarPorGenero('Comedia')">Comedia</div>
+                                </div>
+                                <button class="btn-ver-mas-estrenos" onclick="abrirMenuGeneros()">VER GÉNEROS</button>
                             </div>
-                            <div class="content-grid home-grid-desktop-5" style="padding: 0;">
-                                ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '')).join('')}
-                            </div>
-                            <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS</button>
-                        </div>
 
-                        <!-- BLOQUE PROMO SAGAS (1 Saga al azar) -->
-                        <div class="home-section-block" id="home-block-sagas">
-                            <div class="home-section-header-row">
-                                <h3 class="home-section-title">
-                                    ${iconoClaquetaSVG17}
-                                    PROMO SAGAS
-                                </h3>
-                                <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
+                            <!-- Promo Sagas (1 Saga al azar) -->
+                            <div class="home-section-block" id="home-block-sagas">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">
+                                        ${iconoClaquetaSVG17}
+                                        PROMO SAGAS
+                                    </h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
+                                </div>
+                                ${htmlSagaRandom}
                             </div>
-                            ${htmlSagaRandom}
-                        </div>
 
-                        <!-- BLOQUE PACK DIGITAL (Slideshow que inicia arriba) -->
-                        <div class="home-section-block" id="home-block-packs">
-                            <div class="home-pack-banner-card" id="home-pack-banner" style="background-image: url('${primerPackImg}');" onclick="mostrarPacks()">
-                                <div class="home-pack-banner-overlay"></div>
-                                <button class="btn-ver-mas-packs" onclick="event.stopPropagation(); mostrarPacks();">VER MÁS PACKS</button>
+                            <!-- Banner Pack Digital -->
+                            <div class="home-section-block" id="home-block-packs">
+                                <div class="home-pack-banner-card" id="home-pack-banner" style="background-image: url('${primerPackImg}');" onclick="mostrarPacks()">
+                                    <div class="home-pack-banner-overlay"></div>
+                                    <button class="btn-ver-mas-packs" onclick="event.stopPropagation(); mostrarPacks();">VER MÁS PACKS</button>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -3477,7 +3505,6 @@
                     maxResultados.forEach(item => {
                         const el = document.createElement('div');
                         el.className = 'search-result-item';
-                        // Abre modal sin cerrar la pantalla del buscador
                         el.onclick = () => {
                             abrirModalPeliculaOSerie(item);
                         };
