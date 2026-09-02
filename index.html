@@ -117,17 +117,20 @@
         .section-title.modo-packs .section-title-left {
             transform: translateY(1px);
         }
-
         .section-title.search-active .section-title-left {
             transform: translateY(2px);
         }
-
+/* Nivelar el icono de Pack Digital con el texto en PC */
+@media (min-width: 768px) {
+    .section-title.modo-packs svg {
+        transform: translateY(2px) !important;
+    }
+}
         .header-actions-right {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         /* Botón INFO */
         .btn-info-section {
             background: #005591;
