@@ -779,7 +779,7 @@
             padding: 0 26px;
             border-radius: 8px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -813,7 +813,7 @@
         }
         .home-section-title {
             font-size: 17px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-main);
             text-transform: uppercase;
             display: flex;
@@ -830,9 +830,9 @@
             border: none;
             height: 28px;
             padding: 0 15px;
-            border-radius: 6px;
+            border-radius: 7px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
             box-shadow: 0 2px 6px rgba(0, 122, 204, 0.25);
@@ -869,12 +869,13 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             width: 100%;
+            letter-spacing: 0.4px;
         }
         .home-genre-card {
             background: #f7fdff;
             border: 1px solid #2e9fd2;
             border-radius: 20px;
-            padding: 8px 10px;
+            padding: 7px 10px;
             text-align: center;
             font-size: 12.5px;
             font-weight: 500;
@@ -2469,7 +2470,7 @@
                                 <div class="home-movie-grid">
                                     ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '')).join('')}
                                 </div>
-                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS</button>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS PELÍCULAS</button>
                             </div>
 
                             <!-- Series (6 en móvil / 5 en PC) -->
@@ -2484,7 +2485,7 @@
                                 <div class="home-movie-grid">
                                     ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '')).join('')}
                                 </div>
-                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER SERIES</button>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarSeries()">VER MÁS SERIES</button>
                             </div>
 
                         </div>
@@ -2516,7 +2517,7 @@
                                         ${iconoClaquetaSVG17}
                                         PROMO SAGAS
                                     </h3>
-                                    <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER MÁS</button>
+                                    <button class="home-btn-ver-mas" onclick="mostrarSagas()">VER SAGAS</button>
                                 </div>
                                 ${htmlSagaRandom}
                             </div>
