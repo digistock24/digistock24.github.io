@@ -572,6 +572,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
             background-position: center top -8px;
             margin-bottom: -4px;
+            background-color: #00284d; /* Color base mientras carga */
         }
         .pack-card-big:hover {
             transform: translateY(-1px);
@@ -662,6 +663,7 @@
             justify-content: flex-end;
             padding: 8px 10px;
             transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #00284d; /* Color base mientras carga */
         }
         .pack-card-grid:hover {
             transform: translateY(-3px);
@@ -1578,7 +1580,7 @@
             border-radius: 10px;
         }
 
-        /* ================= VENTANA FLOTANTE INFO GENERAL (RESPONSIVE) ================= */
+        /* ================= VENTANA FLOTANTE INFO GENERAL (EXPANDIDA DINÁMICAMENTE) ================= */
         #modal-info-general {
             display: none; 
             position: fixed; 
@@ -2603,6 +2605,7 @@
         
         let slideshowPackInterval = null;
         let carouselInterval = null;
+        let lazyBgObserver = null;
 
         // Estado del Carrito de Compras (guardado en LocalStorage)
         let carritoPeliculas = JSON.parse(localStorage.getItem('digistock_cart') || '[]');
@@ -2739,6 +2742,25 @@
         }
 
         document.getElementById('footer-copy').textContent = `\u00A9 ${ANIO_ACTUAL} DIGISTOCK24 | Todos los derechos reservados`;
+
+        // ================= LAZY LOADING PARA FONDOS (BACKGROUND-IMAGE) =================
+        function inicializarLazyBgObserver() {
+            if (lazyBgObserver) lazyBgObserver.disconnect();
+            if ('IntersectionObserver' in window) {
+                lazyBgObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const el = entry.target;
+                            const bgUrl = el.dataset.bg;
+                            if (bgUrl) {
+                                el.style.backgroundImage = `url('${bgUrl}')`;
+                            }
+                            observer.unobserve(el);
+                        }
+                    });
+                }, { rootMargin: '200px 0px' });
+            }
+        }
 
         // ================= GESTIÓN DEL CARRITO =================
         function guardarCarrito() {
@@ -3338,20 +3360,22 @@
                 return;
             }
 
-            // 2. MODO PACK DIGITAL
+            // 2. MODO PACK DIGITAL (Con Lazy Loading en el background-image)
             if (modoActual === 'packs') {
                 grid.className = (vistaPacksActual === 'big') 
                     ? 'content-grid packs-wide-layout' 
                     : 'content-grid packs-grid-layout';
 
+                inicializarLazyBgObserver();
+
                 elementosActivos.forEach((pack, idx) => {
                     const card = document.createElement('div');
                     card.id = `pack-card-${idx}`;
                     const linkWhatsapp = generarLinkWhatsappPack(pack);
+                    card.dataset.bg = pack.imagen; // Almacenamos la URL para cargar bajo demanda
 
                     if (vistaPacksActual === 'big') {
                         card.className = 'pack-card-big';
-                        card.style.backgroundImage = `url('${pack.imagen}')`;
                         card.onclick = () => abrirModalPack(pack);
                         card.innerHTML = `
                             <div class="pack-gradient-overlay"></div>
@@ -3371,7 +3395,6 @@
                         `;
                     } else {
                         card.className = 'pack-card-grid';
-                        card.style.backgroundImage = `url('${pack.imagen}')`;
                         card.onclick = () => abrirModalPack(pack);
                         card.innerHTML = `
                             <div class="pack-gradient-overlay"></div>
@@ -3387,6 +3410,14 @@
                             </div>
                         `;
                     }
+
+                    // Se vincula al IntersectionObserver para Lazy Loading
+                    if (lazyBgObserver) {
+                        lazyBgObserver.observe(card);
+                    } else {
+                        card.style.backgroundImage = `url('${pack.imagen}')`;
+                    }
+
                     grid.appendChild(card);
                 });
 
@@ -4259,7 +4290,6 @@
                     maxResultados.forEach(item => {
                         const el = document.createElement('div');
                         el.className = 'search-result-item';
-                        // Abre modal sin cerrar la pantalla del buscador
                         el.onclick = () => {
                             abrirModalPeliculaOSerie(item);
                         };
