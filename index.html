@@ -3647,11 +3647,11 @@
             }
 
             const modalConfirmVaciarEl = document.getElementById('modal-confirm-vaciar');
-            const modalCarritoEl = document.getElementById('modal-carrito');
             const modalDetalles = document.getElementById('modal');
             const modalPack = document.getElementById('modal-pack-info');
             const modalInfoGen = document.getElementById('modal-info-general');
             const modalLista = document.getElementById('modal-lista-sagas');
+            const modalCarritoEl = document.getElementById('modal-carrito');
             const modalSearch = document.getElementById('search-modal');
             const sidebar = document.getElementById('sidebar-container');
 
@@ -3659,10 +3659,7 @@
                 cerrarConfirmVaciar();
                 return;
             }
-            if (modalCarritoEl && modalCarritoEl.style.display === 'flex') {
-                cerrarModalCarrito(false);
-                return;
-            }
+            // Cerrar primero la ventana de detalles de la película
             if (modalDetalles && modalDetalles.style.display === 'flex') {
                 cerrarModal(false);
                 return;
@@ -3677,6 +3674,11 @@
             }
             if (modalLista && modalLista.style.display === 'flex') {
                 cerrarModalListaSagas(false);
+                return;
+            }
+            // Luego el carrito
+            if (modalCarritoEl && modalCarritoEl.style.display === 'flex') {
+                cerrarModalCarrito(false);
                 return;
             }
             if (modalSearch && modalSearch.style.display === 'flex') {
