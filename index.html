@@ -572,7 +572,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
             background-position: center top -8px;
             margin-bottom: -4px;
-            background-color: #00284d; /* Color base mientras carga */
+            background-color: #00284d;
         }
         .pack-card-big:hover {
             transform: translateY(-1px);
@@ -584,14 +584,14 @@
             background: linear-gradient(to top, rgba(0, 24, 55, 0.96) 0%, rgba(0, 25, 55, 0.8) 18%, rgba(0, 45, 95, 0.35) 35%, transparent 50%);
             z-index: 1;
         }
-        .pack-card-big .pack-big-content {
+        .pack-big-content {
             position: relative;
             z-index: 2;
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
-        .pack-card-big .pack-big-title {
+        .pack-big-title {
             color: #ffffff;
             font-size: 16.5px;
             font-weight: 700;
@@ -602,13 +602,13 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .pack-card-big .pack-big-bottom {
+        .pack-big-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 10px;
         }
-        .pack-card-big .pack-big-price {
+        .pack-big-price {
             color: #ffffff;
             font-size: 24px;
             font-weight: 700;
@@ -663,7 +663,7 @@
             justify-content: flex-end;
             padding: 8px 10px;
             transition: transform 0.2s, box-shadow 0.2s;
-            background-color: #00284d; /* Color base mientras carga */
+            background-color: #00284d;
         }
         .pack-card-grid:hover {
             transform: translateY(-3px);
@@ -3647,7 +3647,7 @@
             window.scrollTo(0, 0);
         }
 
-        // CONTROL DE ENLACES DIRECTOS
+        // CONTROL DE ENLACES DIRECTOS Y RECARGA DE PÁGINA
         function verificarRutaDirecta() {
             const hash = window.location.hash.toLowerCase();
             if (hash === '#estrenos') {
@@ -3809,11 +3809,14 @@
             sidebarOverlay.classList.add('active');
         }
 
+        // Corrección: Al cambiar de sección, NO ejecuta history.back() para no borrar la URL del navegador
         function cerrarMenu(cambioDeSeccion = false, limpiarHistorial = true) {
             if (cambioDeSeccion) {
                 posicionScrollGuardada = 0;
+                modalesAbiertosHistorial = 0; // Se resetea la profundidad del historial sin borrar la URL
+            } else if (limpiarHistorial) {
+                limpiarEstadoModal();
             }
-            if (limpiarHistorial) limpiarEstadoModal();
             bloquearScroll(false);
             sidebarContainer.classList.remove('active');
             sidebarOverlay.classList.remove('active');
