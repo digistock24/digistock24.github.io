@@ -15,6 +15,7 @@
             --accent-pink: #ff00ff; 
             --search-accent: #007acc; 
             --pack-green: #00e600;
+            --cart-cyan: #00c2f7;
         }
         * { 
             box-sizing: border-box; 
@@ -23,9 +24,12 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             -webkit-tap-highlight-color: transparent;
         }  
-        body { background-color: var(--bg-color); color: var(--text-main);
-              padding-top: 67px; }
-        /* Bloqueo blindado de scroll sin perder la posición en pantalla */
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            padding-top: 67px; 
+        }
+        /* Bloqueo blindado de scroll */
         body.no-scroll {
             overflow: hidden;
             position: fixed;
@@ -84,7 +88,6 @@
             align-items: center;
             gap: 8px;
             min-width: 0;
-            
         }
         .section-title-left svg {
             flex-shrink: 0;
@@ -117,17 +120,19 @@
         .section-title.search-active .section-title-left {
             transform: translateY(2px);
         }
-/* Nivelar el icono de Pack Digital con el texto en PC */
-@media (min-width: 768px) {
-    .section-title.modo-packs svg {
-        transform: translateY(2px) !important;
-    }
-}
+
+        @media (min-width: 768px) {
+            .section-title.modo-packs svg {
+                transform: translateY(2px) !important;
+            }
+        }
+
         .header-actions-right {
             display: flex;
             align-items: center;
             gap: 8px;
         }
+
         /* Botón INFO */
         .btn-info-section {
             background: #005591;
@@ -322,6 +327,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         .movie-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .img-container { position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; }
@@ -329,13 +335,39 @@
         
         .year-badge {
             position: absolute; 
-        
             left: 9px; background-color: var(--accent-pink);
             color: white; padding: 0px 5px; font-size: 13.2px; font-weight: bolder; border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             z-index: 2;
             bottom: 9px;
-          line-height: 1.4;
+            line-height: 1.4;
+        }
+
+        /* Botón de Carrito en la Tarjeta de Película */
+        .btn-card-cart {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 34px;
+            height: 34px;
+            background: var(--cart-cyan);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 194, 247, 0.45);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn-card-cart:hover {
+            transform: scale(1.1);
+            background: #00aee0;
+        }
+        .btn-card-cart:active {
+            transform: scale(0.95);
         }
 
         .movie-title {
@@ -522,6 +554,7 @@
             background-color: #009226;
             box-shadow: 0px 1px 0px #00751f;
         }
+
         /* ================= DISEÑOS DE TARJETAS DE PACK DIGITAL ================= */
         .pack-card-big {
             position: relative;
@@ -772,10 +805,11 @@
             transform: scale(1.06);
             box-shadow: 0 6px 14px rgba(0,0,0,0.4);
         }
+
         /* Botón Ver Más Estrenos */
         .btn-ver-mas-estrenos {
             border: 1px solid rgba(255,255,255,0.1);
-  background: linear-gradient(130deg,#014777 0%,#005691 90%);
+            background: linear-gradient(130deg,#014777 0%,#005691 90%);
             box-shadow: 0px 1px 0px #02395f;
             color: white;
             height: 32px;
@@ -797,18 +831,17 @@
             background: #0261a2;
             transform: scale(1.05);
         }
-.bvergeneros {
-  letter-spacing: 0px;
-  border-radius: 20px;
-  color: #2e9fd2;
-  border: 1px solid #2e9fd2;
-  background: #f7fdff;
-  box-shadow: none;
-}
-        /* Bloques de sección en Inicio */
-#home-block-generos {
-    padding-top: 10px;
-  padding-bottom: 12px;
+        .bvergeneros {
+            letter-spacing: 0px;
+            border-radius: 20px;
+            color: #2e9fd2;
+            border: 1px solid #2e9fd2;
+            background: #f7fdff;
+            box-shadow: none;
+        }
+        #home-block-generos {
+            padding-top: 10px;
+            padding-bottom: 12px;
         }
         .home-section-block {
             display: flex;
@@ -832,7 +865,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            
             margin-bottom: -1px;
         }
         .home-section-title svg {
@@ -840,7 +872,7 @@
             transform: translateY(0px);
         }
         #svgserieshome {
-  padding-bottom: 1px;
+            padding-bottom: 1px;
         }
         .home-btn-ver-mas {
             background: #005591;
@@ -872,9 +904,9 @@
             border-radius: 8px;
             display: inline-flex;
         }
-     .bseriesmas { 
-         padding-inline: 32px;
-         }
+        .bseriesmas { 
+            padding-inline: 32px;
+        }
         /* Grilla de películas en Inicio */
         .home-movie-grid {
             display: grid;
@@ -963,10 +995,8 @@
             transform: scale(1.02);
             background: #e600e6;
             box-shadow: 0 4px 12px rgba(255, 0, 255, 0.4);
-
         }
 
-        /* Visibilidad de los elementos 16 y 6 */
         .home-item-16th,
         .home-item-6th {
             display: flex;
@@ -980,15 +1010,16 @@
             .home-col-right {
                 display: contents !important;
             }
-            #home-block-carousel { order: 1; }
+            #home-block-carousel  { order: 1; }
             #home-block-generos   { order: 2; }
             #home-block-recientes { order: 3; }
-            #home-block-series    { order: 4; }
+            #home-block-estrenos  { order: 4; }
             #home-block-sagas     { order: 5; }
             #home-block-packs     { order: 6; }
+            #home-block-series    { order: 7; }
         }
 
-        /* En PC (>= 900px): 2 Columnas continuas sin espacios vacíos */
+        /* En PC (>= 900px): 2 Columnas continuas */
         @media (min-width: 900px) {
             .home-desktop-wrapper {
                 display: grid !important;
@@ -1013,6 +1044,7 @@
             #home-block-carousel,
             #home-block-generos,
             #home-block-recientes,
+            #home-block-estrenos,
             #home-block-series,
             #home-block-sagas,
             #home-block-packs {
@@ -1027,11 +1059,325 @@
                 width: 120px;
             }
 
-            /* Ocultar el 16° y el 6° en PC para mantener múltiplos de 5 */
             .home-item-16th,
             .home-item-6th {
                 display: none !important;
             }
+        }
+
+        /* ================= BOTONES FLOTANTES (CARRITO Y VOLVER ARRIBA) ================= */
+        .floating-cart-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 48px;
+            height: 48px;
+            background: var(--cart-cyan);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 14px rgba(0, 194, 247, 0.45);
+            cursor: pointer;
+            z-index: 2500;
+            transition: transform 0.2s, background 0.2s;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .floating-cart-btn:hover {
+            transform: scale(1.08);
+            background: #00aee0;
+        }
+        .floating-cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ff00ff;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Animación de inflado (Pop Bounce) */
+        @keyframes cartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.28); }
+            100% { transform: scale(1); }
+        }
+        .cart-bounce {
+            animation: cartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Botón Flotante Volver Arriba */
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 78px;
+            left: 22px;
+            width: 44px;
+            height: 44px;
+            background: #005691;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 86, 145, 0.4);
+            cursor: pointer;
+            z-index: 2400;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            transition: opacity 0.25s, transform 0.25s, background 0.2s;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+        .back-to-top-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .back-to-top-btn:hover {
+            background: var(--search-accent);
+            transform: scale(1.08);
+        }
+
+        /* ================= VENTANA FLOTANTE DEL CARRITO (MODAL CARRO) ================= */
+        #modal-carrito {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 4500;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px 14px;
+            backdrop-filter: blur(4px);
+            overscroll-behavior: contain;
+        }
+        .modal-cart-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px 18px 16px 18px;
+            width: 100%;
+            max-width: 420px;
+            max-height: calc(100dvh - 120px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .modal-cart-title {
+            color: #00b4d8;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .modal-cart-close {
+            background: #ffffff;
+            border: 2px solid #00b4d8;
+            color: #00b4d8;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .modal-cart-close:hover {
+            background: #00b4d8;
+            color: white;
+            transform: scale(1.08);
+        }
+        .modal-cart-separator {
+            width: 100%;
+            height: 2px;
+            background: #00b4d8;
+            margin-bottom: 8px;
+        }
+        .modal-cart-count-subtitle {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #222222;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+        }
+        .modal-cart-list {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px;
+            max-height: calc(100dvh - 280px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: #00b4d8 transparent;
+        }
+        .modal-cart-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .modal-cart-list::-webkit-scrollbar-thumb {
+            background: #00b4d8;
+            border-radius: 10px;
+        }
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #eef2f6;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cart-item-row:hover {
+            background: #f0f7fc;
+        }
+        .cart-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+        .cart-item-thumb {
+            width: 44px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+        .cart-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            overflow: hidden;
+        }
+        .cart-item-name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cart-item-meta {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .cart-item-remove-btn {
+            background: transparent;
+            border: none;
+            color: #ff0033;
+            font-size: 16px;
+            font-weight: 800;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .cart-item-remove-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-cart-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .btn-vaciar-carrito {
+            background: #ffffff;
+            border: 1.5px solid #ff0033;
+            color: #ff0033;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-vaciar-carrito:hover {
+            background: #fff0f2;
+            transform: scale(1.03);
+        }
+        .btn-pedir-whatsapp {
+            flex: 1;
+            background: #00a82d;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0px 2px 0px #00751f;
+            transition: all 0.2s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-pedir-whatsapp:hover {
+            background: #009226;
+            transform: scale(1.03);
+        }
+
+        /* Botón de añadir carrito dentro del modal flotante */
+        .modal-footer-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .modal-add-cart-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--cart-cyan);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 194, 247, 0.4);
+            transition: transform 0.2s;
+        }
+        .modal-add-cart-btn:hover {
+            transform: scale(1.1);
         }
 
         /* ================= VENTANA FLOTANTE DE PACK DIGITAL (RESPONSIVE) ================= */
@@ -1194,7 +1540,7 @@
             padding: 20px 20px 18px 20px;
             width: 100%;
             max-width: 355px;
-            max-height: calc(100vh - 150px); /* Aprovecha el alto disponible en pantalla */
+            max-height: calc(100vh - 150px);
             box-shadow: 0 12px 30px rgba(0,0,0,0.35);
             display: flex;
             flex-direction: column;
@@ -1219,7 +1565,7 @@
         .modal-info-body {
             background: transparent;
             padding: 0 4px;
-            max-height: calc(100vh - 195px); /* Se expande mostrando todo el texto */
+            max-height: calc(100vh - 195px);
             overflow-y: auto;
             color: #ffffff;
             font-size: 13.5px;
@@ -1455,7 +1801,7 @@
             background: var(--accent-pink); 
             color: white; border: none; width: 40px; height: 40px;
             border-radius: 50%; font-size: 20px; cursor: pointer; display: flex;
-            justify-content: center; align-items: center; margin: 0 auto;
+            justify-content: center; align-items: center;
             font-weight: 400; 
             box-shadow: 0 2px 5px rgba(255, 0, 255, 0.3); 
             transition: transform 0.2s;
@@ -1818,8 +2164,8 @@
             transform: scale(1.12);
         }
         .footer-social svg {
-  color: #00548f;
-}
+            color: #00548f;
+        }
         .footer-copy {
             order: 2;
             font-size: 12.5px;
@@ -2006,6 +2352,20 @@
         </div>
     </footer>
 
+    <!-- BOTONES FLOTANTES: VOLVER ARRIBA Y CARRITO -->
+    <button class="back-to-top-btn" id="back-to-top-btn" onclick="volverArriba()" aria-label="Volver arriba">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg>
+    </button>
+
+    <div class="floating-cart-btn" id="floating-cart-btn" onclick="abrirModalCarrito()" aria-label="Carrito de compras">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+        </svg>
+        <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+    </div>
+
     <!-- VENTANA FLOTANTE (MODAL DETALLES PELIS/SERIES/SAGAS) -->
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
@@ -2024,7 +2384,18 @@
             </div>
             <h2 class="modal-title" id="modal-title"></h2>
             <div id="modal-info"></div>
-            <button class="close-btn" onclick="cerrarModal()">✕</button>
+
+            <!-- Fila inferior: Botón añadir carrito + Botón cerrar -->
+            <div class="modal-footer-row">
+                <button class="modal-add-cart-btn" id="modal-add-cart-btn" onclick="agregarAlCarritoDesdeModal()" aria-label="Añadir al carrito" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="8" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                </button>
+                <button class="close-btn" onclick="cerrarModal()">✕</button>
+            </div>
         </div>
     </div>
 
@@ -2051,7 +2422,7 @@
                 <button class="modal-pack-tab" id="tab-btn-contenido" onclick="cambiarPestanaPack('contenido')">CONTENIDO</button>
             </div>
 
-            <!-- Cuerpo de texto con scroll permanente y tamaño fijo -->
+            <!-- Cuerpo de texto con scroll permanente -->
             <div class="modal-pack-body" id="modal-pack-body"></div>
         </div>
         <button class="modal-info-close-btn" onclick="cerrarModalPack()">✕</button>
@@ -2102,6 +2473,33 @@
             <button class="search-close-circle" onclick="cerrarBuscador()">✕</button>
         </div>
     </div>
+
+    <!-- VENTANA FLOTANTE DEL CARRITO DE PELÍCULAS (MODAL CARRO) -->
+    <div class="modal-overlay" id="modal-carrito">
+        <div class="modal-cart-card">
+            <div class="modal-cart-header">
+                <span class="modal-cart-title">CARRITO DE PELÍCULAS</span>
+                <button class="modal-cart-close" onclick="cerrarModalCarrito()">✕</button>
+            </div>
+            <div class="modal-cart-separator"></div>
+            <div class="modal-cart-count-subtitle" id="cart-count-subtitle">0 PELÍCULAS</div>
+            
+            <div class="modal-cart-list" id="cart-items-list">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <div class="modal-cart-actions">
+                <button class="btn-vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pedir-whatsapp" id="cart-whatsapp-btn" onclick="validarPedidoWhatsapp(event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                        <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                    </svg>
+                    PEDIR POR WHATSAPP
+                </a>
+            </div>
+        </div>
+    </div>
     <script>
         /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS ================= */
         
@@ -2126,13 +2524,18 @@
         let terminoBusquedaActual = '';
         let modoActual = 'inicio'; // 'inicio' | 'peliculas' | 'series' | 'sagas' | 'packs'
         let esSeccionEstrenos = false;
-        let vistaPacksActual = 'big'; // 'big' (Imagen 1) | 'grid' (Imagen 2)
+        let vistaPacksActual = 'big';
         let posicionScrollGuardada = 0;
         let modalHistorialActivo = false;
         let ignorarSiguientePopstate = false;
         let slideshowPackInterval = null;
+        let carouselInterval = null;
 
-        // Control del carrusel de imágenes dentro del modal de Sagas
+        // Estado del Carrito de Compras (guardado en LocalStorage)
+        let carritoPeliculas = JSON.parse(localStorage.getItem('digistock_cart') || '[]');
+        let peliculaActualModal = null;
+
+        // Control del carrusel dentro del modal de Sagas
         let modalSagaImagenes = [];
         let modalSagaIndexActual = 0;
         let packActualModal = null;
@@ -2143,13 +2546,13 @@
         const iconoClaquetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoClaquetaSVG17 = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
-        const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
+        const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
         
-        // Íconos para alternar vistas (Cuadro Grande vs Cuadrícula 4 cuadrados)
+        // Íconos para alternar vistas
         const iconoVistaSquareSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect></svg>`;
         const iconoVistaGridSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>`;
 
-        // Actualizar textos del menú lateral dinámicamente
+        // Textos dinámicos en menú lateral
         const menuItemEstrenos = document.getElementById('menu-item-estrenos');
         if (menuItemEstrenos) menuItemEstrenos.textContent = `ESTRENOS ${ANIO_ACTUAL}`;
 
@@ -2158,7 +2561,6 @@
             return texto !== '' ? texto : '✔ Completa';
         }
 
-        // Extractor universal para celdas F2 o E
         function extraerTextoCelda(json, colIndexPref, rowIndexPref) {
             if (!json || !json.table) return '';
             const rows = json.table.rows || [];
@@ -2192,7 +2594,7 @@
             return '';
         }
 
-        // Genera el enlace directo a WhatsApp para Sagas
+        // WhatsApp para Sagas y Packs
         function generarLinkWhatsappSaga(saga) {
             const emojiCarrito = String.fromCodePoint(0x1F6D2);
             const puntoMedio = '\u00B7';
@@ -2200,14 +2602,20 @@
             return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
         }
 
-        // Genera el enlace directo a WhatsApp para Pack Digital
         function generarLinkWhatsappPack(pack) {
             const emojiCarrito = String.fromCodePoint(0x1F6D2);
             const mensaje = `Hola! Quiero realizar esta compra:\n${emojiCarrito} Pack digital *${pack.nombre}*\n-------------------------\n*TOTAL: ${pack.precio}*`;
             return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
         }
 
-        // Formatea el texto para interpretar negritas
+        // WhatsApp para Carrito de Películas
+        function generarLinkWhatsappCarrito() {
+            if (carritoPeliculas.length === 0) return '#';
+            const listaPelis = carritoPeliculas.map(p => `· *${p.nombre}* ${p.año}`).join('\n');
+            const mensaje = `Hola! Quisiera pedir:\n${listaPelis}\n-------------------------------\n*TOTAL: ${carritoPeliculas.length} Películas*`;
+            return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
+        }
+
         function formatearTextoContenido(texto) {
             if (!texto) return '';
             let html = String(texto)
@@ -2265,14 +2673,149 @@
 
         document.getElementById('footer-copy').textContent = `\u00A9 ${ANIO_ACTUAL} DIGISTOCK24 | Todos los derechos reservados`;
 
-        // Carga simultánea de todas las bases de datos
+        // ================= GESTIÓN DEL CARRITO DE COMPRAS =================
+        function guardarCarrito() {
+            localStorage.setItem('digistock_cart', JSON.stringify(carritoPeliculas));
+            actualizarInterfazCarrito();
+        }
+
+        function animarBotonCarrito() {
+            const btn = document.getElementById('floating-cart-btn');
+            if (btn) {
+                btn.classList.remove('cart-bounce');
+                void btn.offsetWidth; // Forzar reflow
+                btn.classList.add('cart-bounce');
+            }
+        }
+
+        function agregarAlCarrito(nombrePeli) {
+            const peli = todasLasPeliculas.find(p => p.nombre === nombrePeli);
+            if (!peli) return;
+
+            const yaExiste = carritoPeliculas.some(p => p.nombre === peli.nombre);
+            if (!yaExiste) {
+                carritoPeliculas.push({
+                    nombre: peli.nombre,
+                    año: peli.año,
+                    imagen: peli.imagen
+                });
+                guardarCarrito();
+            }
+            animarBotonCarrito();
+        }
+
+        function eliminarDelCarrito(nombrePeli) {
+            carritoPeliculas = carritoPeliculas.filter(p => p.nombre !== nombrePeli);
+            guardarCarrito();
+            if (peliculaActualModal && peliculaActualModal.nombre === nombrePeli) {
+                const btnModal = document.getElementById('modal-add-cart-btn');
+                if (btnModal) btnModal.style.display = 'flex';
+            }
+        }
+
+        function vaciarCarrito() {
+            carritoPeliculas = [];
+            guardarCarrito();
+            if (peliculaActualModal && peliculaActualModal.tipo === 'pelicula') {
+                const btnModal = document.getElementById('modal-add-cart-btn');
+                if (btnModal) btnModal.style.display = 'flex';
+            }
+        }
+
+        function actualizarInterfazCarrito() {
+            const badge = document.getElementById('floating-cart-badge');
+            const subtitle = document.getElementById('cart-count-subtitle');
+            const listContainer = document.getElementById('cart-items-list');
+            const btnWhatsapp = document.getElementById('cart-whatsapp-btn');
+
+            const total = carritoPeliculas.length;
+
+            if (badge) {
+                badge.textContent = total;
+                badge.style.display = total > 0 ? 'flex' : 'none';
+            }
+
+            if (subtitle) {
+                subtitle.textContent = `${total} PELÍCULA${total === 1 ? '' : 'S'}`;
+            }
+
+            if (listContainer) {
+                if (total === 0) {
+                    listContainer.innerHTML = '<div style="text-align: center; color: #888; font-size: 13.5px; padding: 25px 10px;">Tu carrito de películas está vacío</div>';
+                } else {
+                    listContainer.innerHTML = carritoPeliculas.map(p => `
+                        <div class="cart-item-row" onclick="abrirModalPeliculaOSerieDirecto('${p.nombre.replace(/'/g, "\\'")}')">
+                            <div class="cart-item-left">
+                                <img src="${p.imagen}" alt="${p.nombre}" class="cart-item-thumb">
+                                <div class="cart-item-info">
+                                    <span class="cart-item-name">${p.nombre}</span>
+                                    <span class="cart-item-meta">${p.año} ${iconoPeliculaSVG15} PELÍCULA</span>
+                                </div>
+                            </div>
+                            <button class="cart-item-remove-btn" onclick="event.stopPropagation(); eliminarDelCarrito('${p.nombre.replace(/'/g, "\\'")}')" aria-label="Eliminar">✕</button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            if (btnWhatsapp) {
+                btnWhatsapp.href = generarLinkWhatsappCarrito();
+            }
+        }
+
+        function abrirModalCarrito() {
+            registrarEstadoModal();
+            bloquearScroll(true);
+            actualizarInterfazCarrito();
+            document.getElementById('modal-carrito').style.display = 'flex';
+        }
+
+        function cerrarModalCarrito(limpiarHistorial = true) {
+            if (limpiarHistorial) limpiarEstadoModal();
+            bloquearScroll(false);
+            const modalEl = document.getElementById('modal-carrito');
+            if (modalEl) modalEl.style.display = 'none';
+        }
+
+        function agregarAlCarritoDesdeModal() {
+            if (peliculaActualModal && peliculaActualModal.tipo === 'pelicula') {
+                agregarAlCarrito(peliculaActualModal.nombre);
+                const btn = document.getElementById('modal-add-cart-btn');
+                if (btn) btn.style.display = 'none';
+            }
+        }
+
+        function validarPedidoWhatsapp(e) {
+            if (carritoPeliculas.length === 0) {
+                e.preventDefault();
+                alert('El carrito está vacío. Añade al menos una película antes de pedir.');
+            }
+        }
+
+        // ================= BOTÓN VOLVER ARRIBA =================
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('back-to-top-btn');
+            if (btn) {
+                if (window.scrollY > 280) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            }
+        });
+
+        function volverArriba() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================= CARGA DE BASES DE DATOS =================
         Promise.all([
             fetch(urlPeliculas).then(r => r.text()),
             fetch(urlSeries).then(r => r.text()),
             fetch(urlSagas).then(r => r.text()),
             fetch(urlPacks).then(r => r.text())
         ]).then(([dataPeli, dataSerie, dataSaga, dataPack]) => {
-            // 1. PELÍCULAS (Lectura de Columna G para posición en carrusel de Inicio)
+            // 1. PELÍCULAS
             const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
             const rowsPelis = jsonPeli.table.rows || [];
             
@@ -2363,7 +2906,7 @@
                 };
             }).filter(pack => pack.nombre !== '' && pack.nombre !== 'NOMBRE');
 
-            // Cargar ruta directa
+            actualizarInterfazCarrito();
             verificarRutaDirecta();
         }).catch(err => console.error('Error cargando bases de datos:', err));
 
@@ -2372,7 +2915,7 @@
             const pelisAnioActual = todasLasPeliculas.filter(p => String(p.año).trim() === String(ANIO_ACTUAL));
             let slots = Array(12).fill(null);
 
-            // 1. Colocar las que tienen posición forzada en Columna G (1 a 12)
+            // 1. Posiciones fijadas en columna G (1 a 12)
             pelisAnioActual.forEach(p => {
                 if (p.posicionCarousel !== null && p.posicionCarousel >= 1 && p.posicionCarousel <= 12) {
                     if (!slots[p.posicionCarousel - 1]) {
@@ -2381,7 +2924,7 @@
                 }
             });
 
-            // 2. Rellenar los espacios vacíos con las recién añadidas del año actual
+            // 2. Rellenar con estrenos recién añadidos
             let indexPeli = 0;
             for (let i = 0; i < 12; i++) {
                 if (!slots[i]) {
@@ -2398,14 +2941,25 @@
             return slots.filter(p => p !== null);
         }
 
-        function generarTarjetaPeliculaOSerieHTML(item, claseExtra = '') {
+        function generarTarjetaPeliculaOSerieHTML(item, claseExtra = '', conBotonCarrito = true) {
             const lineaInferior = item.tipo === 'serie'
                 ? textoEpisodios(item)
                 : item.generos.replace(/\//g, ' • ');
 
+            const btnCarritoHTML = (item.tipo === 'pelicula' && conBotonCarrito)
+                ? `<button class="btn-card-cart" onclick="event.stopPropagation(); agregarAlCarrito('${item.nombre.replace(/'/g, "\\'")}')" aria-label="Añadir al carrito">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="8" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                </button>`
+                : '';
+
             return `
                 <div class="movie-card ${claseExtra}" onclick="abrirModalPeliculaOSerieDirecto('${item.nombre.replace(/'/g, "\\'")}')">
                     <div class="img-container">
+                        ${btnCarritoHTML}
                         <div class="year-badge">${item.año}</div>
                         <img src="${item.imagen}" alt="${item.nombre}" loading="lazy">
                     </div>
@@ -2417,6 +2971,7 @@
 
         function renderizarPantallaInicio() {
             if (slideshowPackInterval) clearInterval(slideshowPackInterval);
+            if (carouselInterval) clearInterval(carouselInterval);
 
             const grid = document.getElementById('main-grid');
             grid.className = '';
@@ -2424,17 +2979,16 @@
             document.getElementById('section-title-container').style.display = 'none';
 
             const estrenos12 = obtener12EstrenosCarousel();
-            // 16 películas en móvil / 15 en PC
             const recienAnadidas16 = todasLasPeliculas.slice(0, 16);
-            // 6 series en móvil / 5 en PC
+            
+            // Estrenos Recientes (Películas del año actual 2026 de arriba a abajo)
+            const estrenosRecientes16 = todasLasPeliculas.filter(p => String(p.año).trim() === String(ANIO_ACTUAL)).slice(0, 16);
             const series6 = todasLasSeries.slice(0, 6);
             
-            // Saga al azar
             const sagaRandom = (todasLasSagas.length > 0)
                 ? todasLasSagas[Math.floor(Math.random() * todasLasSagas.length)]
                 : null;
 
-            // Pack inicial para el banner de inicio
             const primerPackImg = (todosLosPacks.length > 0) ? todosLosPacks[0].imagen : '';
 
             let htmlSagaRandom = '';
@@ -2470,7 +3024,7 @@
 
             grid.innerHTML = `
                 <div class="home-container">
-                    <!-- 1. Carrusel Superior de Estrenos -->
+                    <!-- 1. Carrusel Superior de Estrenos (Giro automático e infinito) -->
                     <div class="home-section-block" id="home-block-carousel">
                         <div class="home-year-header">
                             <div class="home-year-line left"></div>
@@ -2480,7 +3034,7 @@
 
                         <div class="home-carousel-wrapper">
                             <button class="slider-btn prev" onclick="moverSliderHome(this, -1)">❮</button>
-                            <div class="home-carousel-track">
+                            <div class="home-carousel-track" id="home-carousel-track">
                                 ${estrenos12.map(p => `
                                     <img src="${p.imagen}" alt="${p.nombre}" class="home-carousel-poster" loading="lazy" onclick="abrirModalPeliculaOSerieDirecto('${p.nombre.replace(/'/g, "\\'")}')">
                                 `).join('')}
@@ -2490,25 +3044,37 @@
                         <button class="btn-ver-mas-estrenos" onclick="mostrarEstrenos()">VER MÁS ESTRENOS</button>
                     </div>
 
-                    <!-- Layout 2 Columnas Independientes en PC / Orden Lineal en Móvil -->
+                    <!-- Layout Principal Responsivo -->
                     <div class="home-desktop-wrapper">
                         
-                        <!-- Columna Izquierda (en PC): Películas y Series -->
+                        <!-- Columna Izquierda (PC): Películas Recientes y Estrenos Recientes -->
                         <div class="home-col-left">
                             
-                            <!-- Recién Añadidas (16 en móvil / 15 en PC) -->
+                            <!-- Recién Añadidas (16 móvil / 15 PC) -->
                             <div class="home-section-block" id="home-block-recientes">
                                 <div class="home-section-header-row">
                                     <h3 class="home-section-title">RECIÉN AÑADIDAS</h3>
                                     <button class="home-btn-ver-mas" onclick="mostrarMasRecientes()">VER MÁS</button>
                                 </div>
                                 <div class="home-movie-grid">
-                                    ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '')).join('')}
+                                    ${recienAnadidas16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '', true)).join('')}
                                 </div>
                                 <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarMasRecientes()">VER MÁS PELÍCULAS</button>
                             </div>
 
-                            <!-- Series (6 en móvil / 5 en PC) -->
+                            <!-- Estrenos Recientes (16 móvil / 15 PC) -->
+                            <div class="home-section-block" id="home-block-estrenos">
+                                <div class="home-section-header-row">
+                                    <h3 class="home-section-title">ESTRENOS RECIENTES</h3>
+                                    <button class="home-btn-ver-mas" onclick="mostrarEstrenos()">VER MÁS</button>
+                                </div>
+                                <div class="home-movie-grid">
+                                    ${estrenosRecientes16.map((p, i) => generarTarjetaPeliculaOSerieHTML(p, i === 15 ? 'home-item-16th' : '', true)).join('')}
+                                </div>
+                                <button class="home-btn-ver-mas home-btn-ver-mas-bottom" onclick="mostrarEstrenos()">VER MÁS ESTRENOS</button>
+                            </div>
+
+                            <!-- Series Recientes (Abajo de todo) -->
                             <div class="home-section-block" id="home-block-series">
                                 <div class="home-section-header-row">
                                     <h3 class="home-section-title">
@@ -2518,14 +3084,14 @@
                                     <button class="home-btn-ver-mas" onclick="mostrarSeries()">VER SERIES</button>
                                 </div>
                                 <div class="home-movie-grid">
-                                    ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '')).join('')}
+                                    ${series6.map((s, i) => generarTarjetaPeliculaOSerieHTML(s, i === 5 ? 'home-item-6th' : '', false)).join('')}
                                 </div>
                                 <button class="home-btn-ver-mas home-btn-ver-mas-bottom bseriesmas" onclick="mostrarSeries()">VER MÁS SERIES</button>
                             </div>
 
                         </div>
 
-                        <!-- Columna Derecha (en PC): Géneros, Sagas y Packs -->
+                        <!-- Columna Derecha (PC): Géneros, Sagas y Packs -->
                         <div class="home-col-right">
 
                             <!-- Géneros Más Buscados -->
@@ -2545,7 +3111,7 @@
                                 <button class="btn-ver-mas-estrenos bvergeneros" onclick="abrirMenuGeneros()">TODOS LOS GÉNEROS</button>
                             </div>
 
-                            <!-- Promo Sagas (1 Saga al azar) -->
+                            <!-- Promo Sagas -->
                             <div class="home-section-block" id="home-block-sagas">
                                 <div class="home-section-header-row">
                                     <h3 class="home-section-title">
@@ -2571,7 +3137,20 @@
                 </div>
             `;
 
-            // Iniciar pase de imágenes del Pack Banner cada 3.5 segundos
+            // Auto-rotación infinita del carrusel superior
+            const trackCarousel = document.getElementById('home-carousel-track');
+            if (trackCarousel) {
+                carouselInterval = setInterval(() => {
+                    const maxScroll = trackCarousel.scrollWidth - trackCarousel.clientWidth;
+                    if (trackCarousel.scrollLeft >= maxScroll - 6) {
+                        trackCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        trackCarousel.scrollBy({ left: 130, behavior: 'smooth' });
+                    }
+                }, 2600);
+            }
+
+            // Pase de imágenes automático del Pack Banner
             if (todosLosPacks.length > 1) {
                 let packIndex = 0;
                 slideshowPackInterval = setInterval(() => {
@@ -2610,6 +3189,7 @@
         /* ================= RENDERIZADO GENERAL ================= */
         function mostrarContenido(reiniciar = false) {
             if (slideshowPackInterval) clearInterval(slideshowPackInterval);
+            if (carouselInterval) clearInterval(carouselInterval);
 
             const grid = document.getElementById('main-grid');
             if (reiniciar) {
@@ -2667,7 +3247,7 @@
                 return;
             }
 
-            // 2. MODO PACK DIGITAL (Imágenes 1 y 2)
+            // 2. MODO PACK DIGITAL
             if (modoActual === 'packs') {
                 grid.className = (vistaPacksActual === 'big') 
                     ? 'content-grid packs-wide-layout' 
@@ -2729,7 +3309,7 @@
             
             for (let i = itemsMostrados; i < limit; i++) {
                 const item = elementosActivos[i];
-                grid.innerHTML += generarTarjetaPeliculaOSerieHTML(item);
+                grid.innerHTML += generarTarjetaPeliculaOSerieHTML(item, '', true);
             }
 
             itemsMostrados = limit;
@@ -2966,13 +3546,14 @@
             }
         }
 
-        // Evento que gestiona el botón "Atrás" del celular
+        // Evento botón "Atrás" del celular
         window.addEventListener('popstate', function(e) {
             if (ignorarSiguientePopstate) {
                 ignorarSiguientePopstate = false;
                 return;
             }
 
+            const modalCarritoEl = document.getElementById('modal-carrito');
             const modalDetalles = document.getElementById('modal');
             const modalPack = document.getElementById('modal-pack-info');
             const modalInfoGen = document.getElementById('modal-info-general');
@@ -2980,6 +3561,10 @@
             const modalSearch = document.getElementById('search-modal');
             const sidebar = document.getElementById('sidebar-container');
 
+            if (modalCarritoEl && modalCarritoEl.style.display === 'flex') {
+                cerrarModalCarrito(false);
+                return;
+            }
             if (modalDetalles && modalDetalles.style.display === 'flex') {
                 cerrarModal(false);
                 return;
@@ -3111,6 +3696,7 @@
         function abrirModalPeliculaOSerie(item) {
             registrarEstadoModal();
             bloquearScroll(true);
+            peliculaActualModal = item;
             modalSagaImagenes = [];
             document.getElementById('modal-prev-btn').style.display = 'none';
             document.getElementById('modal-next-btn').style.display = 'none';
@@ -3156,12 +3742,24 @@
                 });
             }
 
+            // Botón de Carrito dentro del modal de película
+            const btnModalCart = document.getElementById('modal-add-cart-btn');
+            if (item.tipo === 'pelicula') {
+                const yaEstaEnCarrito = carritoPeliculas.some(p => p.nombre === item.nombre);
+                btnModalCart.style.display = yaEstaEnCarrito ? 'none' : 'flex';
+            } else {
+                btnModalCart.style.display = 'none';
+            }
+
             modal.style.display = 'flex';
         }
 
         function abrirModalSaga(nombre, cantidad, indiceInicial = 0) {
             registrarEstadoModal();
             bloquearScroll(true);
+            peliculaActualModal = null;
+            document.getElementById('modal-add-cart-btn').style.display = 'none';
+
             const saga = todasLasSagas.find(s => s.nombre === nombre);
             modalSagaImagenes = saga ? saga.imagenesSlider.map(img => obtenerImagenHD(img)) : [];
             modalSagaIndexActual = (indiceInicial >= 0 && indiceInicial < modalSagaImagenes.length) ? indiceInicial : 0;
@@ -3456,11 +4054,12 @@
             }, { passive: true });
         }
 
-        ['modal', 'modal-pack-info', 'modal-info-general', 'modal-lista-sagas', 'search-modal', 'sidebar-overlay'].forEach(id => {
+        // Cierre de modales con clic fuera
+        ['modal', 'modal-pack-info', 'modal-info-general', 'modal-lista-sagas', 'modal-carrito', 'search-modal', 'sidebar-overlay'].forEach(id => {
             const el = document.getElementById(id);
             if (el) {
                 el.addEventListener('touchmove', function(e) {
-                    if (!e.target.closest('.sagas-list-scroll, .modal-pack-body, .modal-info-body, .search-overlay, .sidebar-content')) {
+                    if (!e.target.closest('.sagas-list-scroll, .modal-pack-body, .modal-info-body, .modal-cart-list, .search-overlay, .sidebar-content')) {
                         e.preventDefault();
                     }
                 }, { passive: false });
@@ -3472,6 +4071,7 @@
             bloquearScroll(false);
             modal.style.display = 'none';
             modalSagaImagenes = [];
+            peliculaActualModal = null;
         }
 
         modal.addEventListener('click', function(e) {
@@ -3482,9 +4082,11 @@
             const modalLista = document.getElementById('modal-lista-sagas');
             const modalPack = document.getElementById('modal-pack-info');
             const modalInfoGen = document.getElementById('modal-info-general');
+            const modalCart = document.getElementById('modal-carrito');
             if (e.target === modalLista) cerrarModalListaSagas();
             if (e.target === modalPack) cerrarModalPack();
             if (e.target === modalInfoGen) cerrarModalInfoGeneral();
+            if (e.target === modalCart) cerrarModalCarrito();
         });
 
         /* ================= BUSCADOR EXCLUSIVO ================= */
@@ -3496,13 +4098,6 @@
         const btnBuscarPeliculas = document.getElementById('btn-buscar-peliculas');
         const btnBuscarSeries = document.getElementById('btn-buscar-series');
         let tipoBusquedaActual = 'peliculas';
-
-        function normalizarTexto(texto) {
-            return String(texto || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase();
-        }
 
         function abrirBuscador() {
             registrarEstadoModal();
