@@ -1115,7 +1115,7 @@
             animation: cartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Botón Flotante Volver Arriba: Abajo a la derecha en la misma línea */
+        /* Botón Flotante Volver Arriba */
         .back-to-top-btn {
             position: fixed;
             bottom: 20px;
@@ -1356,7 +1356,7 @@
             grid-template-columns: 40px 1fr 40px;
             align-items: center;
             justify-items: center;
-            width: 85%; /* Mismo ancho exacto que .modal-img-container */
+            width: 85%;
             margin: 10px auto 0 auto;
         }
         .modal-add-cart-btn {
@@ -1372,7 +1372,7 @@
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0, 194, 247, 0.4);
             transition: transform 0.2s;
-            justify-self: start; /* Alineado al borde izquierdo de la imagen */
+            justify-self: start;
         }
         .modal-add-cart-btn:hover {
             transform: scale(1.1);
@@ -1578,7 +1578,7 @@
             border-radius: 10px;
         }
 
-        /* ================= VENTANA FLOTANTE INFO GENERAL (EXPANDIDA DINÁMICAMENTE) ================= */
+        /* ================= VENTANA FLOTANTE INFO GENERAL (RESPONSIVE) ================= */
         #modal-info-general {
             display: none; 
             position: fixed; 
@@ -1650,7 +1650,6 @@
             border-radius: 10px;
         }
 
-        /* Botón de Cierre Circular */
         .modal-info-close-btn {
             margin-top: 14px;
             width: 44px;
@@ -1674,7 +1673,7 @@
             transform: scale(1.1); 
         }
 
-        /* Ajustes responsivos para PC */
+        /* Ajustes PC */
         @media (min-width: 768px) {
             .modal-info-dialog {
                 max-width: 540px;
@@ -1721,7 +1720,7 @@
             }
         }
 
-        /* ================= VENTANA FLOTANTE (MODAL DETALLES PELIS/SERIES) ================= */
+        /* ================= MODAL DETALLES ================= */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.75); z-index: 4000;
@@ -2570,8 +2569,8 @@
                 <button type="button" class="btn-confirm-si" onclick="ejecutarVaciarCarrito()">Sí</button>
             </div>
         </div>
-    </div>
-    <script>
+    </div
+        <script>
         /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS ================= */
         
         const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
@@ -2602,7 +2601,7 @@
         let slideshowPackInterval = null;
         let carouselInterval = null;
 
-        // Estado del Carrito de Compras
+        // Estado del Carrito de Compras (guardado en LocalStorage)
         let carritoPeliculas = JSON.parse(localStorage.getItem('digistock_cart') || '[]');
         let peliculaActualModal = null;
 
@@ -2619,9 +2618,11 @@
         const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
         const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
         
+        // Íconos para alternar vistas
         const iconoVistaSquareSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect></svg>`;
         const iconoVistaGridSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>`;
 
+        // Textos dinámicos en menú lateral
         const menuItemEstrenos = document.getElementById('menu-item-estrenos');
         if (menuItemEstrenos) menuItemEstrenos.textContent = `ESTRENOS ${ANIO_ACTUAL}`;
 
@@ -2871,7 +2872,7 @@
             }
         }
 
-        // ================= BOTÓN VOLVER ARRIBA (Aparición a partir de 500px) =================
+        // ================= BOTÓN VOLVER ARRIBA (Aparece a partir de 500px) =================
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('back-to-top-btn');
             if (btn) {
@@ -2894,7 +2895,7 @@
             fetch(urlSagas).then(r => r.text()),
             fetch(urlPacks).then(r => r.text())
         ]).then(([dataPeli, dataSerie, dataSaga, dataPack]) => {
-            // 1. PELÍCULAS
+            // 1. PELÍCULAS (Columna G para posición 1 a 15 en carrusel)
             const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
             const rowsPelis = jsonPeli.table.rows || [];
             
@@ -2990,20 +2991,22 @@
         }).catch(err => console.error('Error cargando bases de datos:', err));
 
         /* ================= PANTALLA DE INICIO (HOME) ================= */
-        function obtener12EstrenosCarousel() {
+        function obtener15EstrenosCarousel() {
             const pelisAnioActual = todasLasPeliculas.filter(p => String(p.año).trim() === String(ANIO_ACTUAL));
-            let slots = Array(12).fill(null);
+            let slots = Array(15).fill(null);
 
+            // 1. Colocar las que tienen posición forzada en Columna G (1 a 15)
             pelisAnioActual.forEach(p => {
-                if (p.posicionCarousel !== null && p.posicionCarousel >= 1 && p.posicionCarousel <= 12) {
+                if (p.posicionCarousel !== null && p.posicionCarousel >= 1 && p.posicionCarousel <= 15) {
                     if (!slots[p.posicionCarousel - 1]) {
                         slots[p.posicionCarousel - 1] = p;
                     }
                 }
             });
 
+            // 2. Rellenar los espacios vacíos con las recién añadidas del año actual
             let indexPeli = 0;
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 15; i++) {
                 if (!slots[i]) {
                     while (indexPeli < pelisAnioActual.length && slots.includes(pelisAnioActual[indexPeli])) {
                         indexPeli++;
@@ -3055,12 +3058,16 @@
             document.getElementById('load-more').style.display = 'none';
             document.getElementById('section-title-container').style.display = 'none';
 
-            const estrenos12 = obtener12EstrenosCarousel();
+            // 15 películas cargadas en el carrusel de inicio
+            const estrenos15 = obtener15EstrenosCarousel();
+            // Duplicadas en cadena para permitir deslizamiento infinito continuo hacia adelante sin retroceder
+            const listaDuplicadaCarousel = [...estrenos15, ...estrenos15];
+
             const recienAnadidas16 = todasLasPeliculas.slice(0, 16);
             
             // Estrenos Recientes (6 en móvil / 5 en PC)
             const estrenosRecientes6 = todasLasPeliculas.filter(p => String(p.año).trim() === String(ANIO_ACTUAL)).slice(0, 6);
-            // Series (6 en móvil / 5 en PC)
+            // Series Recientes (6 en móvil / 5 en PC)
             const series6 = todasLasSeries.slice(0, 6);
             
             const sagaRandom = (todasLasSagas.length > 0)
@@ -3102,7 +3109,7 @@
 
             grid.innerHTML = `
                 <div class="home-container">
-                    <!-- 1. Carrusel Superior de Estrenos -->
+                    <!-- 1. Carrusel Superior de Estrenos (15 películas en rotación infinita continua) -->
                     <div class="home-section-block" id="home-block-carousel">
                         <div class="home-year-header">
                             <div class="home-year-line left"></div>
@@ -3113,7 +3120,7 @@
                         <div class="home-carousel-wrapper">
                             <button class="slider-btn prev" onclick="moverSliderHome(this, -1)">❮</button>
                             <div class="home-carousel-track" id="home-carousel-track">
-                                ${estrenos12.map(p => `
+                                ${listaDuplicadaCarousel.map(p => `
                                     <img src="${p.imagen}" alt="${p.nombre}" class="home-carousel-poster" loading="lazy" onclick="abrirModalPeliculaOSerieDirecto('${p.nombre.replace(/'/g, "\\'")}')">
                                 `).join('')}
                             </div>
@@ -3215,16 +3222,16 @@
                 </div>
             `;
 
-            // Auto-rotación infinita y suave del carrusel de Estrenos
+            // Auto-rotación infinita continua sin retroceso visual
             const trackCarousel = document.getElementById('home-carousel-track');
             if (trackCarousel) {
                 carouselInterval = setInterval(() => {
-                    const maxScroll = trackCarousel.scrollWidth - trackCarousel.clientWidth;
-                    if (trackCarousel.scrollLeft >= maxScroll - 6) {
-                        trackCarousel.scrollTo({ left: 0, behavior: 'smooth' });
-                    } else {
-                        trackCarousel.scrollBy({ left: 130, behavior: 'smooth' });
+                    const mitad = trackCarousel.scrollWidth / 2;
+                    // Al alcanzar la mitad exacta se reubica instantáneamente sin animación para continuar avanzando
+                    if (trackCarousel.scrollLeft >= mitad - 10) {
+                        trackCarousel.scrollLeft -= mitad;
                     }
+                    trackCarousel.scrollBy({ left: 130, behavior: 'smooth' });
                 }, 2600);
             }
 
@@ -3242,7 +3249,15 @@
         }
 
         function moverSliderHome(btn, dir) {
-            btn.parentElement.querySelector('.home-carousel-track').scrollBy({ left: dir * 130, behavior: 'smooth' });
+            const track = btn.parentElement.querySelector('.home-carousel-track');
+            if (!track) return;
+            const mitad = track.scrollWidth / 2;
+            if (dir > 0 && track.scrollLeft >= mitad - 10) {
+                track.scrollLeft -= mitad;
+            } else if (dir < 0 && track.scrollLeft <= 5) {
+                track.scrollLeft += mitad;
+            }
+            track.scrollBy({ left: dir * 130, behavior: 'smooth' });
         }
 
         function abrirModalPeliculaOSerieDirecto(nombre) {
@@ -4138,7 +4153,7 @@
         }
 
         // Cierre de modales al tocar fondo
-        ['modal', 'modal-pack-info', 'modal-info-general', 'modal-lista-sagas', 'search-modal', 'sidebar-overlay'].forEach(id => {
+        ['modal', 'modal-pack-info', 'modal-info-general', 'modal-lista-sagas', 'modal-carrito', 'modal-confirm-vaciar', 'search-modal', 'sidebar-overlay'].forEach(id => {
             const el = document.getElementById(id);
             if (el) {
                 el.addEventListener('touchmove', function(e) {
