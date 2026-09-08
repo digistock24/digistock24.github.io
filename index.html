@@ -16,6 +16,7 @@
             --search-accent: #007acc; 
             --pack-green: #00e600;
             --cart-cyan: #00c2f7;
+            --vip-gold: #ffd700;
         }
         * { 
             box-sizing: border-box; 
@@ -28,6 +29,7 @@
             background-color: var(--bg-color); 
             color: var(--text-main);
             padding-top: 67px; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         /* Bloqueo blindado de scroll */
         body.no-scroll {
@@ -35,6 +37,23 @@
             position: fixed;
             width: 100%;
         }
+
+        /* Estilo oscuro exclusivo para la sección PASE VIP */
+        body.modo-vip-bg {
+            background-color: #121417;
+            color: #ffffff;
+        }
+        body.modo-vip-bg .site-footer {
+            border-top-color: #22272e;
+        }
+        body.modo-vip-bg .footer-social a,
+        body.modo-vip-bg .footer-social svg {
+            color: #00c2f7 !important;
+        }
+        body.modo-vip-bg .footer-copy {
+            color: #00c2f7 !important;
+        }
+
         /* Barra de navegación superior (Fija) */
         header {
             position: fixed; top: 0; left: 0; width: 100%;
@@ -728,6 +747,161 @@
         .whatsapp-pack-btn svg {
             flex-shrink: 0;
             transform: translateY(-1px);
+        }
+
+        /* ================= SECCIÓN EXCLUSIVA PASE VIP ================= */
+        .vip-section-wrapper {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            padding: 8px 14px 28px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .vip-tabs-bar {
+            display: flex;
+            background: #002d50;
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            width: 100%;
+        }
+        .vip-tab-btn {
+            flex: 1;
+            padding: 10px 6px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .vip-tab-btn.active {
+            background: #007acc;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 122, 204, 0.4);
+        }
+        .vip-card-box {
+            background: #1c1f24;
+            border-radius: 18px;
+            padding: 20px 18px 22px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vip-card-title {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        .vip-card-title.color-peliculas {
+            color: var(--accent-pink);
+        }
+        .vip-card-title.color-series {
+            color: var(--vip-gold);
+        }
+        .vip-banner-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            background-color: #0b0d0f;
+        }
+        .vip-card-texto-a {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+        .vip-card-texto-a.color-peliculas {
+            color: var(--accent-pink);
+        }
+        .vip-card-texto-a.color-series {
+            color: var(--vip-gold);
+        }
+        .vip-card-price {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+        .vip-btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 11px 16px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 0px #00751f;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: linear-gradient(135deg,#05b634 0%,#069a2e 100%);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .vip-btn-whatsapp:hover {
+            background: #009226;
+            transform: scale(1.02);
+            color: #ffffff;
+        }
+        .vip-card-texto-b {
+            color: #d2d7df;
+            font-size: 13.5px;
+            line-height: 1.55;
+            white-space: pre-line;
+            padding-top: 4px;
+        }
+        .vip-card-texto-b strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        /* Submenú desplegable en el menú lateral */
+        .vip-submenu-grid {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.15);
+            margin: 0 15px 15px 15px;
+            padding: 16px 20px;
+            border-radius: 10px;
+        }
+        .vip-submenu-grid.open {
+            display: flex;
+        }
+
+        @media (min-width: 768px) {
+            .vip-section-wrapper {
+                max-width: 480px;
+                padding-top: 14px;
+            }
+            .vip-card-box {
+                padding: 24px 22px 26px 22px;
+            }
+            .vip-card-title {
+                font-size: 26px;
+            }
+            .vip-card-price {
+                font-size: 34px;
+            }
         }
 
         /* ================= ESTILOS EXCLUSIVOS DE LA SECCIÓN INICIO ================= */
@@ -2296,7 +2470,7 @@
                 </div>
                 <svg class="chevron-icon" id="genres-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
-            <!-- Submenú desplegable -->
+            <!-- Submenú desplegable Géneros -->
             <div class="genres-grid" id="genres-grid">
                 <span class="genre-item" onclick="filtrarPorGenero('Acción')">Acción</span>
                 <span class="genre-item" onclick="filtrarPorGenero('Animada')">Animada</span>
@@ -2335,9 +2509,29 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
                 PACK DIGITAL
             </div>
+            <!-- SECCIÓN SERIES -->
             <div class="menu-item" onclick="mostrarSeries()">
                 <svg style="transform: translateY(-1px);" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="15" x="2" y="7" rx="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
                 SERIES
+            </div>
+
+            <!-- NUEVA SECCIÓN PASE VIP (CON DROPDOWN Y DIAMANTE) -->
+            <div class="menu-item has-dropdown" onclick="toggleVipMenu()">
+                <div class="menu-item-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);">
+                        <path d="M6 3h12l4 6-10 12L2 9z"></path>
+                        <path d="M2 9h20"></path>
+                        <path d="m6 3 4 6 2 12"></path>
+                        <path d="m18 3-4 6-2 12"></path>
+                    </svg>
+                    PASE VIP
+                </div>
+                <svg class="chevron-icon" id="vip-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+            <!-- Submenú desplegable Pase VIP -->
+            <div class="vip-submenu-grid" id="vip-submenu-grid">
+                <span class="genre-item" onclick="mostrarPaseVip('peliculas')">Películas</span>
+                <span class="genre-item" onclick="mostrarPaseVip('series')">Series</span>
             </div>
         </div>
     </nav>
@@ -2580,6 +2774,7 @@
         const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
         const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
         const urlPacks = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=packs`;
+        const urlPaseVip = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=pasevip`;
 
         const ANIO_ACTUAL = new Date().getFullYear(); // Año actual dinámico (2026)
 
@@ -2587,6 +2782,9 @@
         let todasLasSeries = [];    
         let todasLasSagas = [];
         let todosLosPacks = [];
+        let datosPaseVip = { peliculas: null, series: null };
+        let tabPaseVipActual = 'peliculas'; // 'peliculas' | 'series'
+
         let infoGeneralPeliculas = '';
         let infoGeneralSeries = '';
         let infoGeneralPacks = '';
@@ -2594,7 +2792,7 @@
         let itemsMostrados = 0;
         const CANTIDAD_POR_PAGINA = 20;
         let terminoBusquedaActual = '';
-        let modoActual = 'inicio'; // 'inicio' | 'peliculas' | 'series' | 'sagas' | 'packs'
+        let modoActual = 'inicio'; // 'inicio' | 'peliculas' | 'series' | 'sagas' | 'packs' | 'pasevip'
         let esSeccionEstrenos = false;
         let vistaPacksActual = 'big';
         let posicionScrollGuardada = 0;
@@ -2623,7 +2821,8 @@
         const iconoClaquetaSVG17 = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><rect x="2" y="4" width="20" height="18" rx="2" ry="2"></rect><path d="M2 9h20"></path><path d="M4 9l2.5-5"></path><path d="M9 9l2.5-5"></path><path d="M14 9l2.5-5"></path><path d="M19 9l2.5-5"></path><path d="M10 12.5l6 3-6 3z"></path></svg>`;
         const iconoPacksCarpetaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>`;
         const iconoLupaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: translateY(-1px);"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>`;
-        
+        const iconoDiamanteSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: translateY(-1px);"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M2 9h20"></path><path d="m6 3 4 6 2 12"></path><path d="m18 3-4 6-2 12"></path></svg>`;
+
         const iconoVistaSquareSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect></svg>`;
         const iconoVistaGridSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>`;
 
@@ -2687,6 +2886,14 @@
             if (carritoPeliculas.length === 0) return '#';
             const listaPelis = carritoPeliculas.map(p => `· *${p.nombre}* ${p.año}`).join('\n');
             const mensaje = `Hola! Quisiera pedir:\n${listaPelis}\n-------------------------------\n*TOTAL: ${carritoPeliculas.length} Películas*`;
+            return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
+        }
+
+        // WhatsApp para Pase VIP
+        function generarLinkWhatsappVip(item) {
+            if (!item) return '#';
+            const emojiCarrito = String.fromCodePoint(0x1F6D2);
+            const mensaje = `Hola! Quiero realizar esta compra:\n${emojiCarrito} *${item.nombre}* ${item.textoA}\n-------------------------\n*TOTAL: ${item.precio}*`;
             return `https://api.whatsapp.com/send?phone=5491125122574&text=${encodeURIComponent(mensaje)}`;
         }
 
@@ -2914,9 +3121,10 @@
             fetch(urlPeliculas).then(r => r.text()),
             fetch(urlSeries).then(r => r.text()),
             fetch(urlSagas).then(r => r.text()),
-            fetch(urlPacks).then(r => r.text())
-        ]).then(([dataPeli, dataSerie, dataSaga, dataPack]) => {
-            // 1. PELÍCULAS (Columna G para posición 1 a 15 en carrusel)
+            fetch(urlPacks).then(r => r.text()),
+            fetch(urlPaseVip).then(r => r.text())
+        ]).then(([dataPeli, dataSerie, dataSaga, dataPack, dataVip]) => {
+            // 1. PELÍCULAS
             const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
             const rowsPelis = jsonPeli.table.rows || [];
             
@@ -3006,6 +3214,27 @@
                     imagen: (row.c[3] && row.c[3].v != null) ? String(row.c[3].v).trim() : ''
                 };
             }).filter(pack => pack.nombre !== '' && pack.nombre !== 'NOMBRE');
+
+            // 5. PASE VIP (Fila 1 Películas / Fila 2 Series)
+            const jsonVip = JSON.parse(dataVip.substring(47).slice(0, -2));
+            const rowsVip = jsonVip.table.rows || [];
+            const dataRowsVip = rowsVip.filter(r => r.c && r.c[0] && r.c[0].v && String(r.c[0].v).trim().toUpperCase() !== 'NOMBRE');
+
+            function parsearFilaVip(r) {
+                if (!r || !r.c) return null;
+                let precio = r.c[1] ? String(r.c[1].v).trim() : '';
+                if (precio && !precio.startsWith('$')) precio = '$' + precio;
+                return {
+                    nombre: r.c[0] ? String(r.c[0].v).trim() : '',
+                    precio: precio,
+                    imagen: r.c[2] ? String(r.c[2].v).trim() : '',
+                    textoA: r.c[3] ? String(r.c[3].v).trim() : '',
+                    textoB: r.c[4] ? String(r.c[4].v).trim() : ''
+                };
+            }
+
+            if (dataRowsVip.length > 0) datosPaseVip.peliculas = parsearFilaVip(dataRowsVip[0]);
+            if (dataRowsVip.length > 1) datosPaseVip.series = parsearFilaVip(dataRowsVip[1]);
 
             actualizarInterfazCarrito();
             verificarRutaDirecta();
@@ -3299,6 +3528,90 @@
             }, 200);
         }
 
+        function toggleVipMenu() {
+            const grid = document.getElementById('vip-submenu-grid');
+            const chevron = document.getElementById('vip-chevron');
+            if (grid) grid.classList.toggle('open');
+            if (chevron) chevron.classList.toggle('open');
+        }
+
+        /* ================= SECCIÓN PASE VIP ================= */
+        function mostrarPaseVip(tipo = 'peliculas') {
+            history.pushState(null, null, '#pase-vip-' + tipo);
+            terminoBusquedaActual = '';
+            modoActual = 'pasevip';
+            tabPaseVipActual = tipo;
+            esSeccionEstrenos = false;
+
+            document.body.classList.add('modo-vip-bg');
+            cerrarMenu(true);
+            mostrarContenido(true);
+            window.scrollTo(0, 0);
+        }
+
+        function cambiarTabPaseVip(tipo) {
+            tabPaseVipActual = tipo;
+            history.replaceState(null, null, '#pase-vip-' + tipo);
+            renderizarPaseVip();
+        }
+
+        function renderizarPaseVip() {
+            const grid = document.getElementById('main-grid');
+            grid.className = '';
+            document.getElementById('load-more').style.display = 'none';
+            document.getElementById('section-title-container').style.display = 'none';
+
+            const item = (tabPaseVipActual === 'series') ? datosPaseVip.series : datosPaseVip.peliculas;
+            const esSeries = (tabPaseVipActual === 'series');
+            const claseColor = esSeries ? 'color-series' : 'color-peliculas';
+
+            if (!item) {
+                grid.innerHTML = `
+                    <div class="vip-section-wrapper">
+                        <div class="vip-tabs-bar">
+                            <button class="vip-tab-btn ${!esSeries ? 'active' : ''}" onclick="cambiarTabPaseVip('peliculas')">PELÍCULAS</button>
+                            <button class="vip-tab-btn ${esSeries ? 'active' : ''}" onclick="cambiarTabPaseVip('series')">SERIES</button>
+                        </div>
+                        <div style="text-align: center; color: #888; padding: 40px 10px;">Cargando información del Pase VIP...</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const linkWhatsapp = generarLinkWhatsappVip(item);
+
+            grid.innerHTML = `
+                <div class="vip-section-wrapper">
+                    <div class="vip-tabs-bar">
+                        <button class="vip-tab-btn ${!esSeries ? 'active' : ''}" onclick="cambiarTabPaseVip('peliculas')">PELÍCULAS</button>
+                        <button class="vip-tab-btn ${esSeries ? 'active' : ''}" onclick="cambiarTabPaseVip('series')">SERIES</button>
+                    </div>
+
+                    <div class="vip-card-box">
+                        <div class="vip-card-title ${claseColor}">${item.nombre}</div>
+                        
+                        <div class="vip-image-wrapper">
+                            <img src="${item.imagen}" alt="${item.nombre}" class="vip-banner-img" loading="lazy">
+                        </div>
+
+                        <div class="vip-card-texto-a ${claseColor}">${item.textoA}</div>
+
+                        <div class="vip-card-price">${item.precio}</div>
+
+                        <a href="${linkWhatsapp}" target="_blank" rel="noopener noreferrer" class="vip-btn-whatsapp" onclick="event.stopPropagation()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347Z"></path>
+                                <path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.892.526 3.66 1.44 5.166L2 22l4.958-1.412A9.955 9.955 0 0 0 12.001 22C17.524 22 22 17.523 22 12S17.524 2 12.001 2Zm0 18.187a8.15 8.15 0 0 1-4.156-1.134l-.298-.177-3.096.882.83-3.02-.194-.31A8.15 8.15 0 1 1 12.001 20.187Z"></path>
+                            </svg>
+                            SOLICITAR POR WHATSAPP
+                        </a>
+
+                        <div class="vip-card-texto-b">${formatearTextoContenido(item.textoB)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
         /* ================= RENDERIZADO GENERAL ================= */
         function mostrarContenido(reiniciar = false) {
             if (slideshowPackInterval) clearInterval(slideshowPackInterval);
@@ -3312,7 +3625,13 @@
                 window.scrollTo(0, 0);
             }
 
-            // 0. MODO INICIO
+            // MODO PASE VIP
+            if (modoActual === 'pasevip') {
+                renderizarPaseVip();
+                return;
+            }
+
+            // MODO INICIO
             if (modoActual === 'inicio') {
                 renderizarPantallaInicio();
                 return;
@@ -3320,7 +3639,7 @@
 
             document.getElementById('section-title-container').style.display = 'flex';
 
-            // 1. MODO PROMO SAGAS
+            // MODO PROMO SAGAS
             if (modoActual === 'sagas') {
                 grid.className = 'content-grid sagas-layout';
                 elementosActivos.forEach((saga, idx) => {
@@ -3360,7 +3679,7 @@
                 return;
             }
 
-            // 2. MODO PACK DIGITAL (Con Lazy Loading en el background-image)
+            // MODO PACK DIGITAL (Con Lazy Loading en el background-image)
             if (modoActual === 'packs') {
                 grid.className = (vistaPacksActual === 'big') 
                     ? 'content-grid packs-wide-layout' 
@@ -3372,7 +3691,7 @@
                     const card = document.createElement('div');
                     card.id = `pack-card-${idx}`;
                     const linkWhatsapp = generarLinkWhatsappPack(pack);
-                    card.dataset.bg = pack.imagen; // Almacenamos la URL para cargar bajo demanda
+                    card.dataset.bg = pack.imagen;
 
                     if (vistaPacksActual === 'big') {
                         card.className = 'pack-card-big';
@@ -3411,7 +3730,6 @@
                         `;
                     }
 
-                    // Se vincula al IntersectionObserver para Lazy Loading
                     if (lazyBgObserver) {
                         lazyBgObserver.observe(card);
                     } else {
@@ -3425,7 +3743,7 @@
                 return;
             }
 
-            // 3. MODO PELÍCULAS O SERIES
+            // MODO PELÍCULAS O SERIES
             grid.className = 'content-grid';
             const limit = Math.min(itemsMostrados + CANTIDAD_POR_PAGINA, elementosActivos.length);
             
@@ -3517,6 +3835,7 @@
         }
 
         function mostrarInicio() {
+            document.body.classList.remove('modo-vip-bg');
             terminoBusquedaActual = '';
             modoActual = 'inicio';
             esSeccionEstrenos = false;
@@ -3526,6 +3845,7 @@
         }
 
         function mostrarEstrenos() {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#estrenos');
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
@@ -3543,6 +3863,7 @@
         }
 
         function mostrarMasRecientes() {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#recien-anadidas');
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
@@ -3560,6 +3881,7 @@
         }
 
         function mostrarSeries() {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#series');
             terminoBusquedaActual = '';
             modoActual = 'series';
@@ -3577,6 +3899,7 @@
         }
 
         function mostrarSagas() {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#sagas');
             terminoBusquedaActual = '';
             modoActual = 'sagas';
@@ -3596,6 +3919,7 @@
         }
 
         function mostrarPacks() {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#pack-digital');
             terminoBusquedaActual = '';
             modoActual = 'packs';
@@ -3628,6 +3952,7 @@
         }
 
         function filtrarPorGenero(genero) {
+            document.body.classList.remove('modo-vip-bg');
             history.pushState(null, null, '#' + encodeURIComponent(genero));
             terminoBusquedaActual = '';
             modoActual = 'peliculas';
@@ -3660,6 +3985,10 @@
                 mostrarPacks();
             } else if (hash === '#series') {
                 mostrarSeries();
+            } else if (hash === '#pase-vip' || hash === '#pase-vip-peliculas') {
+                mostrarPaseVip('peliculas');
+            } else if (hash === '#pase-vip-series') {
+                mostrarPaseVip('series');
             } else if (hash && hash !== '#inicio' && hash !== '#') {
                 const genero = decodeURIComponent(hash.substring(1));
                 filtrarPorGenero(genero);
@@ -3688,7 +4017,7 @@
             const modalSearch = document.getElementById('search-modal');
             const sidebar = document.getElementById('sidebar-container');
 
-            // 1. Cerrar primero confirmaciones
+            // 1. Cerrar confirmaciones
             if (modalConfirmVaciarEl && modalConfirmVaciarEl.style.display === 'flex') {
                 cerrarConfirmVaciar(false);
                 return;
@@ -3809,19 +4138,22 @@
             sidebarOverlay.classList.add('active');
         }
 
-        // Corrección: Al cambiar de sección, NO ejecuta history.back() para no borrar la URL del navegador
         function cerrarMenu(cambioDeSeccion = false, limpiarHistorial = true) {
             if (cambioDeSeccion) {
                 posicionScrollGuardada = 0;
-                modalesAbiertosHistorial = 0; // Se resetea la profundidad del historial sin borrar la URL
+                modalesAbiertosHistorial = 0;
             } else if (limpiarHistorial) {
                 limpiarEstadoModal();
             }
             bloquearScroll(false);
             sidebarContainer.classList.remove('active');
             sidebarOverlay.classList.remove('active');
-            genresGrid.classList.remove('open');
-            genresChevron.classList.remove('open');
+            if (genresGrid) genresGrid.classList.remove('open');
+            if (genresChevron) genresChevron.classList.remove('open');
+            const vipGrid = document.getElementById('vip-submenu-grid');
+            const vipChevron = document.getElementById('vip-chevron');
+            if (vipGrid) vipGrid.classList.remove('open');
+            if (vipChevron) vipChevron.classList.remove('open');
         }
 
         function toggleGeneros() {
@@ -3881,7 +4213,6 @@
                 });
             }
 
-            // Botón de Carrito dentro del modal de película (alineado al borde del póster)
             const btnModalCart = document.getElementById('modal-add-cart-btn');
             if (item.tipo === 'pelicula') {
                 const yaEstaEnCarrito = carritoPeliculas.some(p => p.nombre === item.nombre);
@@ -4335,6 +4666,7 @@
         function verTodosLosResultados() {
             if (!terminoBusquedaActual) return;
 
+            document.body.classList.remove('modo-vip-bg');
             modoActual = tipoBusquedaActual;
             const listaBase = tipoBusquedaActual === 'series' ? todasLasSeries : todasLasPeliculas;
             const queryNormalizada = normalizarTexto(terminoBusquedaActual);
