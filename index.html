@@ -4092,7 +4092,7 @@
             window.scrollTo(0, 0);
         }
 
-        // ACCESO DIRECTO A UN PACK ESPECÍFICO (DEEP LINKING)
+         // ACCESO DIRECTO A UN PACK ESPECÍFICO (DEEP LINKING MEJORADO)
         function mostrarPackDirecto(nombreBuscado) {
             document.body.classList.remove('modo-vip-bg');
             terminoBusquedaActual = '';
@@ -4107,19 +4107,22 @@
             cerrarMenu(true);
             mostrarContenido(true);
 
-            // Ubicar el pack y abrir su modal
+            // Ubica el pack, hace scroll hasta él y abre su ventana flotante
             setTimeout(() => {
-                const normBuscado = normalizarTexto(nombreBuscado);
-                const idx = elementosActivos.findIndex(p => normalizarTexto(p.nombre) === normBuscado || normalizarTexto(p.nombre).includes(normBuscado));
+                const normBuscado = normalizarTexto(nombreBuscado).replace(/\+/g, ' ');
+                const idx = elementosActivos.findIndex(p => {
+                    const normP = normalizarTexto(p.nombre).replace(/\+/g, ' ');
+                    return normP === normBuscado || normP.includes(normBuscado) || normBuscado.includes(normP);
+                });
                 
                 if (idx !== -1) {
                     const pack = elementosActivos[idx];
                     irAElementoId(`pack-card-${idx}`);
                     setTimeout(() => {
                         abrirModalPack(pack);
-                    }, 400);
+                    }, 350);
                 }
-            }, 100);
+            }, 120);
         }
 
         // CONTROL DE ENLACES DIRECTOS Y RECARGA DE PÁGINA
@@ -4442,6 +4445,9 @@
             registrarEstadoModal();
             bloquearScroll(true);
 
+            // Genera automáticamente el enlace directo al pack en la barra de direcciones
+            history.replaceState({ modalNivel: modalesAbiertosHistorial }, '', '#pack=' + encodeURIComponent(pack.nombre));
+
             document.getElementById('modal-pack-banner').style.backgroundImage = `url('${pack.imagen}')`;
             document.getElementById('modal-pack-price').textContent = pack.precio;
             document.getElementById('modal-pack-title').textContent = pack.nombre;
@@ -4487,8 +4493,15 @@
             });
         }
 
-        function cerrarModalPack(limpiarHistorial = true) {
-            if (limpiarHistorial) limpiarEstadoModal();
+   function cerrarModalPack(limpiarHistorial = true) {
+            if (limpiarHistorial) {
+                limpiarEstadoModal();
+            } else {
+                // Al cerrar con el botón atrás, restablece la URL a #pack-digital
+                if (window.location.hash.toLowerCase().startsWith('#pack=')) {
+                    history.replaceState(null, null, '#pack-digital');
+                }
+            }
             bloquearScroll(false);
             const el = document.getElementById('modal-pack-info');
             if (el) el.style.display = 'none';
