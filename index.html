@@ -348,7 +348,7 @@
             flex-direction: column;
             position: relative;
         }
-        .movie-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .movie-card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .img-container { position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; }
         .img-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
         
@@ -369,7 +369,7 @@
             left: 8px;
             width: 34px;
             height: 34px;
-            background: var(--cart-cyan);
+            background: #00c2f7;
             color: white;
             border: none;
             border-radius: 8px;
@@ -378,15 +378,17 @@
             align-items: center;
             z-index: 4;
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0, 194, 247, 0.45);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: transform 0.2s, background 0.2s;
         }
         .btn-card-cart:hover {
             transform: scale(1.1);
-            background: #00aee0;
+            
         }
         .btn-card-cart:active {
             transform: scale(0.95);
+            background: #00aee0;
+            box-shadow: 0 3px 8px rgba(0, 194, 247, 0.45);
         }
 
         .movie-title {
@@ -790,7 +792,7 @@
         .vip-card-box {
             background: #1c1f24;
             border-radius: 18px;
-            padding: 20px 18px 22px 18px;
+            padding: 20px 20px 22px 20px;
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -817,8 +819,10 @@
             object-fit: cover;
             border-radius: 14px;
             display: block;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 9px rgba(0,0,0,0.2);
             background-color: #0b0d0f;
+            object-position: center 65%;
+            border: 1px solid rgb(45, 48, 53);
         }
         .vip-card-texto-a {
             font-size: 15px;
@@ -865,9 +869,9 @@
         .vip-card-texto-b {
             color: #d2d7df;
             font-size: 13.5px;
-            line-height: 1.55;
+            line-height: 2.5;
             white-space: pre-line;
-            padding-top: 4px;
+            padding-top: 8px;
         }
         .vip-card-texto-b strong {
             color: #ffffff;
@@ -961,11 +965,12 @@
         .vip-submenu-grid {
             display: none;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
             background: rgba(0, 0, 0, 0.15);
             margin: 0 15px 15px 15px;
             padding: 16px 20px;
             border-radius: 10px;
+            letter-spacing: 0.5px;
         }
         .vip-submenu-grid.open {
             display: flex;
@@ -1337,15 +1342,16 @@
             justify-content: center;
             align-items: center;
             color: white;
-            box-shadow: 0 4px 14px rgba(0, 194, 247, 0.45);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
             cursor: pointer;
             z-index: 2500;
             transition: transform 0.2s, background 0.2s;
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .floating-cart-btn:hover {
             transform: scale(1.08);
             background: #00aee0;
+            box-shadow: 0 4px 14px rgba(0, 194, 247, 0.45);
         }
         .floating-cart-badge {
             position: absolute;
@@ -1353,8 +1359,8 @@
             right: -6px;
             background: #ff00ff;
             color: white;
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
             min-width: 20px;
             height: 20px;
             border-radius: 10px;
