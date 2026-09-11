@@ -10,6 +10,25 @@
     <link rel="apple-touch-icon-precomposed" href="https://i.imgur.com/WIjNoRq.jpeg">
     <meta name="theme-color" content="#002857">
     <style>
+  /* Evita que seleccionen texto o arrastren imágenes */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+        /* Permite que la barra de búsqueda siga funcionando con normalidad */
+        input, textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+        
         /* ================= CSS: DISEÑO Y ESTILOS ================= */
         :root {
             --bg-color: #f4f6f8; 
@@ -2877,8 +2896,57 @@
         </div>
     </div>
     <script>
+        (function() {
+            const dominioAutorizado = "digistock24.github.io";
+            const hostActual = window.location.hostname;
+
+            // Permite solo tu dominio oficial y pruebas locales en tu PC (localhost)
+            if (hostActual !== dominioAutorizado && hostActual !== "localhost" && hostActual !== "127.0.0.1" && hostActual !== "") {
+                document.documentElement.innerHTML = `
+                    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0d1117;color:#ffffff;font-family:sans-serif;text-align:center;padding:20px;">
+                        <div>
+                            <h1 style="font-size:26px;color:#ff0055;margin-bottom:12px;font-weight:800;">ACCESO NO AUTORIZADO</h1>
+                            <p style="color:#8b949e;font-size:15px;max-width:400px;line-height:1.5;">Este catálogo y su diseño pertenecen exclusivamente a DigiStock 24. El uso no autorizado está bloqueado.</p>
+                        </div>
+                    </div>
+                `;
+                throw new Error("Sitio no autorizado."); // Detiene de inmediato la ejecución de todo el script
+            }
+        })();
+/* ================= PROTECCIÓN: BLOQUEO DE CLIC DERECHO E INSPECCIÓN ================= */
+        // 1. Desactivar menú contextual del clic derecho
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 2. Bloquear atajos de teclado para ver código o abrir consola
+        document.addEventListener('keydown', function(e) {
+            // Bloquea tecla F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Bloquea Ctrl+U (Ver código fuente)
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+            // Bloquea Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Consola / Inspeccionar elemento)
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && (
+                e.key === 'I' || e.key === 'i' || e.keyCode === 73 ||
+                e.key === 'J' || e.key === 'j' || e.keyCode === 74 ||
+                e.key === 'C' || e.key === 'c' || e.keyCode === 67
+            )) {
+                e.preventDefault();
+                return false;
+            }
+            // Bloquea Ctrl+S (Guardar página)
+            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+                e.preventDefault();
+                return false;
+            }
+        });
         /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS (PARTE 3A) ================= */
-        
         const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
         const urlPeliculas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=peliculas`;
         const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
