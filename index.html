@@ -1451,7 +1451,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 9px;
+            padding-bottom: 12px;
         }
         .cart-fullscreen-title {
             color: #00c2f7;
@@ -1676,8 +1676,8 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
         .confirm-dialog-title {
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 600;
             color: #222222;
             margin-bottom: 18px;
             line-height: 1.4;
@@ -1704,20 +1704,22 @@
         }
         .btn-confirm-si {
             flex: 1;
-            background: #ff0033;
+            background: #00c2f7;
             border: none;
             color: #ffffff;
             padding: 8px 16px;
             border-radius: 8px;
-            font-size: 13.5px;
+            font-size: 13.8px;
             font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(255, 0, 51, 0.3);
+            cursor: pointer;    
             transition: all 0.2s;
         }
         .btn-confirm-si:hover {
-            background: #e6002e;
             transform: scale(1.03);
+        }
+            .btn-confirm-si:active {
+            background: #03a7d4;
+             box-shadow: 0 2px 6px rgba(255, 0, 51, 0.3);
         }
 
         /* ================= VENTANA FLOTANTE DE PACK DIGITAL (RESPONSIVE) ================= */
@@ -2864,7 +2866,7 @@
     <!-- CUADRO DE CONFIRMACIÓN PARA VACIAR CARRITO -->
     <div class="modal-overlay" id="modal-confirm-vaciar" style="z-index: 5000;">
         <div class="confirm-dialog-card">
-            <div class="confirm-dialog-title">¿Deseas vaciar el carrito de películas?</div>
+            <div class="confirm-dialog-title">¿Vaciar carrito de películas?</div>
             <div class="confirm-dialog-buttons">
                 <button type="button" class="btn-confirm-no" onclick="cerrarConfirmVaciar()">No</button>
                 <button type="button" class="btn-confirm-si" onclick="ejecutarVaciarCarrito()">Sí</button>
