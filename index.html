@@ -2947,7 +2947,12 @@
             }
         });
         /* ================= JAVASCRIPT: LÓGICA Y DATOS UNIFICADOS (PARTE 3A) ================= */
-      const API_URL = 'https://script.google.com/macros/s/AKfycbyCIqQdllrWZkcR2P_Sz9PUuiVP5Bs1F2R-gJgumw2sdRTJHAIMCtUAlg5JoagSf6TPrQ/exec';
+        const SHEET_ID = '1jyU4bfJvmgnTnR2RY4NQ1Yp-rvcPD7GN5L_QzLXYlm0'; 
+        const urlPeliculas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=peliculas`;
+        const urlSeries = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=series`;
+        const urlSagas = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=sagas`;
+        const urlPacks = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=packs`;
+        const urlPaseVip = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=pasevip`;
 
         const ANIO_ACTUAL = new Date().getFullYear(); // Año actual dinámico (2026)
 
@@ -3290,22 +3295,128 @@
         }
 
         // ================= CARGA DE BASES DE DATOS =================
-        fetch(API_URL)
-            .then(res => res.json())
-            .then(data => {
-                todasLasPeliculas = data.peliculas || [];
-                infoGeneralPeliculas = data.infoPeliculas || '';
-                todasLasSeries = data.series || [];
-                infoGeneralSeries = data.infoSeries || '';
-                todasLasSagas = data.sagas || [];
-                todosLosPacks = data.packs || [];
-                infoGeneralPacks = data.infoPacks || '';
-                datosPaseVip = data.paseVip || { peliculas: null, series: null };
+        Promise.all([
+            fetch(urlPeliculas).then(r => r.text()),
+            fetch(urlSeries).then(r => r.text()),
+            fetch(urlSagas).then(r => r.text()),
+            fetch(urlPacks).then(r => r.text()),
+            fetch(urlPaseVip).then(r => r.text())
+        ]).then(([dataPeli, dataSerie, dataSaga, dataPack, dataVip]) => {
+            // 1. PELÍCULAS
+            const jsonPeli = JSON.parse(dataPeli.substring(47).slice(0, -2));
+            const rowsPelis = jsonPeli.table.rows || [];
+            
+            infoGeneralPeliculas = extraerTextoCelda(jsonPeli, 5, 0);
 
-                actualizarInterfazCarrito();
-                verificarRutaDirecta();
-            })
-            .catch(err => console.error('Error cargando bases de datos:', err));
+            todasLasPeliculas = rowsPelis.map(row => ({
+                tipo: 'pelicula',
+                nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                año: row.c[1] ? String(row.c[1].v).trim() : '',
+                generos: row.c[2] ? String(row.c[2].v).trim() : '',
+                imagen: row.c[3] ? String(row.c[3].v).trim() : '',
+                posicionCarousel: (row.c[6] && row.c[6].v != null && !isNaN(parseInt(row.c[6].v))) ? parseInt(row.c[6].v) : null
+            })).filter(peli => peli.nombre !== 'NOMBRE' && peli.nombre !== '');
+
+            // 2. SERIES
+            const jsonSerie = JSON.parse(dataSerie.substring(47).slice(0, -2));
+            const rowsSeries = jsonSerie.table.rows || [];
+
+            infoGeneralSeries = extraerTextoCelda(jsonSerie, 5, 0);
+
+            todasLasSeries = rowsSeries.map(row => ({
+                tipo: 'serie',
+                nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                año: row.c[1] ? String(row.c[1].v).trim() : '',
+                episodios: (row.c[2] && row.c[2].v != null) ? String(row.c[2].v).trim() : '',
+                pack: (row.c[3] && row.c[3].v != null) ? String(row.c[3].v).trim() : '',
+                imagen: row.c[4] ? String(row.c[4].v).trim() : ''
+            })).filter(serie => serie.nombre !== 'NOMBRE' && serie.nombre !== '');
+
+            // 3. SAGAS
+            const jsonSaga = JSON.parse(dataSaga.substring(47).slice(0, -2));
+            const rowsSagas = jsonSaga.table.rows;
+            const filaPrecios = rowsSagas[0]?.c || [];
+            const filaCantidades = rowsSagas[1]?.c || [];
+            todasLasSagas = [];
+
+            for (let i = 2; i < rowsSagas.length; i++) {
+                const celdas = rowsSagas[i]?.c;
+                if (!celdas || !celdas[0] || celdas[0].v === null || String(celdas[0].v).trim() === '') continue;
+
+                const nombreSaga = String(celdas[0].v).trim();
+                let ultimaColumna = 1;
+                let imagenes = [];
+
+                for (let j = 1; j < celdas.length; j++) {
+                    if (celdas[j] && celdas[j].v !== null && String(celdas[j].v).trim() !== '') {
+                        imagenes.push(String(celdas[j].v).trim());
+                        ultimaColumna = j;
+                    }
+                }
+
+                if (imagenes.length === 0) continue;
+
+                let precio = (filaPrecios[ultimaColumna] && filaPrecios[ultimaColumna].v !== null)
+                    ? String(filaPrecios[ultimaColumna].v).trim()
+                    : '0';
+                if (!precio.startsWith('$')) precio = '$' + precio;
+
+                const cantidadX = (filaCantidades[ultimaColumna] && filaCantidades[ultimaColumna].v !== null)
+                    ? String(filaCantidades[ultimaColumna].v).trim()
+                    : String(imagenes.length);
+
+                todasLasSagas.push({
+                    tipo: 'saga',
+                    nombre: nombreSaga,
+                    precio: precio,
+                    cantidad: cantidadX,
+                    imagenesSlider: [...imagenes]
+                });
+            }
+
+            // 4. PACKS DIGITALES
+            const jsonPack = JSON.parse(dataPack.substring(47).slice(0, -2));
+            const rowsPacks = jsonPack.table.rows || [];
+            
+            infoGeneralPacks = extraerTextoCelda(jsonPack, 4, 0);
+
+            todosLosPacks = rowsPacks.map(row => {
+                let precio = row.c[1] ? String(row.c[1].v).trim() : '';
+                if (precio && !precio.startsWith('$')) precio = '$' + precio;
+
+                return {
+                    tipo: 'pack',
+                    nombre: row.c[0] ? String(row.c[0].v).trim() : '',
+                    precio: precio,
+                    contenido: (row.c[2] && row.c[2].v != null) ? String(row.c[2].v).trim() : '',
+                    imagen: (row.c[3] && row.c[3].v != null) ? String(row.c[3].v).trim() : ''
+                };
+            }).filter(pack => pack.nombre !== '' && pack.nombre !== 'NOMBRE');
+
+            // 5. PASE VIP (Fila 1 Películas / Fila 2 Series)
+            const jsonVip = JSON.parse(dataVip.substring(47).slice(0, -2));
+            const rowsVip = jsonVip.table.rows || [];
+            const dataRowsVip = rowsVip.filter(r => r.c && r.c[0] && r.c[0].v && String(r.c[0].v).trim().toUpperCase() !== 'NOMBRE');
+
+            function parsearFilaVip(r) {
+                if (!r || !r.c) return null;
+                let precio = r.c[1] ? String(r.c[1].v).trim() : '';
+                if (precio && !precio.startsWith('$')) precio = '$' + precio;
+                return {
+                    nombre: r.c[0] ? String(r.c[0].v).trim() : '',
+                    precio: precio,
+                    imagen: r.c[2] ? String(r.c[2].v).trim() : '',
+                    textoA: r.c[3] ? String(r.c[3].v).trim() : '',
+                    textoB: r.c[4] ? String(r.c[4].v).trim() : ''
+                };
+            }
+
+            if (dataRowsVip.length > 0) datosPaseVip.peliculas = parsearFilaVip(dataRowsVip[0]);
+            if (dataRowsVip.length > 1) datosPaseVip.series = parsearFilaVip(dataRowsVip[1]);
+
+            actualizarInterfazCarrito();
+            verificarRutaDirecta();
+        }).catch(err => console.error('Error cargando bases de datos:', err));
 
         /* ================= PANTALLA DE INICIO (HOME) ================= */
         function obtener15EstrenosCarousel() {
@@ -4846,4 +4957,4 @@
         });
     </script>
 </body>
-</html>      
+</html> 
